@@ -111,16 +111,22 @@ const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelecti
                       </>
                     )}
                   </Button>
-                  {expandedInsights[key] && (
+                  {(expandedInsights[key] || showOnlySelected) && (
                     <ul className="mt-2 text-sm">
                       {value.nextBest.map((item, i) => (
                         <li key={i} className="flex items-center">
-                          <Checkbox
-                            checked={selectedNextBest[key]?.includes(i)}
-                            onCheckedChange={() => handleNextBestSelection(key, i)}
-                            className="mr-2"
-                          />
-                          <span className="text-gray-600">{item}</span>
+                          {!showOnlySelected && (
+                            <Checkbox
+                              checked={selectedNextBest[key]?.includes(i)}
+                              onCheckedChange={() => handleNextBestSelection(key, i)}
+                              className="mr-2"
+                            />
+                          )}
+                          {(showOnlySelected && selectedNextBest[key]?.includes(i)) || !showOnlySelected ? (
+                            <span className={`${showOnlySelected && selectedNextBest[key]?.includes(i) ? 'font-semibold' : 'text-gray-600'}`}>
+                              {item}
+                            </span>
+                          ) : null}
                         </li>
                       ))}
                     </ul>
