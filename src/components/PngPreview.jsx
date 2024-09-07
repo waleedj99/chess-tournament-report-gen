@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Share2Icon } from 'lucide-react';
 
-const PngPreview = ({ imageUrl }) => {
+const PngPreview = ({ imageUrl, layout }) => {
   const shareToSocialMedia = (platform) => {
     // Implement sharing logic for different platforms
     console.log(`Sharing to ${platform}`);
@@ -12,10 +12,12 @@ const PngPreview = ({ imageUrl }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>PNG Preview</CardTitle>
+        <CardTitle>PNG Preview ({layout.name} Layout)</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <img src={imageUrl} alt="Insights Preview" className="w-full h-auto" />
+        <div className={`p-4 rounded-lg ${layout.background}`}>
+          <img src={imageUrl} alt="Insights Preview" className="w-full h-auto" />
+        </div>
         <div className="flex flex-wrap justify-center gap-2">
           <Button onClick={() => shareToSocialMedia('twitter')} className="bg-blue-400 hover:bg-blue-500">
             <Share2Icon className="mr-2 h-4 w-4" /> Twitter

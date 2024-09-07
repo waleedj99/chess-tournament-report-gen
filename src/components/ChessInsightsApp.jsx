@@ -23,12 +23,19 @@ const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
   });
 };
 
+const layoutOptions = [
+  { id: 'classic', name: 'Classic', background: 'bg-gray-100' },
+  { id: 'modern', name: 'Modern', background: 'bg-blue-100' },
+  { id: 'dark', name: 'Dark', background: 'bg-gray-800 text-white' },
+];
+
 const ChessInsightsApp = () => {
   const [tournamentType, setTournamentType] = useState('swiss');
   const [tournamentId, setTournamentId] = useState('');
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [selectedInsights, setSelectedInsights] = useState([]);
   const [pngPreview, setPngPreview] = useState(null);
+  const [selectedLayout, setSelectedLayout] = useState(layoutOptions[0]);
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['tournamentData', tournamentType, tournamentId],
@@ -98,7 +105,7 @@ const ChessInsightsApp = () => {
             selectedInsights={selectedInsights}
             onInsightSelection={handleInsightSelection}
           />
-          <div id="selected-insights-container" className="mt-6 p-4 bg-white rounded-lg shadow">
+          <div id="selected-insights-container" className={`mt-6 p-4 rounded-lg shadow ${selectedLayout.background}`}>
             <h2 className="text-2xl font-bold mb-4">{data.name} Insights</h2>
             <TournamentInsights 
               tournamentData={data} 
@@ -112,10 +119,20 @@ const ChessInsightsApp = () => {
 
       {isDataFetched && data && (
         <div className="space-y-4">
+          <Select value={selectedLayout.id} onValueChange={(layoutId) => setSelectedLayout(layoutOptions.find(l => l.id === layoutId))}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select layout" />
+            </SelectTrigger>
+            <SelectContent>
+              {layoutOptions.map((layout) => (
+                <SelectItem key={layout.id} value={layout.id}>{layout.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Button onClick={generatePng} disabled={selectedInsights.length === 0}>
             Generate PNG
           </Button>
-          {pngPreview && <PngPreview imageUrl={pngPreview} />}
+          {pngPreview && <PngPreview imageUrl={pngPreview} layout={selectedLayout} />}
         </div>
       )}
     </div>
