@@ -4,7 +4,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelection, showOnlySelected = false, selectedNextBest, onNextBestSelection }) => {
+const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelection, showOnlySelected = false, selectedNextBest, onNextBestSelection, isPngPreview = false }) => {
   const [expandedInsights, setExpandedInsights] = useState({});
 
   const insights = {
@@ -59,9 +59,85 @@ const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelecti
     onNextBestSelection(key, index);
   };
 
+  const renderInsightContent = (key, value) => {
+    if (isPngPreview) {
+      if (selectedNextBest[key] && selectedNextBest[key].length > 0) {
+        return (
+          <ul>
+            {selectedNextBest[key].map(index => (
+              <li key={index}>{value.nextBest[index]}</li>
+            ))}
+          </ul>
+        );
+      } else {
+        return Array.isArray(value.main) ? (
+          <ul>
+            {value.main.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>{value.main}</p>
+        );
+      }
+    } else {
+      return (
+        <>
+          {Array.isArray(value.main) ? (
+            <ul>
+              {value.main.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>{value.main}</p>
+          )}
+          {value.nextBest && value.nextBest.length > 0 && (
+            <div className="mt-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="p-0 h-6 text-xs"
+                onClick={() => toggleExpand(key)}
+              >
+                {expandedInsights[key] ? (
+                  <>
+                    <ChevronUpIcon className="h-4 w-4 mr-1" />
+                    Hide next best
+                  </>
+                ) : (
+                  <>
+                    <ChevronDownIcon className="h-4 w-4 mr-1" />
+                    Show next best
+                  </>
+                )}
+              </Button>
+              {expandedInsights[key] && (
+                <ul className="mt-2 text-sm">
+                  {value.nextBest.map((item, i) => (
+                    <li key={i} className="flex items-center">
+                      <Checkbox
+                        checked={selectedNextBest[key]?.includes(i)}
+                        onCheckedChange={() => handleNextBestSelection(key, i)}
+                        className="mr-2"
+                      />
+                      <span className={selectedNextBest[key]?.includes(i) ? 'font-semibold' : 'text-gray-600'}>
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </>
+      );
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {!showOnlySelected && (
+      {!showOnlySelected && !isPngPreview && (
         <>
           <h2 className="text-2xl font-bold">Insights for {tournamentData.name}</h2>
           <p>Tournament Type: {tournamentData.type}, Players: {tournamentData.players}, Total Games: {tournamentData.games}</p>
@@ -74,7 +150,7 @@ const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelecti
               <CardTitle className="text-sm font-medium">
                 {key.split(/(?=[A-Z])/).join(" ")}
               </CardTitle>
-              {!showOnlySelected && (
+              {!showOnlySelected && !isPngPreview && (
                 <Checkbox
                   checked={selectedInsights.includes(key)}
                   onCheckedChange={() => onInsightSelection(key)}
@@ -82,57 +158,7 @@ const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelecti
               )}
             </CardHeader>
             <CardContent>
-              {Array.isArray(value.main) ? (
-                <ul>
-                  {value.main.map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p>{value.main}</p>
-              )}
-              {value.nextBest && value.nextBest.length > 0 && (
-                <div className="mt-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="p-0 h-6 text-xs"
-                    onClick={() => toggleExpand(key)}
-                  >
-                    {expandedInsights[key] ? (
-                      <>
-                        <ChevronUpIcon className="h-4 w-4 mr-1" />
-                        Hide next best
-                      </>
-                    ) : (
-                      <>
-                        <ChevronDownIcon className="h-4 w-4 mr-1" />
-                        Show next best
-                      </>
-                    )}
-                  </Button>
-                  {(expandedInsights[key] || showOnlySelected) && (
-                    <ul className="mt-2 text-sm">
-                      {value.nextBest.map((item, i) => (
-                        <li key={i} className="flex items-center">
-                          {!showOnlySelected && (
-                            <Checkbox
-                              checked={selectedNextBest[key]?.includes(i)}
-                              onCheckedChange={() => handleNextBestSelection(key, i)}
-                              className="mr-2"
-                            />
-                          )}
-                          {(showOnlySelected && selectedNextBest[key]?.includes(i)) || !showOnlySelected ? (
-                            <span className={`${showOnlySelected && selectedNextBest[key]?.includes(i) ? 'font-semibold' : 'text-gray-600'}`}>
-                              {item}
-                            </span>
-                          ) : null}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              )}
+              {renderInsightContent(key, value)}
             </CardContent>
           </Card>
         ))}

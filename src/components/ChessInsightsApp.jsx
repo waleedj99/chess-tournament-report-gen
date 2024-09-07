@@ -129,6 +129,7 @@ const ChessInsightsApp = () => {
               showOnlySelected={true}
               selectedNextBest={selectedNextBest}
               onNextBestSelection={() => {}}
+              isPngPreview={true}
             />
           </div>
         </div>
