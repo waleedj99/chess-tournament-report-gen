@@ -52,9 +52,18 @@ const ChessInsightsApp = () => {
   };
 
   const generatePng = async () => {
-    const element = document.getElementById('insights-container');
+    const element = document.getElementById('selected-insights-container');
     if (element) {
-      const dataUrl = await toPng(element);
+      const dataUrl = await toPng(element, {
+        width: 800,
+        height: 800,
+        style: {
+          transform: 'scale(2)',
+          transformOrigin: 'top left',
+          width: '400px',
+          height: '400px'
+        }
+      });
       setPngPreview(dataUrl);
     }
   };
@@ -83,12 +92,21 @@ const ChessInsightsApp = () => {
       {isLoading && <p>Loading tournament data...</p>}
       {error && <p className="text-red-500">Error: {error.message}</p>}
       {isDataFetched && data && (
-        <div id="insights-container">
+        <div>
           <TournamentInsights 
             tournamentData={data} 
             selectedInsights={selectedInsights}
             onInsightSelection={handleInsightSelection}
           />
+          <div id="selected-insights-container" className="mt-6 p-4 bg-white rounded-lg shadow">
+            <h2 className="text-2xl font-bold mb-4">{data.name} Insights</h2>
+            <TournamentInsights 
+              tournamentData={data} 
+              selectedInsights={selectedInsights}
+              onInsightSelection={() => {}}
+              showOnlySelected={true}
+            />
+          </div>
         </div>
       )}
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 
-const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelection }) => {
+const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelection, showOnlySelected = false }) => {
   // Dummy data for insights
   const insights = {
     shortestGame: "Game 12: White vs Black (15 moves)",
@@ -20,24 +20,35 @@ const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelecti
 
   const colors = [
     'bg-blue-100', 'bg-green-100', 'bg-yellow-100', 
-    'bg-purple-100', 'bg-pink-100', 'bg-indigo-100', 'bg-red-100'
+    'bg-purple-100', 'bg-pink-100', 'bg-indigo-100', 'bg-red-100',
+    'bg-orange-100', 'bg-teal-100', 'bg-cyan-100'
   ];
+
+  const insightsToShow = showOnlySelected 
+    ? Object.entries(insights).filter(([key]) => selectedInsights.includes(key))
+    : Object.entries(insights);
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Insights for {tournamentData.name}</h2>
-      <p>Tournament Type: {tournamentData.type}, Players: {tournamentData.players}, Total Games: {tournamentData.games}</p>
+      {!showOnlySelected && (
+        <>
+          <h2 className="text-2xl font-bold">Insights for {tournamentData.name}</h2>
+          <p>Tournament Type: {tournamentData.type}, Players: {tournamentData.players}, Total Games: {tournamentData.games}</p>
+        </>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Object.entries(insights).map(([key, value], index) => (
+        {insightsToShow.map(([key, value], index) => (
           <Card key={key} className={`${colors[index % colors.length]} transition-all ${selectedInsights.includes(key) ? 'ring-2 ring-blue-500' : ''}`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 {key.split(/(?=[A-Z])/).join(" ")}
               </CardTitle>
-              <Checkbox
-                checked={selectedInsights.includes(key)}
-                onCheckedChange={() => onInsightSelection(key)}
-              />
+              {!showOnlySelected && (
+                <Checkbox
+                  checked={selectedInsights.includes(key)}
+                  onCheckedChange={() => onInsightSelection(key)}
+                />
+              )}
             </CardHeader>
             <CardContent>
               {Array.isArray(value) ? (
