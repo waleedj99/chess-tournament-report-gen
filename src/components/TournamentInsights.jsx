@@ -4,10 +4,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelection, showOnlySelected = false }) => {
+const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelection, showOnlySelected = false, selectedNextBest, onNextBestSelection }) => {
   const [expandedInsights, setExpandedInsights] = useState({});
 
-  // Dummy data for insights
   const insights = {
     shortestGame: {
       main: "Game 12: White vs Black (15 moves)",
@@ -54,6 +53,10 @@ const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelecti
       ...prev,
       [key]: !prev[key]
     }));
+  };
+
+  const handleNextBestSelection = (key, index) => {
+    onNextBestSelection(key, index);
   };
 
   return (
@@ -111,7 +114,14 @@ const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelecti
                   {expandedInsights[key] && (
                     <ul className="mt-2 text-sm">
                       {value.nextBest.map((item, i) => (
-                        <li key={i} className="text-gray-600">{item}</li>
+                        <li key={i} className="flex items-center">
+                          <Checkbox
+                            checked={selectedNextBest[key]?.includes(i)}
+                            onCheckedChange={() => handleNextBestSelection(key, i)}
+                            className="mr-2"
+                          />
+                          <span className="text-gray-600">{item}</span>
+                        </li>
                       ))}
                     </ul>
                   )}

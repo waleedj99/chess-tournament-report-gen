@@ -34,6 +34,7 @@ const ChessInsightsApp = () => {
   const [tournamentId, setTournamentId] = useState('');
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [selectedInsights, setSelectedInsights] = useState([]);
+  const [selectedNextBest, setSelectedNextBest] = useState({});
   const [pngPreview, setPngPreview] = useState(null);
   const [selectedLayout, setSelectedLayout] = useState(layoutOptions[0]);
 
@@ -56,6 +57,18 @@ const ChessInsightsApp = () => {
         ? prev.filter(i => i !== insight)
         : [...prev, insight]
     );
+  };
+
+  const handleNextBestSelection = (key, index) => {
+    setSelectedNextBest(prev => {
+      const currentSelection = prev[key] || [];
+      return {
+        ...prev,
+        [key]: currentSelection.includes(index)
+          ? currentSelection.filter(i => i !== index)
+          : [...currentSelection, index]
+      };
+    });
   };
 
   const generatePng = async () => {
@@ -104,6 +117,8 @@ const ChessInsightsApp = () => {
             tournamentData={data} 
             selectedInsights={selectedInsights}
             onInsightSelection={handleInsightSelection}
+            selectedNextBest={selectedNextBest}
+            onNextBestSelection={handleNextBestSelection}
           />
           <div id="selected-insights-container" className={`mt-6 p-4 rounded-lg shadow ${selectedLayout.background}`}>
             <h2 className="text-2xl font-bold mb-4">{data.name} Insights</h2>
@@ -112,6 +127,8 @@ const ChessInsightsApp = () => {
               selectedInsights={selectedInsights}
               onInsightSelection={() => {}}
               showOnlySelected={true}
+              selectedNextBest={selectedNextBest}
+              onNextBestSelection={() => {}}
             />
           </div>
         </div>
