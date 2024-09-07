@@ -30,7 +30,7 @@ const PngPreview = ({ imageUrl }) => {
         <div className="flex justify-center">
           <a href={imageUrl} download="chess-insights.png" className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">
             Download PNG
-          </Button>
+          </a>
         </div>
       </CardContent>
     </Card>
