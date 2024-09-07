@@ -6,11 +6,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import TournamentInsights from './TournamentInsights';
 
 const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
-  const response = await fetch(`https://lichess.org/api/tournament/${tournamentId}`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch tournament data');
-  }
-  return response.json();
+  // Simulating API call with dummy data
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        id: tournamentId,
+        type: tournamentType,
+        name: "Chess Masters 2023",
+        players: 64,
+        games: 124,
+        // Add more dummy data as needed
+      });
+    }, 1000);
+  });
 };
 
 const ChessInsightsApp = () => {
