@@ -1,21 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelection, showOnlySelected = false }) => {
+  const [expandedInsights, setExpandedInsights] = useState({});
+
   // Dummy data for insights
   const insights = {
-    shortestGame: "Game 12: White vs Black (15 moves)",
-    longestGame: "Game 7: Alice vs Bob (78 moves)",
-    mostAccurateGame: "Game 3: Charlie vs David (97% accuracy)",
-    longestMove: "Game 5: Eve, Move 25 (8 minutes 30 seconds)",
-    mostPopularOpening: "Sicilian Defense (23% of games)",
-    mostDynamicGame: "Game 18: Frank vs Grace (21 advantage shifts)",
-    topPerformers: [
-      "1. Alice (95% avg. accuracy, 10 games)",
-      "2. Bob (93% avg. accuracy, 9 games)",
-      "3. Charlie (91% avg. accuracy, 11 games)"
-    ]
+    shortestGame: {
+      main: "Game 12: White vs Black (15 moves)",
+      nextBest: ["Game 8: Alice vs Eve (17 moves)", "Game 23: Bob vs Charlie (18 moves)"]
+    },
+    longestGame: {
+      main: "Game 7: Alice vs Bob (78 moves)",
+      nextBest: ["Game 15: Charlie vs David (72 moves)", "Game 31: Eve vs Frank (70 moves)"]
+    },
+    mostAccurateGame: {
+      main: "Game 3: Charlie vs David (97% accuracy)",
+      nextBest: ["Game 19: Alice vs Frank (95% accuracy)", "Game 27: Bob vs Eve (94% accuracy)"]
+    },
+    longestMove: {
+      main: "Game 5: Eve, Move 25 (8 minutes 30 seconds)",
+      nextBest: ["Game 11: Alice, Move 18 (7 minutes 45 seconds)", "Game 29: Bob, Move 32 (7 minutes 15 seconds)"]
+    },
+    mostPopularOpening: {
+      main: "Sicilian Defense (23% of games)",
+      nextBest: ["French Defense (18% of games)", "King's Indian Defense (15% of games)"]
+    },
+    mostDynamicGame: {
+      main: "Game 18: Frank vs Grace (21 advantage shifts)",
+      nextBest: ["Game 9: Alice vs Charlie (19 advantage shifts)", "Game 25: Bob vs David (18 advantage shifts)"]
+    },
+    topPerformers: {
+      main: ["1. Alice (95% avg. accuracy, 10 games)", "2. Bob (93% avg. accuracy, 9 games)", "3. Charlie (91% avg. accuracy, 11 games)"],
+      nextBest: ["4. David (90% avg. accuracy, 8 games)", "5. Eve (89% avg. accuracy, 10 games)"]
+    }
   };
 
   const colors = [
@@ -27,6 +48,13 @@ const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelecti
   const insightsToShow = showOnlySelected 
     ? Object.entries(insights).filter(([key]) => selectedInsights.includes(key))
     : Object.entries(insights);
+
+  const toggleExpand = (key) => {
+    setExpandedInsights(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+  };
 
   return (
     <div className="space-y-6">
@@ -51,14 +79,43 @@ const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelecti
               )}
             </CardHeader>
             <CardContent>
-              {Array.isArray(value) ? (
+              {Array.isArray(value.main) ? (
                 <ul>
-                  {value.map((item, i) => (
+                  {value.main.map((item, i) => (
                     <li key={i}>{item}</li>
                   ))}
                 </ul>
               ) : (
-                <p>{value}</p>
+                <p>{value.main}</p>
+              )}
+              {value.nextBest && value.nextBest.length > 0 && (
+                <div className="mt-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="p-0 h-6 text-xs"
+                    onClick={() => toggleExpand(key)}
+                  >
+                    {expandedInsights[key] ? (
+                      <>
+                        <ChevronUpIcon className="h-4 w-4 mr-1" />
+                        Hide next best
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDownIcon className="h-4 w-4 mr-1" />
+                        Show next best
+                      </>
+                    )}
+                  </Button>
+                  {expandedInsights[key] && (
+                    <ul className="mt-2 text-sm">
+                      {value.nextBest.map((item, i) => (
+                        <li key={i} className="text-gray-600">{item}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               )}
             </CardContent>
           </Card>
