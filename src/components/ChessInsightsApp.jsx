@@ -4,6 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import TournamentInsights from './TournamentInsights';
+import PngPreview from './PngPreview';
+import { toPng } from 'html-to-image';
 
 const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
   // Simulating API call with dummy data
@@ -25,6 +27,8 @@ const ChessInsightsApp = () => {
   const [tournamentType, setTournamentType] = useState('swiss');
   const [tournamentId, setTournamentId] = useState('');
   const [isDataFetched, setIsDataFetched] = useState(false);
+  const [selectedInsights, setSelectedInsights] = useState([]);
+  const [pngPreview, setPngPreview] = useState(null);
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['tournamentData', tournamentType, tournamentId],
@@ -36,6 +40,22 @@ const ChessInsightsApp = () => {
     if (tournamentId) {
       refetch();
       setIsDataFetched(true);
+    }
+  };
+
+  const handleInsightSelection = (insight) => {
+    setSelectedInsights(prev => 
+      prev.includes(insight) 
+        ? prev.filter(i => i !== insight)
+        : [...prev, insight]
+    );
+  };
+
+  const generatePng = async () => {
+    const element = document.getElementById('insights-container');
+    if (element) {
+      const dataUrl = await toPng(element);
+      setPngPreview(dataUrl);
     }
   };
 
@@ -62,7 +82,24 @@ const ChessInsightsApp = () => {
 
       {isLoading && <p>Loading tournament data...</p>}
       {error && <p className="text-red-500">Error: {error.message}</p>}
-      {isDataFetched && data && <TournamentInsights tournamentData={data} />}
+      {isDataFetched && data && (
+        <div id="insights-container">
+          <TournamentInsights 
+            tournamentData={data} 
+            selectedInsights={selectedInsights}
+            onInsightSelection={handleInsightSelection}
+          />
+        </div>
+      )}
+
+      {isDataFetched && data && (
+        <div className="space-y-4">
+          <Button onClick={generatePng} disabled={selectedInsights.length === 0}>
+            Generate PNG
+          </Button>
+          {pngPreview && <PngPreview imageUrl={pngPreview} />}
+        </div>
+      )}
     </div>
   );
 };

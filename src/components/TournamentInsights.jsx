@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 
-const TournamentInsights = ({ tournamentData }) => {
+const TournamentInsights = ({ tournamentData, selectedInsights, onInsightSelection }) => {
   // Dummy data for insights
   const insights = {
     shortestGame: "Game 12: White vs Black (15 moves)",
@@ -17,59 +18,40 @@ const TournamentInsights = ({ tournamentData }) => {
     ]
   };
 
+  const colors = [
+    'bg-blue-100', 'bg-green-100', 'bg-yellow-100', 
+    'bg-purple-100', 'bg-pink-100', 'bg-indigo-100', 'bg-red-100'
+  ];
+
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">Insights for {tournamentData.name}</h2>
       <p>Tournament Type: {tournamentData.type}, Players: {tournamentData.players}, Total Games: {tournamentData.games}</p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Shortest Game</CardTitle>
-          </CardHeader>
-          <CardContent>{insights.shortestGame}</CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Longest Game</CardTitle>
-          </CardHeader>
-          <CardContent>{insights.longestGame}</CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Most Accurate Game</CardTitle>
-          </CardHeader>
-          <CardContent>{insights.mostAccurateGame}</CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Longest Move</CardTitle>
-          </CardHeader>
-          <CardContent>{insights.longestMove}</CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Most Popular Opening</CardTitle>
-          </CardHeader>
-          <CardContent>{insights.mostPopularOpening}</CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Most Dynamic Game</CardTitle>
-          </CardHeader>
-          <CardContent>{insights.mostDynamicGame}</CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Top Performers</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul>
-              {insights.topPerformers.map((performer, index) => (
-                <li key={index}>{performer}</li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+        {Object.entries(insights).map(([key, value], index) => (
+          <Card key={key} className={`${colors[index % colors.length]} transition-all ${selectedInsights.includes(key) ? 'ring-2 ring-blue-500' : ''}`}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {key.split(/(?=[A-Z])/).join(" ")}
+              </CardTitle>
+              <Checkbox
+                checked={selectedInsights.includes(key)}
+                onCheckedChange={() => onInsightSelection(key)}
+              />
+            </CardHeader>
+            <CardContent>
+              {Array.isArray(value) ? (
+                <ul>
+                  {value.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>{value}</p>
+              )}
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );
