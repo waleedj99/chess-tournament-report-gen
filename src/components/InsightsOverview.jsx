@@ -21,6 +21,10 @@ const insightsData = {
 };
 
 const InsightsOverview = () => {
+  const toTitleCase = (str) => {
+    return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+  };
+
   return (
     <Card className="mb-6">
       <CardHeader>
@@ -30,7 +34,7 @@ const InsightsOverview = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {Object.entries(insightsData).map(([category, insights]) => (
             <div key={category}>
-              <h3 className="font-semibold mb-2 text-lg">{category.replace(/([A-Z])/g, ' $1').trim()}</h3>
+              <h3 className="font-semibold mb-2 text-lg">{toTitleCase(category.replace(/([A-Z])/g, ' $1').trim())}</h3>
               <ul className="list-disc pl-5">
                 {insights.map((insight, index) => (
                   <li key={index} className="text-sm mb-1">{insight}</li>
