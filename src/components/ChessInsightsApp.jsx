@@ -9,6 +9,7 @@ import { toPng } from 'html-to-image';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { InfoIcon } from 'lucide-react';
 import InsightsOverview from './InsightsOverview';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
   // Simulating API call with dummy data
@@ -96,24 +97,31 @@ const ChessInsightsApp = () => {
   return (
     <div className="space-y-6">
       <InsightsOverview />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Select value={tournamentType} onValueChange={setTournamentType}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select tournament type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="swiss">Swiss</SelectItem>
-            <SelectItem value="arena">Arena</SelectItem>
-          </SelectContent>
-        </Select>
-        <Input
-          type="text"
-          placeholder="Enter tournament ID"
-          value={tournamentId}
-          onChange={(e) => setTournamentId(e.target.value)}
-        />
-        <Button onClick={handleFetchData}>Fetch Data</Button>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Tournament Details</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Select value={tournamentType} onValueChange={setTournamentType}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select tournament type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="swiss">Swiss</SelectItem>
+                <SelectItem value="arena">Arena</SelectItem>
+              </SelectContent>
+            </Select>
+            <Input
+              type="text"
+              placeholder="Enter tournament ID"
+              value={tournamentId}
+              onChange={(e) => setTournamentId(e.target.value)}
+            />
+            <Button onClick={handleFetchData}>Fetch Data</Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {isLoading && <p>Loading tournament data...</p>}
       {error && <p className="text-red-500">Error: {error.message}</p>}
@@ -151,22 +159,27 @@ const ChessInsightsApp = () => {
       )}
 
       {isDataFetched && data && (
-        <div className="space-y-4">
-          <Select value={selectedLayout.id} onValueChange={(layoutId) => setSelectedLayout(layoutOptions.find(l => l.id === layoutId))}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select layout" />
-            </SelectTrigger>
-            <SelectContent>
-              {layoutOptions.map((layout) => (
-                <SelectItem key={layout.id} value={layout.id}>{layout.name}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button onClick={generatePng} disabled={selectedInsights.length === 0}>
-            Generate PNG
-          </Button>
-          {pngPreview && <PngPreview imageUrl={pngPreview} layout={selectedLayout} />}
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Generate PNG Preview</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Select value={selectedLayout.id} onValueChange={(layoutId) => setSelectedLayout(layoutOptions.find(l => l.id === layoutId))}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select layout" />
+              </SelectTrigger>
+              <SelectContent>
+                {layoutOptions.map((layout) => (
+                  <SelectItem key={layout.id} value={layout.id}>{layout.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button onClick={generatePng} disabled={selectedInsights.length === 0}>
+              Generate PNG
+            </Button>
+            {pngPreview && <PngPreview imageUrl={pngPreview} layout={selectedLayout} />}
+          </CardContent>
+        </Card>
       )}
     </div>
   );
