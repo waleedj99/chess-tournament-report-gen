@@ -8,6 +8,7 @@ import PngPreview from './PngPreview';
 import { toPng } from 'html-to-image';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { InfoIcon } from 'lucide-react';
+import InsightsOverview from './InsightsOverview';
 
 const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
   // Simulating API call with dummy data
@@ -19,8 +20,7 @@ const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
         name: "Chess Masters 2023",
         players: 64,
         games: 124,
-        analyzedGames: 50, // Added this field
-        // Add more dummy data as needed
+        analyzedGames: 50,
       });
     }, 1000);
   });
@@ -95,6 +95,7 @@ const ChessInsightsApp = () => {
 
   return (
     <div className="space-y-6">
+      <InsightsOverview />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Select value={tournamentType} onValueChange={setTournamentType}>
           <SelectTrigger>
