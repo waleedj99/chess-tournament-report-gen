@@ -6,6 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import TournamentInsights from './TournamentInsights';
 import PngPreview from './PngPreview';
 import { toPng } from 'html-to-image';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { InfoIcon } from 'lucide-react';
 
 const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
   // Simulating API call with dummy data
@@ -37,6 +39,7 @@ const ChessInsightsApp = () => {
   const [selectedNextBest, setSelectedNextBest] = useState({});
   const [pngPreview, setPngPreview] = useState(null);
   const [selectedLayout, setSelectedLayout] = useState(layoutOptions[0]);
+  const [showAnalysisAlert, setShowAnalysisAlert] = useState(false);
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['tournamentData', tournamentType, tournamentId],
@@ -48,6 +51,7 @@ const ChessInsightsApp = () => {
     if (tournamentId) {
       refetch();
       setIsDataFetched(true);
+      setShowAnalysisAlert(true);
     }
   };
 
@@ -111,6 +115,15 @@ const ChessInsightsApp = () => {
 
       {isLoading && <p>Loading tournament data...</p>}
       {error && <p className="text-red-500">Error: {error.message}</p>}
+      {showAnalysisAlert && (
+        <Alert>
+          <InfoIcon className="h-4 w-4" />
+          <AlertTitle>Game Analysis Required</AlertTitle>
+          <AlertDescription>
+            Some insights like 'Most Dynamic Game', 'Most Accurate Player', and 'Most Accurate Match' require game analysis. This process may take some time depending on the number of games in the tournament.
+          </AlertDescription>
+        </Alert>
+      )}
       {isDataFetched && data && (
         <div>
           <TournamentInsights 
