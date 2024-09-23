@@ -19,6 +19,7 @@ const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
         name: "Chess Masters 2023",
         players: 64,
         games: 124,
+        analyzedGames: 50, // Added this field
         // Add more dummy data as needed
       });
     }, 1000);
