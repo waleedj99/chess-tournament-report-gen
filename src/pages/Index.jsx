@@ -1,7 +1,7 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ChessInsightsApp from '../components/ChessInsightsApp';
-import { ChessKnight } from 'lucide-react';
+import { ChessIcon } from 'lucide-react';
 
 const queryClient = new QueryClient();
 
@@ -12,7 +12,7 @@ const Index = () => {
         <header className="bg-white shadow">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center space-x-4">
-              <ChessKnight className="h-12 w-12 text-blue-600" />
+              <ChessIcon className="h-12 w-12 text-blue-600" />
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Chess Insights App</h1>
                 <p className="mt-1 text-sm text-gray-600">
