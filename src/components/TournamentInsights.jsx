@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ChevronDownIcon, ChevronUpIcon, ExternalLinkIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { redirectToGame } from '../utils/gameUtils';
 import InsightContent from './InsightContent';
 
 const TournamentInsights = ({ 
@@ -65,6 +62,12 @@ const TournamentInsights = ({
     }));
   };
 
+  const toTitleCase = (str) => {
+    return str.split(/(?=[A-Z])/).map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(" ");
+  };
+
   return (
     <div className="space-y-6">
       {!showOnlySelected && !isPngPreview && (
@@ -78,7 +81,7 @@ const TournamentInsights = ({
           <Card key={key} className={`${colors[index % colors.length]} transition-all ${selectedInsights.includes(key) ? 'ring-2 ring-blue-500' : ''}`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                {key.split(/(?=[A-Z])/).join(" ")}
+                {toTitleCase(key)}
               </CardTitle>
               {!showOnlySelected && !isPngPreview && (
                 <Checkbox
