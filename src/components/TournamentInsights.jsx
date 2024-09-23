@@ -96,9 +96,16 @@ const TournamentInsights = ({
     : Object.entries(insights);
 
   const colors = [
-    'bg-blue-100', 'bg-green-100', 'bg-yellow-100', 
-    'bg-purple-100', 'bg-pink-100', 'bg-indigo-100', 'bg-red-100',
-    'bg-orange-100', 'bg-teal-100', 'bg-cyan-100'
+    'bg-blue-100 dark:bg-blue-900',
+    'bg-green-100 dark:bg-green-900',
+    'bg-yellow-100 dark:bg-yellow-900',
+    'bg-purple-100 dark:bg-purple-900',
+    'bg-pink-100 dark:bg-pink-900',
+    'bg-indigo-100 dark:bg-indigo-900',
+    'bg-red-100 dark:bg-red-900',
+    'bg-orange-100 dark:bg-orange-900',
+    'bg-teal-100 dark:bg-teal-900',
+    'bg-cyan-100 dark:bg-cyan-900'
   ];
 
   return (
@@ -112,7 +119,7 @@ const TournamentInsights = ({
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {insightsToShow.map(([key, value], index) => (
-          <Card key={key} className={`${colors[index % colors.length]} transition-all ${selectedInsights.includes(key) ? 'ring-2 ring-blue-500' : ''}`}>
+          <Card key={key} className={`${colors[index % colors.length]} transition-all ${selectedInsights.includes(key) ? 'ring-2 ring-blue-500 dark:ring-blue-400' : ''}`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 {toTitleCase(key)}
