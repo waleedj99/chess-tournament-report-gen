@@ -1,13 +1,9 @@
 import { INSIGHTS } from './constants';
 
 const maxConsecutiveDifferenceWithPositions = (arr) => {
-  if (arr.length < 2) {
-    return [undefined, undefined];
-  }
-
+  if (arr.length < 2) return [undefined, undefined];
   let maxDiff = -Infinity;
   let maxDiffPositions = undefined;
-
   for (let i = 2; i < arr.length; i++) {
     const diff = arr[i - 1] - arr[i];
     if (diff > maxDiff) {
@@ -15,255 +11,151 @@ const maxConsecutiveDifferenceWithPositions = (arr) => {
       maxDiffPositions = i + 1;
     }
   }
-
   return [maxDiff, maxDiffPositions];
 };
 
 const highestConsecutiveCount = (arr, value) => {
   let maxCount = 0;
   let currentCount = 0;
-
   for (const element of arr) {
     if (element === value) {
       currentCount++;
-      if (currentCount > maxCount) {
-        maxCount = currentCount;
-      }
+      maxCount = Math.max(maxCount, currentCount);
     } else {
       currentCount = 0;
     }
   }
-
   return maxCount;
 };
 
+const calculateInsight = (insightName, games, calculationFunction) => {
+  const result = calculationFunction(games);
+  return result ? { [insightName]: [result] } : {};
+};
+
 const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
-  const TournamentInsight = {};
-
-  function formatInsight(name, gameId, whitePlayer, blackPlayer, value) {
-    TournamentInsight[name] = [{
-      'gameId': gameId,
-      'players': {
-        'white': whitePlayer,
-        'black': blackPlayer,
-      },
-      'value': value,
-    }];
-  }
-
-  let leastNoOfMoves = Number.MAX_VALUE;
-  let mostNoOfMoves = Number.MIN_VALUE;
-  let maxDiff = -Infinity;
-  let maxAcc = 0;
-  const OpeningMap = {};
-  const playerMap = {};
-  const playerToGamesMap = {};
-  const startingMove = {};
-  const dynamicGame = [];
+  const insights = {};
   let analysedGames = 0;
-  let totalGames = 0;
+  let totalGames = tournamentGames.length;
 
-  for (const game of tournamentGames) {
-    if (playerToGamesMap[game.players.white.user.name] == undefined) {
-      playerToGamesMap[game.players.white.user.name] = [game.winner === "white"];
-    } else {
-      playerToGamesMap[game.players.white.user.name].push(game.winner === "white");
-    }
-
-    if (playerToGamesMap[game.players.black.user.name] == undefined) {
-      playerToGamesMap[game.players.black.user.name] = [game.winner === "black"];    
-    } else {
-      playerToGamesMap[game.players.black.user.name].push(game.winner === "black");
-    }
-    
-    var noOfMoves = Math.floor(game.moves.split(' ').length / 2);
-    totalGames += 1; 
-    if (game["analysis"] !== undefined) {
-      analysedGames += 1; 
-    }
-    if (insightsToCalculate.includes(INSIGHTS.SHORTEST_GAME_BY_MOVES)) {
-      if (noOfMoves < leastNoOfMoves && noOfMoves > 2) {
-        leastNoOfMoves = noOfMoves;
-        formatInsight(INSIGHTS.SHORTEST_GAME_BY_MOVES, game.id, game.players.white, game.players.black, noOfMoves);
-      }
-    }
-
-    if (insightsToCalculate.includes(INSIGHTS.LONGEST_GAME_BY_MOVES)) {
-      if (noOfMoves >= mostNoOfMoves) {
-        mostNoOfMoves = noOfMoves;
-        formatInsight(INSIGHTS.LONGEST_GAME_BY_MOVES, game.id, game.players.white, game.players.black, noOfMoves);
-      }
-    }
-
-    if (insightsToCalculate.includes(INSIGHTS.LONGEST_MOVE_BY_TIME)) {
-      let pos = 0;
-      const blackMoves = [];
-      const whiteMoves = [];
-      for (const time of game.clocks) {
-        if (pos % 2 === 0) {
-          whiteMoves.push(time);
-        } else {
-          blackMoves.push(time);
+  const insightCalculations = {
+    [INSIGHTS.SHORTEST_GAME_BY_MOVES]: (games) => {
+      const shortestGame = games.reduce((shortest, game) => {
+        const moves = Math.floor(game.moves.split(' ').length / 2);
+        return moves > 2 && moves < shortest.moves ? { id: game.id, players: game.players, moves } : shortest;
+      }, { moves: Infinity });
+      return shortestGame.id ? { gameId: shortestGame.id, players: shortestGame.players, value: shortestGame.moves } : null;
+    },
+    [INSIGHTS.LONGEST_GAME_BY_MOVES]: (games) => {
+      const longestGame = games.reduce((longest, game) => {
+        const moves = Math.floor(game.moves.split(' ').length / 2);
+        return moves > longest.moves ? { id: game.id, players: game.players, moves } : longest;
+      }, { moves: 0 });
+      return longestGame.id ? { gameId: longestGame.id, players: longestGame.players, value: longestGame.moves } : null;
+    },
+    [INSIGHTS.LONGEST_MOVE_BY_TIME]: (games) => {
+      let maxDiff = -Infinity;
+      let result = null;
+      games.forEach(game => {
+        const [diffW, positionsW] = maxConsecutiveDifferenceWithPositions(game.clocks.filter((_, i) => i % 2 === 0));
+        const [diffB, positionsB] = maxConsecutiveDifferenceWithPositions(game.clocks.filter((_, i) => i % 2 !== 0));
+        if (Math.max(diffW, diffB) > maxDiff) {
+          maxDiff = Math.max(diffW, diffB);
+          result = {
+            gameId: game.id,
+            players: game.players,
+            side: diffW > diffB ? "white" : "black",
+            timeTaken: maxDiff / 6000,
+            moveNo: diffW > diffB ? positionsW : positionsB
+          };
         }
-        pos++;
-      }
-      const [diffW, positionsW] = maxConsecutiveDifferenceWithPositions(whiteMoves);
-      const [diffB, positionsB] = maxConsecutiveDifferenceWithPositions(blackMoves);
-  
-      if (diffW >= diffB) {
-        if (diffW > maxDiff) {
-          maxDiff = diffW;
-          formatInsight(INSIGHTS.LONGEST_MOVE_BY_TIME, game.id, game.players.white, game.players.black, {
-            side: "white",
-            timeTaken: diffW / 6000,
-            moveNo: positionsW,
+      });
+      return result;
+    },
+    [INSIGHTS.MOST_ACCURATE_GAME]: (games) => {
+      const mostAccurateGame = games.reduce((mostAccurate, game) => {
+        if (game.players.white.analysis && game.players.black.analysis) {
+          const accuracy = (game.players.white.analysis.accuracy + game.players.black.analysis.accuracy) / 2;
+          return accuracy > mostAccurate.accuracy ? { id: game.id, players: game.players, accuracy } : mostAccurate;
+        }
+        return mostAccurate;
+      }, { accuracy: 0 });
+      return mostAccurateGame.id ? { gameId: mostAccurateGame.id, players: mostAccurateGame.players, value: mostAccurateGame.accuracy } : null;
+    },
+    [INSIGHTS.MOST_DYNAMIC_GAME]: (games) => {
+      const mostDynamicGame = games.reduce((mostDynamic, game) => {
+        if (game.analysis) {
+          let turnArounds = 0;
+          let prevWinning = null;
+          game.analysis.forEach(analysis => {
+            const whiteWinning = 'eval' in analysis ? analysis.eval > 0 : analysis.mate > 0;
+            if (whiteWinning !== prevWinning && prevWinning !== null) turnArounds++;
+            prevWinning = whiteWinning;
           });
+          return turnArounds > mostDynamic.turnArounds ? { id: game.id, players: game.players, turnArounds } : mostDynamic;
         }
-      } else {
-        if (diffB > maxDiff) {
-          maxDiff = diffB;
-          formatInsight(INSIGHTS.LONGEST_MOVE_BY_TIME, game.id, game.players.white, game.players.black, {
-            side: "black",
-            timeTaken: diffB / 6000,
-            moveNo: positionsB,
-          });
+        return mostDynamic;
+      }, { turnArounds: 0 });
+      return mostDynamicGame.id ? { gameId: mostDynamicGame.id, players: mostDynamicGame.players, value: mostDynamicGame.turnArounds } : null;
+    },
+    [INSIGHTS.MOST_USED_OPENING]: (games) => {
+      const openings = games.reduce((acc, game) => {
+        if (game.opening) {
+          acc[game.opening.name] = (acc[game.opening.name] || 0) + 1;
         }
-      }
-    }
-
-    if (insightsToCalculate.includes(INSIGHTS.MOST_ACCURATE_GAME) && game.players.white.analysis) {
-      const sumA = parseInt(game.players.white.analysis.accuracy) + parseInt(game.players.black.analysis.accuracy);
-      if (sumA > maxAcc) {
-        maxAcc = sumA;
-        formatInsight(INSIGHTS.MOST_ACCURATE_GAME, game.id, game.players.white, game.players.black, maxAcc / 2);
-      }
-    }
-
-    if (insightsToCalculate.includes(INSIGHTS.MOST_USED_OPENING)) {
-      if (game.opening !== undefined) {
-        if (game.opening.name in OpeningMap) {
-          OpeningMap[game.opening.name] += 1;
-        } else {
-          OpeningMap[game.opening.name] = 1;
-        }
-      }
-    }
-
-    if (insightsToCalculate.includes(INSIGHTS.MOST_USED_OPENING_MOVE)) {
-      if (game.moves !== undefined) {
-        if (game.moves.split(' ')[0] in startingMove) {
-          startingMove[game.moves.split(' ')[0]] += 1;
-        } else {
-          startingMove[game.moves.split(' ')[0]] = 1;
-        }
-      }
-    }
-
-    if (insightsToCalculate.includes(INSIGHTS.MOST_DYNAMIC_GAME)) {
-      let numberOfTurnArounds = 0;
-      let currentWinning = undefined;
-      let whiteWinning = undefined;
-      if (game.analysis !== undefined) {
-        for (const analysis of game.analysis) {
-          if ('eval' in analysis) {
-            const posEval = analysis.eval;
-            whiteWinning = posEval > 0;
-          } else if (analysis.mate > 0) {
-            whiteWinning = true;
-          } else {
-            whiteWinning = false;
+        return acc;
+      }, {});
+      const mostUsedOpening = Object.entries(openings).reduce((a, b) => a[1] > b[1] ? a : b);
+      return mostUsedOpening ? { openingName: mostUsedOpening[0], noOfTimes: mostUsedOpening[1] } : null;
+    },
+    [INSIGHTS.MOST_ACCURATE_PLAYER]: (games) => {
+      const playerAccuracies = games.reduce((acc, game) => {
+        ['white', 'black'].forEach(color => {
+          if (game.players[color].analysis) {
+            const playerName = game.players[color].user.name;
+            if (!acc[playerName]) acc[playerName] = { totalAcc: 0, games: 0 };
+            acc[playerName].totalAcc += game.players[color].analysis.accuracy;
+            acc[playerName].games++;
           }
-          if (whiteWinning !== currentWinning) {
-            numberOfTurnArounds += 1;
-            currentWinning = whiteWinning;
-          }
-        }
-        dynamicGame.push({ game, dFactor: numberOfTurnArounds });
-      }
+        });
+        return acc;
+      }, {});
+      const mostAccuratePlayer = Object.entries(playerAccuracies).reduce((a, b) => 
+        (a[1].totalAcc / a[1].games > b[1].totalAcc / b[1].games) ? a : b
+      );
+      return mostAccuratePlayer ? {
+        playerName: mostAccuratePlayer[0],
+        averageAccuracy: mostAccuratePlayer[1].totalAcc / mostAccuratePlayer[1].games,
+        noOfMatches: mostAccuratePlayer[1].games
+      } : null;
+    },
+    [INSIGHTS.HIGHEST_WINNING_STREAK]: (games) => {
+      const playerStreaks = games.reduce((acc, game) => {
+        ['white', 'black'].forEach(color => {
+          const playerName = game.players[color].user.name;
+          if (!acc[playerName]) acc[playerName] = [];
+          acc[playerName].push(game.winner === color);
+        });
+        return acc;
+      }, {});
+      const highestStreak = Object.entries(playerStreaks).reduce((highest, [player, results]) => {
+        const streak = highestConsecutiveCount(results, true);
+        return streak > highest.streak ? { players: [player], streak } : 
+               streak === highest.streak ? { players: [...highest.players, player], streak } : highest;
+      }, { players: [], streak: 0 });
+      return highestStreak.streak > 0 ? { playerNames: highestStreak.players, streakCount: highestStreak.streak } : null;
     }
+  };
 
-    if (insightsToCalculate.includes(INSIGHTS.MOST_ACCURATE_PLAYER)) {
-      if (game.players.white.user !== undefined && game.players.white.analysis !== undefined) {
-        const whitePlayerName = game.players.white.user.name;
-        if (whitePlayerName in playerMap) {
-          playerMap[whitePlayerName].noMatches += 1;
-          playerMap[whitePlayerName].totalAcc += game.players.white.analysis.accuracy;
-        } else {
-          playerMap[whitePlayerName] = { noMatches: 1, totalAcc: game.players.white.analysis.accuracy };
-        }
-      }
-  
-      if (game.players.black.user !== undefined && game.players.black.analysis !== undefined) {
-        const blackPlayerName = game.players.black.user.name;
-        if (blackPlayerName in playerMap) {
-          playerMap[blackPlayerName].noMatches += 1;
-          playerMap[blackPlayerName].totalAcc += game.players.black.analysis.accuracy;
-        } else {
-          playerMap[blackPlayerName] = { noMatches: 1, totalAcc: game.players.black.analysis.accuracy };
-        }
-      }
+  insightsToCalculate.forEach(insight => {
+    if (insightCalculations[insight]) {
+      Object.assign(insights, calculateInsight(insight, tournamentGames, insightCalculations[insight]));
     }
-  }
-  
-  if (insightsToCalculate.includes(INSIGHTS.MOST_USED_OPENING) && Object.values(OpeningMap).length > 0) {
-    const maxName = Object.keys(OpeningMap).reduce((a, b) => (OpeningMap[a] > OpeningMap[b] ? a : b));
-    const maxNumber = OpeningMap[maxName];
-    formatInsight(INSIGHTS.MOST_USED_OPENING, undefined, undefined, undefined, { openingName: maxName, noOfTimes: maxNumber });
-  }
+  });
 
-  if (insightsToCalculate.includes(INSIGHTS.MOST_USED_OPENING_MOVE) && Object.values(startingMove).length > 0) {
-    const maxName = Object.keys(startingMove).reduce((a, b) => (startingMove[a] > startingMove[b] ? a : b));
-    const maxNumber = startingMove[maxName];
-    formatInsight(INSIGHTS.MOST_USED_OPENING_MOVE, undefined, undefined, undefined, { openingMoveName: maxName, noOfTimes: maxNumber });
-  }
+  analysedGames = tournamentGames.filter(game => game.analysis).length;
 
-  if (insightsToCalculate.includes(INSIGHTS.MOST_DYNAMIC_GAME) && Object.values(dynamicGame).length > 0) {
-    dynamicGame.sort((a, b) => b.dFactor - a.dFactor);
-    formatInsight(INSIGHTS.MOST_DYNAMIC_GAME, dynamicGame[0].game.id, dynamicGame[0].game.players.white, dynamicGame[0].game.players.black, dynamicGame[0].dFactor);
-  }
-
-  if (insightsToCalculate.includes(INSIGHTS.MOST_ACCURATE_PLAYER) && Object.values(playerMap).length > 0) {
-    for (const player in playerMap) {
-      if (playerMap[player].noMatches >= (totalGames / 2))
-        playerMap[player].totalAcc = playerMap[player].totalAcc / playerMap[player].noMatches;
-      else {
-        playerMap[player].totalAcc = 0;
-      }
-    }
-    
-    const accuratePlayer = Object.keys(playerMap).reduce((a, b) => (playerMap[a].totalAcc > playerMap[b].totalAcc ? a : b));
-    formatInsight(INSIGHTS.MOST_ACCURATE_PLAYER, undefined, undefined, undefined, {
-      playerName: accuratePlayer,
-      averageAccuracy: playerMap[accuratePlayer].totalAcc,
-      noOfMatches: playerMap[accuratePlayer].noMatches,
-    });
-  }
-
-  if (insightsToCalculate.includes(INSIGHTS.HIGHEST_WINNING_STREAK) && Object.values(playerToGamesMap).length > 0) {
-    let hStreak = Number.MIN_VALUE;
-    let winner = [];
-    for (let pl in playerToGamesMap) {
-      let cStreak = highestConsecutiveCount(playerToGamesMap[pl], true);
-      if (cStreak >= hStreak) {
-        if (cStreak === hStreak) {
-          winner.push(pl);
-        } else {
-          winner = [pl];
-        }
-        
-        hStreak = cStreak;
-      }
-    }
-    formatInsight(INSIGHTS.HIGHEST_WINNING_STREAK, undefined, undefined, undefined, {
-      playerNames: winner,
-      streakCount: hStreak
-    });
-  }
-
-  console.log(TournamentInsight);
-  console.log("Analysed Games", analysedGames);
-  console.log("Unanalysed Games", totalGames - analysedGames);
-  return TournamentInsight;
-}
+  return { ...insights, analysedGames, totalGames };
+};
 
 export default calculateAllInsights;

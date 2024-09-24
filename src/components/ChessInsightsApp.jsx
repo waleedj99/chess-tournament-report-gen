@@ -14,29 +14,8 @@ import calculateAllInsights from '../utils/insightsCalculator';
 import { INSIGHTS } from '../utils/constants';
 
 const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
-  // Simulating API call with dummy data
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        id: tournamentId,
-        type: tournamentType,
-        name: "Chess Masters 2023",
-        players: 64,
-        games: [
-          {
-            id: '1',
-            players: { white: { user: { name: 'Player1' } }, black: { user: { name: 'Player2' } } },
-            winner: 'white',
-            moves: 'e4 e5 Nf3 Nc6',
-            clocks: [300, 290, 285, 280],
-            opening: { name: 'Italian Game' },
-            analysis: [{ eval: 0.5 }, { eval: -0.2 }, { eval: 0.3 }],
-          },
-          // Add more dummy games here if needed
-        ],
-      });
-    }, 1000);
-  });
+  // TODO: Implement real API call here
+  throw new Error('API not implemented');
 };
 
 const ChessInsightsApp = () => {
