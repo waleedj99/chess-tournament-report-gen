@@ -105,8 +105,8 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
         }
         return acc;
       }, {});
-      const mostUsedOpening = Object.entries(openings).reduce((a, b) => a[1] > b[1] ? a : b);
-      return mostUsedOpening ? { openingName: mostUsedOpening[0], noOfTimes: mostUsedOpening[1] } : null;
+      const mostUsedOpening = Object.entries(openings).reduce((a, b) => a[1] > b[1] ? a : b, ['', 0]);
+      return mostUsedOpening[1] > 0 ? { openingName: mostUsedOpening[0], noOfTimes: mostUsedOpening[1] } : null;
     },
     [INSIGHTS.MOST_ACCURATE_PLAYER]: (games) => {
       const playerAccuracies = games.reduce((acc, game) => {
@@ -122,8 +122,8 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
       }, {});
       const mostAccuratePlayer = Object.entries(playerAccuracies).reduce((a, b) => 
         (a[1].totalAcc / a[1].games > b[1].totalAcc / b[1].games) ? a : b
-      );
-      return mostAccuratePlayer ? {
+      , ['', { totalAcc: 0, games: 0 }]);
+      return mostAccuratePlayer[1].games > 0 ? {
         playerName: mostAccuratePlayer[0],
         averageAccuracy: mostAccuratePlayer[1].totalAcc / mostAccuratePlayer[1].games,
         noOfMatches: mostAccuratePlayer[1].games
