@@ -23,7 +23,6 @@ const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
         name: "Chess Masters 2023",
         players: 64,
         games: [
-          // Add some dummy game data here
           {
             id: '1',
             players: { white: { user: { name: 'Player1' } }, black: { user: { name: 'Player2' } } },
@@ -33,7 +32,7 @@ const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
             opening: { name: 'Italian Game' },
             analysis: [{ eval: 0.5 }, { eval: -0.2 }, { eval: 0.3 }],
           },
-          // Add more dummy games...
+          // Add more dummy games here if needed
         ],
       });
     }, 1000);
@@ -140,7 +139,7 @@ const ChessInsightsApp = () => {
         <div>
           <TournamentInsights 
             tournamentData={data} 
-            insights={calculatedInsights.insights}
+            insights={calculatedInsights}
             analysedGames={calculatedInsights.analysedGames}
             totalGames={calculatedInsights.totalGames}
             selectedInsights={selectedInsights}
@@ -152,7 +151,7 @@ const ChessInsightsApp = () => {
             <h2 className="text-2xl font-bold mb-4">{data.name} Insights</h2>
             <TournamentInsights 
               tournamentData={data}
-              insights={calculatedInsights.insights}
+              insights={calculatedInsights}
               analysedGames={calculatedInsights.analysedGames}
               totalGames={calculatedInsights.totalGames}
               selectedInsights={selectedInsights}

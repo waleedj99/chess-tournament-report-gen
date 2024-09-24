@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { ChevronDownIcon, ChevronUpIcon, ExternalLinkIcon } from 'lucide-react';
+import { ExternalLinkIcon } from 'lucide-react';
 import { redirectToGame } from '../utils/gameUtils';
 
 const InsightContent = ({
@@ -32,7 +31,7 @@ const InsightContent = ({
         <div>
           {Object.entries(value).map(([key, val]) => (
             <p key={key} className="flex items-center">
-              {key}: {val}
+              {key}: {typeof val === 'object' ? JSON.stringify(val) : val}
               {key === 'gameId' && renderGameRedirectButton(val)}
             </p>
           ))}
@@ -42,7 +41,7 @@ const InsightContent = ({
       return (
         <p className="flex items-center">
           {value}
-          {value.gameId && renderGameRedirectButton(value.gameId)}
+          {value && value.gameId && renderGameRedirectButton(value.gameId)}
         </p>
       );
     }
