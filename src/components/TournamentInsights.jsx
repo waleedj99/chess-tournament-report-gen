@@ -7,13 +7,13 @@ import { INSIGHTS } from '../utils/constants';
 
 const TournamentInsights = ({ 
   tournamentData, 
-  insights,
-  analysedGames,
-  totalGames,
-  selectedInsights, 
+  insights = {},
+  analysedGames = 0,
+  totalGames = 0,
+  selectedInsights = [], 
   onInsightSelection, 
   showOnlySelected = false, 
-  selectedNextBest, 
+  selectedNextBest = {}, 
   onNextBestSelection, 
   isPngPreview = false 
 }) => {
@@ -38,7 +38,7 @@ const TournamentInsights = ({
 
   return (
     <div className="space-y-6">
-      {!showOnlySelected && !isPngPreview && (
+      {!showOnlySelected && !isPngPreview && tournamentData && (
         <>
           <h2 className="text-2xl font-bold">Insights for {tournamentData.name}</h2>
           <p>Tournament Type: {tournamentData.type}, Players: {tournamentData.players}, Total Games: {totalGames}</p>
