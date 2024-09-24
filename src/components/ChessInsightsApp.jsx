@@ -9,6 +9,7 @@ import { toPng } from 'html-to-image';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import InsightsOverview from './InsightsOverview';
 
 const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
   // Simulating API call with dummy data
@@ -86,6 +87,7 @@ const ChessInsightsApp = () => {
 
   return (
     <div className="space-y-6">
+      <InsightsOverview />
       <Card>
         <CardContent className="pt-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
