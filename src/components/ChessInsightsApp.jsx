@@ -6,10 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import TournamentInsights from './TournamentInsights';
 import PngPreview from './PngPreview';
 import { toPng } from 'html-to-image';
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon } from 'lucide-react';
-import InsightsOverview from './InsightsOverview';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 
 const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
   // Simulating API call with dummy data
@@ -27,12 +26,6 @@ const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
   });
 };
 
-const layoutOptions = [
-  { id: 'classic', name: 'Classic', background: 'bg-gray-100' },
-  { id: 'modern', name: 'Modern', background: 'bg-blue-100' },
-  { id: 'dark', name: 'Dark', background: 'bg-gray-800 text-white' },
-];
-
 const ChessInsightsApp = () => {
   const [tournamentType, setTournamentType] = useState('swiss');
   const [tournamentId, setTournamentId] = useState('');
@@ -40,8 +33,6 @@ const ChessInsightsApp = () => {
   const [selectedInsights, setSelectedInsights] = useState([]);
   const [selectedNextBest, setSelectedNextBest] = useState({});
   const [pngPreview, setPngPreview] = useState(null);
-  const [selectedLayout, setSelectedLayout] = useState(layoutOptions[0]);
-  const [showAnalysisAlert, setShowAnalysisAlert] = useState(false);
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['tournamentData', tournamentType, tournamentId],
@@ -53,7 +44,6 @@ const ChessInsightsApp = () => {
     if (tournamentId) {
       refetch();
       setIsDataFetched(true);
-      setShowAnalysisAlert(true);
     }
   };
 
@@ -96,12 +86,8 @@ const ChessInsightsApp = () => {
 
   return (
     <div className="space-y-6">
-      <InsightsOverview />
       <Card>
-        <CardHeader>
-          <CardTitle>Tournament Details</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Select value={tournamentType} onValueChange={setTournamentType}>
               <SelectTrigger>
@@ -125,12 +111,11 @@ const ChessInsightsApp = () => {
 
       {isLoading && <p>Loading tournament data...</p>}
       {error && <p className="text-red-500">Error: {error.message}</p>}
-      {showAnalysisAlert && (
+      {isDataFetched && data && (
         <Alert>
           <InfoIcon className="h-4 w-4" />
-          <AlertTitle>Game Analysis Required</AlertTitle>
           <AlertDescription>
-            Some insights like 'Most Dynamic Game', 'Most Accurate Player', and 'Most Accurate Match' require game analysis. This process may take some time depending on the number of games in the tournament.
+            Some insights require game analysis. This process may take some time depending on the number of games.
           </AlertDescription>
         </Alert>
       )}
@@ -143,7 +128,7 @@ const ChessInsightsApp = () => {
             selectedNextBest={selectedNextBest}
             onNextBestSelection={handleNextBestSelection}
           />
-          <div id="selected-insights-container" className={`mt-6 p-4 rounded-lg shadow ${selectedLayout.background}`}>
+          <div id="selected-insights-container" className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
             <h2 className="text-2xl font-bold mb-4">{data.name} Insights</h2>
             <TournamentInsights 
               tournamentData={data} 
@@ -160,24 +145,11 @@ const ChessInsightsApp = () => {
 
       {isDataFetched && data && (
         <Card>
-          <CardHeader>
-            <CardTitle>Generate PNG Preview</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Select value={selectedLayout.id} onValueChange={(layoutId) => setSelectedLayout(layoutOptions.find(l => l.id === layoutId))}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select layout" />
-              </SelectTrigger>
-              <SelectContent>
-                {layoutOptions.map((layout) => (
-                  <SelectItem key={layout.id} value={layout.id}>{layout.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <CardContent className="pt-6">
             <Button onClick={generatePng} disabled={selectedInsights.length === 0}>
               Generate PNG
             </Button>
-            {pngPreview && <PngPreview imageUrl={pngPreview} layout={selectedLayout} />}
+            {pngPreview && <PngPreview imageUrl={pngPreview} />}
           </CardContent>
         </Card>
       )}
