@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -13,11 +13,6 @@ import InsightsOverview from './InsightsOverview';
 import calculateAllInsights from '../utils/insightsCalculator';
 import { INSIGHTS } from '../utils/constants';
 
-const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
-  // TODO: Implement real API call here
-  throw new Error('API not implemented');
-};
-
 const ChessInsightsApp = () => {
   const [tournamentType, setTournamentType] = useState('swiss');
   const [tournamentId, setTournamentId] = useState('');
@@ -25,12 +20,63 @@ const ChessInsightsApp = () => {
   const [selectedInsights, setSelectedInsights] = useState([]);
   const [selectedNextBest, setSelectedNextBest] = useState({});
   const [pngPreview, setPngPreview] = useState(null);
+  const [tournamentGames, setTournamentGames] = useState([]);
+  const [calculatedInsights, setCalculatedInsights] = useState(null);
+
+  const fetchGames = async () => {
+    let fetchData = [];
+    var requestOptions = {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/x-ndjson",
+        "Accept": "application/x-ndjson"
+      },
+      redirect: 'follow'
+    };
+
+    try {
+      const response = await fetch(`https://lichess.org/api/${tournamentType}/${tournamentId}/games?evals=true&accuracy=true&clocks=true&opening=true`, requestOptions);
+      const reader = response.body.getReader();
+      let chunk = '';
+
+      const read = async () => {
+        const { done, value } = await reader.read();
+        if (done) return;
+
+        chunk += new TextDecoder().decode(value);
+        const lines = chunk.split('\n');
+
+        for (let i = 0; i < lines.length - 1; i++) {
+          const jsonLine = lines[i];
+          const jsonObject = JSON.parse(jsonLine);
+          fetchData.push(jsonObject);
+        }
+
+        chunk = lines[lines.length - 1];
+        await read();
+      };
+
+      await read();
+      setTournamentGames(fetchData);
+      return fetchData;
+    } catch (error) {
+      console.error('Error fetching games:', error);
+      throw error;
+    }
+  };
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['tournamentData', tournamentType, tournamentId],
-    queryFn: () => fetchTournamentData({ tournamentType, tournamentId }),
+    queryKey: ['tournamentGames', tournamentType, tournamentId],
+    queryFn: fetchGames,
     enabled: false,
   });
+
+  useEffect(() => {
+    if (tournamentGames.length > 0) {
+      const insights = calculateAllInsights(tournamentGames, Object.values(INSIGHTS));
+      setCalculatedInsights(insights);
+    }
+  }, [tournamentGames]);
 
   const handleFetchData = () => {
     if (tournamentId) {
@@ -76,8 +122,6 @@ const ChessInsightsApp = () => {
     }
   };
 
-  const calculatedInsights = data ? calculateAllInsights(data.games, Object.values(INSIGHTS)) : null;
-
   return (
     <div className="space-y-6">
       <InsightsOverview />
@@ -106,7 +150,7 @@ const ChessInsightsApp = () => {
 
       {isLoading && <p>Loading tournament data...</p>}
       {error && <p className="text-red-500">Error: {error.message}</p>}
-      {isDataFetched && data && (
+      {isDataFetched && calculatedInsights && (
         <Alert>
           <InfoIcon className="h-4 w-4" />
           <AlertDescription>
@@ -117,7 +161,7 @@ const ChessInsightsApp = () => {
       {isDataFetched && calculatedInsights && (
         <div>
           <TournamentInsights 
-            tournamentData={data} 
+            tournamentData={{ name: `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, type: tournamentType, players: calculatedInsights.totalGames }}
             insights={calculatedInsights}
             analysedGames={calculatedInsights.analysedGames}
             totalGames={calculatedInsights.totalGames}
@@ -127,9 +171,9 @@ const ChessInsightsApp = () => {
             onNextBestSelection={handleNextBestSelection}
           />
           <div id="selected-insights-container" className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-            <h2 className="text-2xl font-bold mb-4">{data.name} Insights</h2>
+            <h2 className="text-2xl font-bold mb-4">{tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament Insights</h2>
             <TournamentInsights 
-              tournamentData={data}
+              tournamentData={{ name: `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, type: tournamentType, players: calculatedInsights.totalGames }}
               insights={calculatedInsights}
               analysedGames={calculatedInsights.analysedGames}
               totalGames={calculatedInsights.totalGames}

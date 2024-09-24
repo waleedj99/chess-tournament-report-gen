@@ -41,14 +41,14 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
   const insightCalculations = {
     [INSIGHTS.SHORTEST_GAME_BY_MOVES]: (games) => {
       const shortestGame = games.reduce((shortest, game) => {
-        const moves = Math.floor(game.moves.split(' ').length / 2);
+        const moves = game.moves ? Math.floor(game.moves.split(' ').length / 2) : Infinity;
         return moves > 2 && moves < shortest.moves ? { id: game.id, players: game.players, moves } : shortest;
       }, { moves: Infinity });
       return shortestGame.id ? { gameId: shortestGame.id, players: shortestGame.players, value: shortestGame.moves } : null;
     },
     [INSIGHTS.LONGEST_GAME_BY_MOVES]: (games) => {
       const longestGame = games.reduce((longest, game) => {
-        const moves = Math.floor(game.moves.split(' ').length / 2);
+        const moves = game.moves ? Math.floor(game.moves.split(' ').length / 2) : 0;
         return moves > longest.moves ? { id: game.id, players: game.players, moves } : longest;
       }, { moves: 0 });
       return longestGame.id ? { gameId: longestGame.id, players: longestGame.players, value: longestGame.moves } : null;
@@ -57,25 +57,27 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
       let maxDiff = -Infinity;
       let result = null;
       games.forEach(game => {
-        const [diffW, positionsW] = maxConsecutiveDifferenceWithPositions(game.clocks.filter((_, i) => i % 2 === 0));
-        const [diffB, positionsB] = maxConsecutiveDifferenceWithPositions(game.clocks.filter((_, i) => i % 2 !== 0));
-        if (Math.max(diffW, diffB) > maxDiff) {
-          maxDiff = Math.max(diffW, diffB);
-          result = {
-            gameId: game.id,
-            players: game.players,
-            side: diffW > diffB ? "white" : "black",
-            timeTaken: maxDiff / 6000,
-            moveNo: diffW > diffB ? positionsW : positionsB
-          };
+        if (game.clocks) {
+          const [diffW, positionsW] = maxConsecutiveDifferenceWithPositions(game.clocks.filter((_, i) => i % 2 === 0));
+          const [diffB, positionsB] = maxConsecutiveDifferenceWithPositions(game.clocks.filter((_, i) => i % 2 !== 0));
+          if (Math.max(diffW, diffB) > maxDiff) {
+            maxDiff = Math.max(diffW, diffB);
+            result = {
+              gameId: game.id,
+              players: game.players,
+              side: diffW > diffB ? "white" : "black",
+              timeTaken: maxDiff / 1000, // Convert to seconds
+              moveNo: diffW > diffB ? positionsW : positionsB
+            };
+          }
         }
       });
       return result;
     },
     [INSIGHTS.MOST_ACCURATE_GAME]: (games) => {
       const mostAccurateGame = games.reduce((mostAccurate, game) => {
-        if (game.players.white.analysis && game.players.black.analysis) {
-          const accuracy = (game.players.white.analysis.accuracy + game.players.black.analysis.accuracy) / 2;
+        if (game.players.white.accuracy && game.players.black.accuracy) {
+          const accuracy = (game.players.white.accuracy + game.players.black.accuracy) / 2;
           return accuracy > mostAccurate.accuracy ? { id: game.id, players: game.players, accuracy } : mostAccurate;
         }
         return mostAccurate;
@@ -111,10 +113,10 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
     [INSIGHTS.MOST_ACCURATE_PLAYER]: (games) => {
       const playerAccuracies = games.reduce((acc, game) => {
         ['white', 'black'].forEach(color => {
-          if (game.players[color].analysis) {
+          if (game.players[color].accuracy) {
             const playerName = game.players[color].user.name;
             if (!acc[playerName]) acc[playerName] = { totalAcc: 0, games: 0 };
-            acc[playerName].totalAcc += game.players[color].analysis.accuracy;
+            acc[playerName].totalAcc += game.players[color].accuracy;
             acc[playerName].games++;
           }
         });
