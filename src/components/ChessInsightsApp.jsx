@@ -10,6 +10,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import InsightsOverview from './InsightsOverview';
+import calculateAllInsights from '../utils/insightsCalculator';
+import { INSIGHTS } from '../utils/constants';
 
 const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
   // Simulating API call with dummy data
@@ -20,8 +22,19 @@ const fetchTournamentData = async ({ tournamentType, tournamentId }) => {
         type: tournamentType,
         name: "Chess Masters 2023",
         players: 64,
-        games: 124,
-        analyzedGames: 50,
+        games: [
+          // Add some dummy game data here
+          {
+            id: '1',
+            players: { white: { user: { name: 'Player1' } }, black: { user: { name: 'Player2' } } },
+            winner: 'white',
+            moves: 'e4 e5 Nf3 Nc6',
+            clocks: [300, 290, 285, 280],
+            opening: { name: 'Italian Game' },
+            analysis: [{ eval: 0.5 }, { eval: -0.2 }, { eval: 0.3 }],
+          },
+          // Add more dummy games...
+        ],
       });
     }, 1000);
   });
@@ -85,6 +98,8 @@ const ChessInsightsApp = () => {
     }
   };
 
+  const calculatedInsights = data ? calculateAllInsights(data.games, Object.values(INSIGHTS)) : null;
+
   return (
     <div className="space-y-6">
       <InsightsOverview />
@@ -121,10 +136,13 @@ const ChessInsightsApp = () => {
           </AlertDescription>
         </Alert>
       )}
-      {isDataFetched && data && (
+      {isDataFetched && calculatedInsights && (
         <div>
           <TournamentInsights 
             tournamentData={data} 
+            insights={calculatedInsights.insights}
+            analysedGames={calculatedInsights.analysedGames}
+            totalGames={calculatedInsights.totalGames}
             selectedInsights={selectedInsights}
             onInsightSelection={handleInsightSelection}
             selectedNextBest={selectedNextBest}
@@ -133,7 +151,10 @@ const ChessInsightsApp = () => {
           <div id="selected-insights-container" className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
             <h2 className="text-2xl font-bold mb-4">{data.name} Insights</h2>
             <TournamentInsights 
-              tournamentData={data} 
+              tournamentData={data}
+              insights={calculatedInsights.insights}
+              analysedGames={calculatedInsights.analysedGames}
+              totalGames={calculatedInsights.totalGames}
               selectedInsights={selectedInsights}
               onInsightSelection={() => {}}
               showOnlySelected={true}
@@ -145,7 +166,7 @@ const ChessInsightsApp = () => {
         </div>
       )}
 
-      {isDataFetched && data && (
+      {isDataFetched && calculatedInsights && (
         <Card>
           <CardContent className="pt-6">
             <Button onClick={generatePng} disabled={selectedInsights.length === 0}>
