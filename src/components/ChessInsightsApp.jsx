@@ -73,8 +73,8 @@ const ChessInsightsApp = () => {
 
   useEffect(() => {
     if (tournamentGames.length > 0) {
-      const insights = calculateAllInsights(tournamentGames, Object.values(INSIGHTS));
-      setCalculatedInsights(insights);
+      const insightsResult = calculateAllInsights(tournamentGames, Object.values(INSIGHTS));
+      setCalculatedInsights(insightsResult);
     }
   }, [tournamentGames]);
 
@@ -162,7 +162,7 @@ const ChessInsightsApp = () => {
         <div>
           <TournamentInsights 
             tournamentData={{ name: `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, type: tournamentType, players: calculatedInsights.totalGames }}
-            insights={calculatedInsights}
+            insights={calculatedInsights.insights}
             analysedGames={calculatedInsights.analysedGames}
             totalGames={calculatedInsights.totalGames}
             selectedInsights={selectedInsights}
@@ -174,7 +174,7 @@ const ChessInsightsApp = () => {
             <h2 className="text-2xl font-bold mb-4">{tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament Insights</h2>
             <TournamentInsights 
               tournamentData={{ name: `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, type: tournamentType, players: calculatedInsights.totalGames }}
-              insights={calculatedInsights}
+              insights={calculatedInsights.insights}
               analysedGames={calculatedInsights.analysedGames}
               totalGames={calculatedInsights.totalGames}
               selectedInsights={selectedInsights}

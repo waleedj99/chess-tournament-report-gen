@@ -151,13 +151,16 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
 
   insightsToCalculate.forEach(insight => {
     if (insightCalculations[insight]) {
-      Object.assign(insights, calculateInsight(insight, tournamentGames, insightCalculations[insight]));
+      const result = calculateInsight(insight, tournamentGames, insightCalculations[insight]);
+      if (Object.keys(result).length > 0) {
+        insights[insight] = result[insight];
+      }
     }
   });
 
   analysedGames = tournamentGames.filter(game => game.analysis).length;
 
-  return { ...insights, analysedGames, totalGames };
+  return { insights, analysedGames, totalGames };
 };
 
 export default calculateAllInsights;
