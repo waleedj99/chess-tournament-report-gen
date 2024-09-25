@@ -34,7 +34,16 @@ const ChessInsightsApp = () => {
     };
 
     try {
-      const response = await fetch(`https://lichess.org/api/${tournamentType}/${tournamentId}/games?evals=true&accuracy=true&clocks=true&opening=true`, requestOptions);
+      let apiUrl;
+      if (tournamentType === 'swiss') {
+        apiUrl = `https://lichess.org/api/swiss/${tournamentId}/games`;
+      } else if (tournamentType === 'arena') {
+        apiUrl = `https://lichess.org/api/tournament/${tournamentId}/games`;
+      } else {
+        throw new Error('Invalid tournament type');
+      }
+
+      const response = await fetch(`${apiUrl}?evals=true&accuracy=true&clocks=true&opening=true`, requestOptions);
       const reader = response.body.getReader();
       let chunk = '';
 
@@ -47,8 +56,12 @@ const ChessInsightsApp = () => {
 
         for (let i = 0; i < lines.length - 1; i++) {
           const jsonLine = lines[i];
-          const jsonObject = JSON.parse(jsonLine);
-          fetchData.push(jsonObject);
+          try {
+            const jsonObject = JSON.parse(jsonLine);
+            fetchData.push(jsonObject);
+          } catch (error) {
+            console.error('Error parsing JSON:', error);
+          }
         }
 
         chunk = lines[lines.length - 1];
