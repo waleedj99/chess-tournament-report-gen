@@ -78,7 +78,9 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
     },
     [INSIGHTS.MOST_ACCURATE_GAME]: (games) => {
       return games
-        .filter(game => game.players.white.accuracy && game.players.black.accuracy)
+        .filter(game => game.players.white && game.players.black && 
+                        typeof game.players.white.accuracy === 'number' && 
+                        typeof game.players.black.accuracy === 'number')
         .map(game => ({
           gameId: game.id,
           players: game.players,
@@ -118,7 +120,7 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
     [INSIGHTS.MOST_ACCURATE_PLAYER]: (games) => {
       const playerAccuracies = games.reduce((acc, game) => {
         ['white', 'black'].forEach(color => {
-          if (game.players[color].accuracy) {
+          if (game.players[color] && typeof game.players[color].accuracy === 'number') {
             const playerName = game.players[color].user.name;
             if (!acc[playerName]) acc[playerName] = { totalAcc: 0, games: 0 };
             acc[playerName].totalAcc += game.players[color].accuracy;
