@@ -50,9 +50,9 @@ const InsightContent = ({
       case 'MOST_ACCURATE_GAME':
         return (
           <div key={index} className="mb-2">
-            <p>#{index + 1} - Average Accuracy: {item.value?.toFixed(2) || 'N/A'}%</p>
-            <p>White: {item.players?.white?.user?.name || 'Unknown'} (Accuracy: {item.players?.white?.accuracy?.toFixed(2) || 'N/A'}%)</p>
-            <p>Black: {item.players?.black?.user?.name || 'Unknown'} (Accuracy: {item.players?.black?.accuracy?.toFixed(2) || 'N/A'}%)</p>
+            <p>#{index + 1} - Average Accuracy: {item.value.toFixed(2)}%</p>
+            <p>White: {item.players.white.name} (Accuracy: {item.players.white.accuracy.toFixed(2)}%)</p>
+            <p>Black: {item.players.black.name} (Accuracy: {item.players.black.accuracy.toFixed(2)}%)</p>
             {item.gameId && renderGameRedirectButton(item.gameId)}
           </div>
         );
@@ -74,9 +74,9 @@ const InsightContent = ({
       case 'MOST_ACCURATE_PLAYER':
         return (
           <div key={index} className="mb-2">
-            <p>#{index + 1} - Player: {item.playerName || 'Unknown'}</p>
-            <p>Average accuracy: {item.averageAccuracy?.toFixed(2) || 'N/A'}%</p>
-            <p>Matches played: {item.noOfMatches || 'N/A'}</p>
+            <p>#{index + 1} - Player: {item.playerName}</p>
+            <p>Average accuracy: {item.averageAccuracy.toFixed(2)}%</p>
+            <p>Matches played: {item.noOfMatches}</p>
           </div>
         );
       case 'HIGHEST_WINNING_STREAK':
