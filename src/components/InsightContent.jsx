@@ -50,8 +50,9 @@ const InsightContent = ({
       case 'MOST_ACCURATE_GAME':
         return (
           <div key={index} className="mb-2">
-            <p>#{index + 1} - Accuracy: {item.value?.toFixed(2) || 'N/A'}%</p>
-            <p>Players: {item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'}</p>
+            <p>#{index + 1} - Average Accuracy: {item.value?.toFixed(2) || 'N/A'}%</p>
+            <p>White: {item.players?.white?.user?.name || 'Unknown'} (Accuracy: {item.players?.white?.accuracy?.toFixed(2) || 'N/A'}%)</p>
+            <p>Black: {item.players?.black?.user?.name || 'Unknown'} (Accuracy: {item.players?.black?.accuracy?.toFixed(2) || 'N/A'}%)</p>
             {item.gameId && renderGameRedirectButton(item.gameId)}
           </div>
         );
