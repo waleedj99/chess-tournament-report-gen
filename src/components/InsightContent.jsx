@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ExternalLinkIcon } from 'lucide-react';
+import { ExternalLinkIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { redirectToGame } from '../utils/gameUtils';
+import { Toggle } from '@/components/ui/toggle';
 
 const InsightContent = ({
   insightKey,
   value,
   isPngPreview,
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const renderGameRedirectButton = (gameId) => {
     return (
       <Button
@@ -21,73 +24,89 @@ const InsightContent = ({
     );
   };
 
-  const formatInsight = (key, data) => {
-    switch (key) {
-      case 'SHORTEST_GAME_LENGTH_BY_MOVES':
-      case 'LONGEST_GAME_LENGTH_BY_MOVES':
-        return data.map((game, index) => (
-          <div key={index} className="mb-2">
-            <p>#{index + 1} - Moves: {game.value}</p>
-            <p>Players: {game.players.white.user.name} vs {game.players.black.user.name}</p>
-            {renderGameRedirectButton(game.gameId)}
-          </div>
-        ));
-      case 'LONGEST_MOVE_BY_TIME':
-        return data.map((move, index) => (
-          <div key={index} className="mb-2">
-            <p>#{index + 1} - Time taken: {move.timeTaken.toFixed(2)} seconds</p>
-            <p>Move number: {move.moveNo}</p>
-            <p>Side: {move.side}</p>
-            <p>Players: {move.players.white.user.name} vs {move.players.black.user.name}</p>
-            {renderGameRedirectButton(move.gameId)}
-          </div>
-        ));
-      case 'MOST_ACCURATE_GAME':
-        return data.map((game, index) => (
-          <div key={index} className="mb-2">
-            <p>#{index + 1} - Accuracy: {game.value.toFixed(2)}%</p>
-            <p>Players: {game.players.white.user.name} vs {game.players.black.user.name}</p>
-            {renderGameRedirectButton(game.gameId)}
-          </div>
-        ));
-      case 'MOST_DYNAMIC_GAME':
-        return data.map((game, index) => (
-          <div key={index} className="mb-2">
-            <p>#{index + 1} - Turn arounds: {game.value}</p>
-            <p>Players: {game.players.white.user.name} vs {game.players.black.user.name}</p>
-            {renderGameRedirectButton(game.gameId)}
-          </div>
-        ));
-      case 'MOST_USED_OPENING':
-        return data.map((opening, index) => (
-          <div key={index} className="mb-2">
-            <p>#{index + 1} - Opening: {opening.openingName}</p>
-            <p>Used {opening.noOfTimes} times</p>
-          </div>
-        ));
-      case 'MOST_ACCURATE_PLAYER':
-        return data.map((player, index) => (
-          <div key={index} className="mb-2">
-            <p>#{index + 1} - Player: {player.playerName}</p>
-            <p>Average accuracy: {player.averageAccuracy.toFixed(2)}%</p>
-            <p>Matches played: {player.noOfMatches}</p>
-          </div>
-        ));
-      case 'HIGHEST_WINNING_STREAK':
-        return data.map((streak, index) => (
-          <div key={index} className="mb-2">
-            <p>#{index + 1} - Player(s): {streak.playerNames.join(', ')}</p>
-            <p>Streak: {streak.streakCount} games</p>
-          </div>
-        ));
-      default:
-        return <p>{JSON.stringify(data)}</p>;
-    }
+  const formatInsight = (key, data, showAll = false) => {
+    const formatSingleInsight = (item, index) => {
+      switch (key) {
+        case 'SHORTEST_GAME_LENGTH_BY_MOVES':
+        case 'LONGEST_GAME_LENGTH_BY_MOVES':
+          return (
+            <div key={index} className="mb-2">
+              <p>#{index + 1} - Moves: {item.value}</p>
+              <p>Players: {item.players.white.user.name} vs {item.players.black.user.name}</p>
+              {renderGameRedirectButton(item.gameId)}
+            </div>
+          );
+        case 'LONGEST_MOVE_BY_TIME':
+          return (
+            <div key={index} className="mb-2">
+              <p>#{index + 1} - Time taken: {item.timeTaken.toFixed(2)} seconds</p>
+              <p>Move number: {item.moveNo}</p>
+              <p>Side: {item.side}</p>
+              <p>Players: {item.players.white.user.name} vs {item.players.black.user.name}</p>
+              {renderGameRedirectButton(item.gameId)}
+            </div>
+          );
+        case 'MOST_ACCURATE_GAME':
+          return (
+            <div key={index} className="mb-2">
+              <p>#{index + 1} - Accuracy: {item.value.toFixed(2)}%</p>
+              <p>Players: {item.players.white.user.name} vs {item.players.black.user.name}</p>
+              {renderGameRedirectButton(item.gameId)}
+            </div>
+          );
+        case 'MOST_DYNAMIC_GAME':
+          return (
+            <div key={index} className="mb-2">
+              <p>#{index + 1} - Turn arounds: {item.value}</p>
+              <p>Players: {item.players.white.user.name} vs {item.players.black.user.name}</p>
+              {renderGameRedirectButton(item.gameId)}
+            </div>
+          );
+        case 'MOST_USED_OPENING':
+          return (
+            <div key={index} className="mb-2">
+              <p>#{index + 1} - Opening: {item.openingName}</p>
+              <p>Used {item.noOfTimes} times</p>
+            </div>
+          );
+        case 'MOST_ACCURATE_PLAYER':
+          return (
+            <div key={index} className="mb-2">
+              <p>#{index + 1} - Player: {item.playerName}</p>
+              <p>Average accuracy: {item.averageAccuracy.toFixed(2)}%</p>
+              <p>Matches played: {item.noOfMatches}</p>
+            </div>
+          );
+        case 'HIGHEST_WINNING_STREAK':
+          return (
+            <div key={index} className="mb-2">
+              <p>#{index + 1} - Player(s): {item.playerNames.join(', ')}</p>
+              <p>Streak: {item.streakCount} games</p>
+            </div>
+          );
+        default:
+          return <p key={index}>{JSON.stringify(item)}</p>;
+      }
+    };
+
+    return showAll ? data.map(formatSingleInsight) : formatSingleInsight(data[0], 0);
   };
 
   return (
     <div className="space-y-2">
-      {formatInsight(insightKey, value)}
+      {formatInsight(insightKey, value, false)}
+      {!isPngPreview && value.length > 1 && (
+        <Toggle
+          aria-label="Toggle insight expansion"
+          pressed={isExpanded}
+          onPressedChange={setIsExpanded}
+          className="w-full justify-between"
+        >
+          {isExpanded ? 'Show less' : 'Show more'}
+          {isExpanded ? <ChevronUpIcon className="h-4 w-4" /> : <ChevronDownIcon className="h-4 w-4" />}
+        </Toggle>
+      )}
+      {isExpanded && formatInsight(insightKey, value.slice(1), true)}
     </div>
   );
 };
