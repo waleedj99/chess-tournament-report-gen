@@ -18,7 +18,6 @@ const ChessInsightsApp = () => {
   const [tournamentId, setTournamentId] = useState('');
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [selectedInsights, setSelectedInsights] = useState([]);
-  const [selectedNextBest, setSelectedNextBest] = useState({});
   const [pngPreview, setPngPreview] = useState(null);
   const [tournamentGames, setTournamentGames] = useState([]);
   const [calculatedInsights, setCalculatedInsights] = useState(null);
@@ -93,18 +92,6 @@ const ChessInsightsApp = () => {
     );
   };
 
-  const handleNextBestSelection = (key, index) => {
-    setSelectedNextBest(prev => {
-      const currentSelection = prev[key] || [];
-      return {
-        ...prev,
-        [key]: currentSelection.includes(index)
-          ? currentSelection.filter(i => i !== index)
-          : [...currentSelection, index]
-      };
-    });
-  };
-
   const generatePng = async () => {
     const element = document.getElementById('selected-insights-container');
     if (element) {
@@ -167,8 +154,6 @@ const ChessInsightsApp = () => {
             totalGames={calculatedInsights.totalGames}
             selectedInsights={selectedInsights}
             onInsightSelection={handleInsightSelection}
-            selectedNextBest={selectedNextBest}
-            onNextBestSelection={handleNextBestSelection}
           />
           <div id="selected-insights-container" className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
             <h2 className="text-2xl font-bold mb-4">{tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament Insights</h2>
@@ -180,8 +165,6 @@ const ChessInsightsApp = () => {
               selectedInsights={selectedInsights}
               onInsightSelection={() => {}}
               showOnlySelected={true}
-              selectedNextBest={selectedNextBest}
-              onNextBestSelection={() => {}}
               isPngPreview={true}
             />
           </div>

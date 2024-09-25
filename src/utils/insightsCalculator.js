@@ -30,7 +30,7 @@ const highestConsecutiveCount = (arr, value) => {
 
 const calculateInsight = (insightName, games, calculationFunction) => {
   const result = calculationFunction(games);
-  return result ? { [insightName]: [result] } : {};
+  return result ? { [insightName]: result } : {};
 };
 
 const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
@@ -40,53 +40,57 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
 
   const insightCalculations = {
     [INSIGHTS.SHORTEST_GAME_BY_MOVES]: (games) => {
-      const shortestGame = games.reduce((shortest, game) => {
-        const moves = game.moves ? Math.floor(game.moves.split(' ').length / 2) : Infinity;
-        return moves > 2 && moves < shortest.moves ? { id: game.id, players: game.players, moves } : shortest;
-      }, { moves: Infinity });
-      return shortestGame.id ? { gameId: shortestGame.id, players: shortestGame.players, value: shortestGame.moves } : null;
+      return games
+        .map(game => ({
+          id: game.id,
+          players: game.players,
+          moves: game.moves ? Math.floor(game.moves.split(' ').length / 2) : Infinity
+        }))
+        .filter(game => game.moves > 2)
+        .sort((a, b) => a.moves - b.moves)
+        .slice(0, 5)
+        .map(game => ({ gameId: game.id, players: game.players, value: game.moves }));
     },
     [INSIGHTS.LONGEST_GAME_BY_MOVES]: (games) => {
-      const longestGame = games.reduce((longest, game) => {
-        const moves = game.moves ? Math.floor(game.moves.split(' ').length / 2) : 0;
-        return moves > longest.moves ? { id: game.id, players: game.players, moves } : longest;
-      }, { moves: 0 });
-      return longestGame.id ? { gameId: longestGame.id, players: longestGame.players, value: longestGame.moves } : null;
+      return games
+        .map(game => ({
+          id: game.id,
+          players: game.players,
+          moves: game.moves ? Math.floor(game.moves.split(' ').length / 2) : 0
+        }))
+        .sort((a, b) => b.moves - a.moves)
+        .slice(0, 5)
+        .map(game => ({ gameId: game.id, players: game.players, value: game.moves }));
     },
     [INSIGHTS.LONGEST_MOVE_BY_TIME]: (games) => {
-      let maxDiff = -Infinity;
-      let result = null;
-      games.forEach(game => {
-        if (game.clocks) {
+      return games
+        .flatMap(game => {
+          if (!game.clocks) return [];
           const [diffW, positionsW] = maxConsecutiveDifferenceWithPositions(game.clocks.filter((_, i) => i % 2 === 0));
           const [diffB, positionsB] = maxConsecutiveDifferenceWithPositions(game.clocks.filter((_, i) => i % 2 !== 0));
-          if (Math.max(diffW, diffB) > maxDiff) {
-            maxDiff = Math.max(diffW, diffB);
-            result = {
-              gameId: game.id,
-              players: game.players,
-              side: diffW > diffB ? "white" : "black",
-              timeTaken: maxDiff / 1000, // Convert to seconds
-              moveNo: diffW > diffB ? positionsW : positionsB
-            };
-          }
-        }
-      });
-      return result;
+          return [
+            { gameId: game.id, players: game.players, side: "white", timeTaken: diffW / 1000, moveNo: positionsW },
+            { gameId: game.id, players: game.players, side: "black", timeTaken: diffB / 1000, moveNo: positionsB }
+          ];
+        })
+        .sort((a, b) => b.timeTaken - a.timeTaken)
+        .slice(0, 5);
     },
     [INSIGHTS.MOST_ACCURATE_GAME]: (games) => {
-      const mostAccurateGame = games.reduce((mostAccurate, game) => {
-        if (game.players.white.accuracy && game.players.black.accuracy) {
-          const accuracy = (game.players.white.accuracy + game.players.black.accuracy) / 2;
-          return accuracy > mostAccurate.accuracy ? { id: game.id, players: game.players, accuracy } : mostAccurate;
-        }
-        return mostAccurate;
-      }, { accuracy: 0 });
-      return mostAccurateGame.id ? { gameId: mostAccurateGame.id, players: mostAccurateGame.players, value: mostAccurateGame.accuracy } : null;
+      return games
+        .filter(game => game.players.white.accuracy && game.players.black.accuracy)
+        .map(game => ({
+          gameId: game.id,
+          players: game.players,
+          value: (game.players.white.accuracy + game.players.black.accuracy) / 2
+        }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 5);
     },
     [INSIGHTS.MOST_DYNAMIC_GAME]: (games) => {
-      const mostDynamicGame = games.reduce((mostDynamic, game) => {
-        if (game.analysis) {
+      return games
+        .filter(game => game.analysis)
+        .map(game => {
           let turnArounds = 0;
           let prevWinning = null;
           game.analysis.forEach(analysis => {
@@ -94,11 +98,10 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
             if (whiteWinning !== prevWinning && prevWinning !== null) turnArounds++;
             prevWinning = whiteWinning;
           });
-          return turnArounds > mostDynamic.turnArounds ? { id: game.id, players: game.players, turnArounds } : mostDynamic;
-        }
-        return mostDynamic;
-      }, { turnArounds: 0 });
-      return mostDynamicGame.id ? { gameId: mostDynamicGame.id, players: mostDynamicGame.players, value: mostDynamicGame.turnArounds } : null;
+          return { gameId: game.id, players: game.players, value: turnArounds };
+        })
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 5);
     },
     [INSIGHTS.MOST_USED_OPENING]: (games) => {
       const openings = games.reduce((acc, game) => {
@@ -107,8 +110,10 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
         }
         return acc;
       }, {});
-      const mostUsedOpening = Object.entries(openings).reduce((a, b) => a[1] > b[1] ? a : b, ['', 0]);
-      return mostUsedOpening[1] > 0 ? { openingName: mostUsedOpening[0], noOfTimes: mostUsedOpening[1] } : null;
+      return Object.entries(openings)
+        .map(([openingName, noOfTimes]) => ({ openingName, noOfTimes }))
+        .sort((a, b) => b.noOfTimes - a.noOfTimes)
+        .slice(0, 5);
     },
     [INSIGHTS.MOST_ACCURATE_PLAYER]: (games) => {
       const playerAccuracies = games.reduce((acc, game) => {
@@ -122,14 +127,14 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
         });
         return acc;
       }, {});
-      const mostAccuratePlayer = Object.entries(playerAccuracies).reduce((a, b) => 
-        (a[1].totalAcc / a[1].games > b[1].totalAcc / b[1].games) ? a : b
-      , ['', { totalAcc: 0, games: 0 }]);
-      return mostAccuratePlayer[1].games > 0 ? {
-        playerName: mostAccuratePlayer[0],
-        averageAccuracy: mostAccuratePlayer[1].totalAcc / mostAccuratePlayer[1].games,
-        noOfMatches: mostAccuratePlayer[1].games
-      } : null;
+      return Object.entries(playerAccuracies)
+        .map(([playerName, data]) => ({
+          playerName,
+          averageAccuracy: data.totalAcc / data.games,
+          noOfMatches: data.games
+        }))
+        .sort((a, b) => b.averageAccuracy - a.averageAccuracy)
+        .slice(0, 5);
     },
     [INSIGHTS.HIGHEST_WINNING_STREAK]: (games) => {
       const playerStreaks = games.reduce((acc, game) => {
@@ -140,12 +145,13 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
         });
         return acc;
       }, {});
-      const highestStreak = Object.entries(playerStreaks).reduce((highest, [player, results]) => {
-        const streak = highestConsecutiveCount(results, true);
-        return streak > highest.streak ? { players: [player], streak } : 
-               streak === highest.streak ? { players: [...highest.players, player], streak } : highest;
-      }, { players: [], streak: 0 });
-      return highestStreak.streak > 0 ? { playerNames: highestStreak.players, streakCount: highestStreak.streak } : null;
+      return Object.entries(playerStreaks)
+        .map(([player, results]) => ({
+          playerNames: [player],
+          streakCount: highestConsecutiveCount(results, true)
+        }))
+        .sort((a, b) => b.streakCount - a.streakCount)
+        .slice(0, 5);
     }
   };
 

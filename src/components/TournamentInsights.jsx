@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import InsightContent from './InsightContent';
@@ -13,19 +13,8 @@ const TournamentInsights = ({
   selectedInsights = [], 
   onInsightSelection, 
   showOnlySelected = false, 
-  selectedNextBest = {}, 
-  onNextBestSelection, 
   isPngPreview = false 
 }) => {
-  const [expandedInsights, setExpandedInsights] = useState({});
-
-  const toggleExpand = (key) => {
-    setExpandedInsights(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }));
-  };
-
   const toTitleCase = (str) => {
     return str.split('_').map(word => 
       word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
@@ -62,12 +51,8 @@ const TournamentInsights = ({
             <CardContent>
               <InsightContent
                 insightKey={key}
-                value={value[0]}
+                value={value}
                 isPngPreview={isPngPreview}
-                selectedNextBest={selectedNextBest}
-                expandedInsights={expandedInsights}
-                toggleExpand={toggleExpand}
-                onNextBestSelection={onNextBestSelection}
               />
             </CardContent>
           </Card>
