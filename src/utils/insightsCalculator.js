@@ -28,6 +28,11 @@ const highestConsecutiveCount = (arr, value) => {
   return maxCount;
 };
 
+const calculateInsight = (insightName, games, calculationFunction) => {
+  const result = calculationFunction(games);
+  return result ? { [insightName]: result } : {};
+};
+
 const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
   const insights = {};
   let analysedGames = 0;
@@ -71,14 +76,11 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
         .sort((a, b) => b.timeTaken - a.timeTaken)
         .slice(0, 5);
     },
-
     [INSIGHTS.MOST_ACCURATE_GAME]: (games) => {
       return games
-        .filter(game => 
-          game.players.white && game.players.black && 
-          typeof game.players.white.accuracy === 'number' && 
-          typeof game.players.black.accuracy === 'number'
-        )
+        .filter(game => game.players.white && game.players.black && 
+                        typeof game.players.white.accuracy === 'number' && 
+                        typeof game.players.black.accuracy === 'number')
         .map(game => ({
           gameId: game.id,
           players: {
@@ -96,7 +98,34 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
         .sort((a, b) => b.value - a.value)
         .slice(0, 5);
     },
-
+    [INSIGHTS.MOST_DYNAMIC_GAME]: (games) => {
+      return games
+        .filter(game => game.analysis)
+        .map(game => {
+          let turnArounds = 0;
+          let prevWinning = null;
+          game.analysis.forEach(analysis => {
+            const whiteWinning = 'eval' in analysis ? analysis.eval > 0 : analysis.mate > 0;
+            if (whiteWinning !== prevWinning && prevWinning !== null) turnArounds++;
+            prevWinning = whiteWinning;
+          });
+          return { gameId: game.id, players: game.players, value: turnArounds };
+        })
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 5);
+    },
+    [INSIGHTS.MOST_USED_OPENING]: (games) => {
+      const openings = games.reduce((acc, game) => {
+        if (game.opening) {
+          acc[game.opening.name] = (acc[game.opening.name] || 0) + 1;
+        }
+        return acc;
+      }, {});
+      return Object.entries(openings)
+        .map(([openingName, noOfTimes]) => ({ openingName, noOfTimes }))
+        .sort((a, b) => b.noOfTimes - a.noOfTimes)
+        .slice(0, 5);
+    },
     [INSIGHTS.MOST_ACCURATE_PLAYER]: (games) => {
       const playerAccuracies = games.reduce((acc, game) => {
         ['white', 'black'].forEach(color => {
@@ -109,7 +138,6 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
         });
         return acc;
       }, {});
-
       return Object.entries(playerAccuracies)
         .map(([playerName, data]) => ({
           playerName,
@@ -119,7 +147,6 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
         .sort((a, b) => b.averageAccuracy - a.averageAccuracy)
         .slice(0, 5);
     },
-
     [INSIGHTS.HIGHEST_WINNING_STREAK]: (games) => {
       const playerStreaks = games.reduce((acc, game) => {
         ['white', 'black'].forEach(color => {
@@ -141,9 +168,9 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
 
   insightsToCalculate.forEach(insight => {
     if (insightCalculations[insight]) {
-      const result = insightCalculations[insight](tournamentGames);
-      if (result && result.length > 0) {
-        insights[insight] = result;
+      const result = calculateInsight(insight, tournamentGames, insightCalculations[insight]);
+      if (Object.keys(result).length > 0) {
+        insights[insight] = result[insight];
       }
     }
   });
