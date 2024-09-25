@@ -83,7 +83,16 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
                         typeof game.players.black.accuracy === 'number')
         .map(game => ({
           gameId: game.id,
-          players: game.players,
+          players: {
+            white: {
+              name: game.players.white.user.name,
+              accuracy: game.players.white.accuracy
+            },
+            black: {
+              name: game.players.black.user.name,
+              accuracy: game.players.black.accuracy
+            }
+          },
           value: (game.players.white.accuracy + game.players.black.accuracy) / 2
         }))
         .sort((a, b) => b.value - a.value)
