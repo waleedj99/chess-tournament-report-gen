@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import InsightContent from './InsightContent';
 import AnalysisProgress from './AnalysisProgress';
 import { INSIGHTS } from '../utils/constants';
@@ -11,8 +13,10 @@ const TournamentInsights = ({
   analysedGames = 0,
   totalGames = 0,
   selectedInsights = {}, 
+  expandedInsights = {},
   onInsightSelection, 
   onItemSelection,
+  onInsightExpansion,
   showOnlySelected = false, 
   isPngPreview = false 
 }) => {
@@ -43,10 +47,19 @@ const TournamentInsights = ({
                 {toTitleCase(key)}
               </CardTitle>
               {!showOnlySelected && !isPngPreview && (
-                <Checkbox
-                  checked={selectedInsights[key] && selectedInsights[key].length > 0}
-                  onCheckedChange={() => onInsightSelection(key)}
-                />
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    checked={selectedInsights[key] && selectedInsights[key].length > 0}
+                    onCheckedChange={() => onInsightSelection(key)}
+                  />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onInsightExpansion(key)}
+                  >
+                    {expandedInsights[key] ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                  </Button>
+                </div>
               )}
             </CardHeader>
             <CardContent>
@@ -56,6 +69,7 @@ const TournamentInsights = ({
                 isPngPreview={isPngPreview}
                 selectedItems={selectedInsights[key] || []}
                 onItemSelection={onItemSelection}
+                expanded={expandedInsights[key]}
               />
             </CardContent>
           </Card>
