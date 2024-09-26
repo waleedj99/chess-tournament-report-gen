@@ -18,6 +18,7 @@ const ChessInsightsApp = () => {
   const [tournamentId, setTournamentId] = useState('');
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [selectedInsights, setSelectedInsights] = useState({});
+  const [expandedInsights, setExpandedInsights] = useState({});
   const [pngPreview, setPngPreview] = useState(null);
   const [tournamentGames, setTournamentGames] = useState([]);
   const [calculatedInsights, setCalculatedInsights] = useState(null);
@@ -95,6 +96,14 @@ const ChessInsightsApp = () => {
     if (tournamentGames.length > 0) {
       const insightsResult = calculateAllInsights(tournamentGames, Object.values(INSIGHTS));
       setCalculatedInsights(insightsResult);
+      // Set default selections for each insight
+      const defaultSelections = {};
+      Object.keys(insightsResult.insights).forEach(key => {
+        if (insightsResult.insights[key] && insightsResult.insights[key].length > 0) {
+          defaultSelections[key] = [0]; // Select the top value by default
+        }
+      });
+      setSelectedInsights(defaultSelections);
     }
   }, [tournamentGames]);
 
@@ -123,6 +132,13 @@ const ChessInsightsApp = () => {
         [insightKey]: updatedSelection
       };
     });
+  };
+
+  const handleExpand = (insightKey) => {
+    setExpandedInsights(prev => ({
+      ...prev,
+      [insightKey]: !prev[insightKey]
+    }));
   };
 
   const generatePng = async () => {
@@ -186,8 +202,10 @@ const ChessInsightsApp = () => {
             analysedGames={calculatedInsights.analysedGames}
             totalGames={calculatedInsights.totalGames}
             selectedInsights={selectedInsights}
+            expandedInsights={expandedInsights}
             onInsightSelection={handleInsightSelection}
             onItemSelection={handleItemSelection}
+            onExpand={handleExpand}
           />
           <div id="selected-insights-container" className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
             <h2 className="text-2xl font-bold mb-4">{tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament Insights</h2>
@@ -197,8 +215,10 @@ const ChessInsightsApp = () => {
               analysedGames={calculatedInsights.analysedGames}
               totalGames={calculatedInsights.totalGames}
               selectedInsights={selectedInsights}
+              expandedInsights={expandedInsights}
               onInsightSelection={() => {}}
               onItemSelection={() => {}}
+              onExpand={() => {}}
               showOnlySelected={true}
               isPngPreview={true}
             />

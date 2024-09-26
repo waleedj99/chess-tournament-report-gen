@@ -4,6 +4,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import InsightContent from './InsightContent';
 import AnalysisProgress from './AnalysisProgress';
 import { INSIGHTS } from '../utils/constants';
+import { Button } from '@/components/ui/button';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const TournamentInsights = ({ 
   tournamentData, 
@@ -11,8 +13,10 @@ const TournamentInsights = ({
   analysedGames = 0,
   totalGames = 0,
   selectedInsights = {}, 
+  expandedInsights = {},
   onInsightSelection, 
   onItemSelection,
+  onExpand,
   showOnlySelected = false, 
   isPngPreview = false 
 }) => {
@@ -43,10 +47,19 @@ const TournamentInsights = ({
                 {toTitleCase(key)}
               </CardTitle>
               {!showOnlySelected && !isPngPreview && (
-                <Checkbox
-                  checked={selectedInsights[key] && selectedInsights[key].length > 0}
-                  onCheckedChange={() => onInsightSelection(key)}
-                />
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    checked={selectedInsights[key] && selectedInsights[key].length > 0}
+                    onCheckedChange={() => onInsightSelection(key)}
+                  />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onExpand(key)}
+                  >
+                    {expandedInsights[key] ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  </Button>
+                </div>
               )}
             </CardHeader>
             <CardContent>
@@ -56,6 +69,7 @@ const TournamentInsights = ({
                 isPngPreview={isPngPreview}
                 selectedItems={selectedInsights[key] || []}
                 onItemSelection={onItemSelection}
+                expanded={expandedInsights[key]}
               />
             </CardContent>
           </Card>
