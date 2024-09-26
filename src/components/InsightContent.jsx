@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ExternalLinkIcon } from 'lucide-react';
+import { ExternalLinkIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 
 const InsightContent = ({
@@ -10,6 +10,8 @@ const InsightContent = ({
   selectedItems,
   onItemSelection
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const renderGameRedirectButton = (gameId) => {
     return (
       <Button
@@ -157,12 +159,37 @@ const InsightContent = ({
     );
   };
 
+  const values = Array.isArray(value) ? value : [value];
+
   return (
     <div className="space-y-2">
-      {Array.isArray(value) ? (
-        value.map((item, index) => formatSingleInsight(item, index))
-      ) : (
-        formatSingleInsight(value, 0)
+      {formatSingleInsight(values[0], 0)}
+      {values.length > 1 && (
+        <div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="mt-2"
+          >
+            {isExpanded ? (
+              <>
+                <ChevronUpIcon className="mr-2 h-4 w-4" />
+                Hide additional values
+              </>
+            ) : (
+              <>
+                <ChevronDownIcon className="mr-2 h-4 w-4" />
+                Show {values.length - 1} more values
+              </>
+            )}
+          </Button>
+          {isExpanded && (
+            <div className="mt-2 space-y-2">
+              {values.slice(1).map((item, index) => formatSingleInsight(item, index + 1))}
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
