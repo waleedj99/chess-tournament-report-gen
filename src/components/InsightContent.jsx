@@ -8,8 +8,7 @@ const InsightContent = ({
   value,
   isPngPreview,
   selectedItems,
-  onItemSelection,
-  expanded
+  onItemSelection
 }) => {
   const renderGameRedirectButton = (gameId) => {
     return (
@@ -146,7 +145,7 @@ const InsightContent = ({
 
     return (
       <div key={index} className="mb-2 flex items-start">
-        {!isPngPreview && index !== 0 && (
+        {!isPngPreview && (
           <Checkbox
             checked={isSelected}
             onCheckedChange={toggleSelection}
@@ -161,10 +160,7 @@ const InsightContent = ({
   return (
     <div className="space-y-2">
       {Array.isArray(value) ? (
-        <>
-          {formatSingleInsight(value[0], 0)}
-          {expanded && value.slice(1).map((item, index) => formatSingleInsight(item, index + 1))}
-        </>
+        value.map((item, index) => formatSingleInsight(item, index))
       ) : (
         formatSingleInsight(value, 0)
       )}

@@ -12,17 +12,18 @@ import { Card, CardContent } from '@/components/ui/card';
 import InsightsOverview from './InsightsOverview';
 import calculateAllInsights from '../utils/insightsCalculator';
 import { INSIGHTS } from '../utils/constants';
+import { Progress } from '@/components/ui/progress';
 
 const ChessInsightsApp = () => {
   const [tournamentType, setTournamentType] = useState('swiss');
   const [tournamentId, setTournamentId] = useState('');
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [selectedInsights, setSelectedInsights] = useState({});
-  const [expandedInsights, setExpandedInsights] = useState({});
   const [pngPreview, setPngPreview] = useState(null);
   const [tournamentGames, setTournamentGames] = useState([]);
   const [calculatedInsights, setCalculatedInsights] = useState(null);
   const [fetchError, setFetchError] = useState(null);
+  const [evaluationProgress, setEvaluationProgress] = useState(0);
 
   const fetchGames = async () => {
     let fetchData = [];
@@ -96,14 +97,7 @@ const ChessInsightsApp = () => {
     if (tournamentGames.length > 0) {
       const insightsResult = calculateAllInsights(tournamentGames, Object.values(INSIGHTS));
       setCalculatedInsights(insightsResult);
-      // Initialize selectedInsights with top values
-      const initialSelectedInsights = {};
-      Object.keys(insightsResult.insights).forEach(key => {
-        if (insightsResult.insights[key] && insightsResult.insights[key].length > 0) {
-          initialSelectedInsights[key] = [0]; // Select only the top value
-        }
-      });
-      setSelectedInsights(initialSelectedInsights);
+      setSelectedInsights({});
     }
   }, [tournamentGames]);
 
@@ -111,33 +105,25 @@ const ChessInsightsApp = () => {
     if (tournamentId) {
       refetch();
       setIsDataFetched(true);
+      setEvaluationProgress(0);
+      const interval = setInterval(() => {
+        setEvaluationProgress(prev => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            return 100;
+          }
+          return prev + 1;
+        });
+      }, 100);
     }
   };
 
-  const handleInsightSelection = (insight) => {
+  const handleInsightSelection = (insightKey, itemIndex) => {
     setSelectedInsights(prev => ({
       ...prev,
-      [insight]: prev[insight] ? [] : [0] // Toggle selection, default to top value if selected
-    }));
-  };
-
-  const handleItemSelection = (insightKey, itemIndex) => {
-    setSelectedInsights(prev => {
-      const currentSelection = prev[insightKey] || [];
-      const updatedSelection = currentSelection.includes(itemIndex)
-        ? currentSelection.filter(i => i !== itemIndex)
-        : [...currentSelection, itemIndex];
-      return {
-        ...prev,
-        [insightKey]: updatedSelection.length > 0 ? updatedSelection : [0] // Ensure at least top value is selected
-      };
-    });
-  };
-
-  const handleInsightExpansion = (insightKey) => {
-    setExpandedInsights(prev => ({
-      ...prev,
-      [insightKey]: !prev[insightKey]
+      [insightKey]: prev[insightKey]?.includes(itemIndex)
+        ? prev[insightKey].filter(i => i !== itemIndex)
+        : [itemIndex]
     }));
   };
 
@@ -184,7 +170,12 @@ const ChessInsightsApp = () => {
         </CardContent>
       </Card>
 
-      {isLoading && <p>Loading tournament data...</p>}
+      {isLoading && (
+        <div className="space-y-2">
+          <p>Loading tournament data...</p>
+          <Progress value={evaluationProgress} className="w-full" />
+        </div>
+      )}
       {fetchError && <Alert variant="destructive"><AlertDescription>{fetchError}</AlertDescription></Alert>}
       {isDataFetched && calculatedInsights && (
         <Alert>
@@ -202,10 +193,7 @@ const ChessInsightsApp = () => {
             analysedGames={calculatedInsights.analysedGames}
             totalGames={calculatedInsights.totalGames}
             selectedInsights={selectedInsights}
-            expandedInsights={expandedInsights}
             onInsightSelection={handleInsightSelection}
-            onItemSelection={handleItemSelection}
-            onInsightExpansion={handleInsightExpansion}
           />
           <div id="selected-insights-container" className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
             <h2 className="text-2xl font-bold mb-4">{tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament Insights</h2>
@@ -215,10 +203,6 @@ const ChessInsightsApp = () => {
               analysedGames={calculatedInsights.analysedGames}
               totalGames={calculatedInsights.totalGames}
               selectedInsights={selectedInsights}
-              expandedInsights={expandedInsights}
-              onInsightSelection={() => {}}
-              onItemSelection={() => {}}
-              onInsightExpansion={() => {}}
               showOnlySelected={true}
               isPngPreview={true}
             />
