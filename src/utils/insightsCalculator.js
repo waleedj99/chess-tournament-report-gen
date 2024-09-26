@@ -79,21 +79,21 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
     [INSIGHTS.MOST_ACCURATE_GAME]: (games) => {
       return games
         .filter(game => game.players.white && game.players.black && 
-                        typeof game.players.white.accuracy === 'number' && 
-                        typeof game.players.black.accuracy === 'number')
+                        typeof game.players.white?.analysis?.accuracy === 'number' && 
+                        typeof game.players.black?.analysis?.accuracy === 'number')
         .map(game => ({
           gameId: game.id,
           players: {
             white: {
               name: game.players.white.user.name,
-              accuracy: game.players.white.accuracy
+              accuracy: game.players.white?.analysis?.accuracy
             },
             black: {
               name: game.players.black.user.name,
-              accuracy: game.players.black.accuracy
+              accuracy: game.players.black?.analysis?.accuracy
             }
           },
-          value: (game.players.white.accuracy + game.players.black.accuracy) / 2
+          value: (game.players.white?.analysis?.accuracy + game.players.black?.analysis?.accuracy) / 2
         }))
         .sort((a, b) => b.value - a.value)
         .slice(0, 5);
@@ -129,10 +129,10 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
     [INSIGHTS.MOST_ACCURATE_PLAYER]: (games) => {
       const playerAccuracies = games.reduce((acc, game) => {
         ['white', 'black'].forEach(color => {
-          if (game.players[color] && typeof game.players[color].accuracy === 'number') {
+          if (game.players[color] && typeof game.players[color]?.analysis?.accuracy === 'number') {
             const playerName = game.players[color].user.name;
             if (!acc[playerName]) acc[playerName] = { totalAcc: 0, games: 0 };
-            acc[playerName].totalAcc += game.players[color].accuracy;
+            acc[playerName].totalAcc += game.players[color]?.analysis?.accuracy;
             acc[playerName].games++;
           }
         });
