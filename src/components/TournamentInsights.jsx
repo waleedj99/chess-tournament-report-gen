@@ -10,8 +10,9 @@ const TournamentInsights = ({
   insights = {},
   analysedGames = 0,
   totalGames = 0,
-  selectedInsights = [], 
+  selectedInsights = {}, 
   onInsightSelection, 
+  onItemSelection,
   showOnlySelected = false, 
   isPngPreview = false 
 }) => {
@@ -22,7 +23,7 @@ const TournamentInsights = ({
   };
 
   const insightsToShow = showOnlySelected 
-    ? Object.entries(insights).filter(([key]) => selectedInsights.includes(key))
+    ? Object.entries(insights).filter(([key]) => selectedInsights[key] && selectedInsights[key].length > 0)
     : Object.entries(insights);
 
   return (
@@ -36,14 +37,14 @@ const TournamentInsights = ({
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {insightsToShow.map(([key, value]) => (
-          <Card key={key} className={`transition-all ${selectedInsights.includes(key) ? 'ring-2 ring-blue-500 dark:ring-blue-400' : ''}`}>
+          <Card key={key} className={`transition-all ${selectedInsights[key] && selectedInsights[key].length > 0 ? 'ring-2 ring-blue-500 dark:ring-blue-400' : ''}`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 {toTitleCase(key)}
               </CardTitle>
               {!showOnlySelected && !isPngPreview && (
                 <Checkbox
-                  checked={selectedInsights.includes(key)}
+                  checked={selectedInsights[key] && selectedInsights[key].length > 0}
                   onCheckedChange={() => onInsightSelection(key)}
                 />
               )}
@@ -53,6 +54,8 @@ const TournamentInsights = ({
                 insightKey={key}
                 value={value}
                 isPngPreview={isPngPreview}
+                selectedItems={selectedInsights[key] || []}
+                onItemSelection={onItemSelection}
               />
             </CardContent>
           </Card>

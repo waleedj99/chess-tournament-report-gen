@@ -17,7 +17,7 @@ const ChessInsightsApp = () => {
   const [tournamentType, setTournamentType] = useState('swiss');
   const [tournamentId, setTournamentId] = useState('');
   const [isDataFetched, setIsDataFetched] = useState(false);
-  const [selectedInsights, setSelectedInsights] = useState([]);
+  const [selectedInsights, setSelectedInsights] = useState({});
   const [pngPreview, setPngPreview] = useState(null);
   const [tournamentGames, setTournamentGames] = useState([]);
   const [calculatedInsights, setCalculatedInsights] = useState(null);
@@ -106,11 +106,23 @@ const ChessInsightsApp = () => {
   };
 
   const handleInsightSelection = (insight) => {
-    setSelectedInsights(prev => 
-      prev.includes(insight) 
-        ? prev.filter(i => i !== insight)
-        : [...prev, insight]
-    );
+    setSelectedInsights(prev => ({
+      ...prev,
+      [insight]: prev[insight] ? [] : [0]
+    }));
+  };
+
+  const handleItemSelection = (insightKey, itemIndex) => {
+    setSelectedInsights(prev => {
+      const currentSelection = prev[insightKey] || [];
+      const updatedSelection = currentSelection.includes(itemIndex)
+        ? currentSelection.filter(i => i !== itemIndex)
+        : [...currentSelection, itemIndex];
+      return {
+        ...prev,
+        [insightKey]: updatedSelection
+      };
+    });
   };
 
   const generatePng = async () => {
@@ -175,6 +187,7 @@ const ChessInsightsApp = () => {
             totalGames={calculatedInsights.totalGames}
             selectedInsights={selectedInsights}
             onInsightSelection={handleInsightSelection}
+            onItemSelection={handleItemSelection}
           />
           <div id="selected-insights-container" className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
             <h2 className="text-2xl font-bold mb-4">{tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament Insights</h2>
@@ -185,6 +198,7 @@ const ChessInsightsApp = () => {
               totalGames={calculatedInsights.totalGames}
               selectedInsights={selectedInsights}
               onInsightSelection={() => {}}
+              onItemSelection={() => {}}
               showOnlySelected={true}
               isPngPreview={true}
             />
@@ -195,7 +209,7 @@ const ChessInsightsApp = () => {
       {isDataFetched && calculatedInsights && (
         <Card>
           <CardContent className="pt-6">
-            <Button onClick={generatePng} disabled={selectedInsights.length === 0}>
+            <Button onClick={generatePng} disabled={Object.values(selectedInsights).every(arr => arr.length === 0)}>
               Generate PNG
             </Button>
             {pngPreview && <PngPreview imageUrl={pngPreview} />}
