@@ -8,7 +8,8 @@ const InsightContent = ({
   value,
   isPngPreview,
   selectedItems,
-  onItemSelection
+  onItemSelection,
+  showOnlySelected
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -83,13 +84,13 @@ const InsightContent = ({
             <>
               <p>#{index + 1} - Average Accuracy: {item.value?.toFixed(2) || 'N/A'}%</p>
               <p>
-                White: {item.players?.white?.user?.name || 'Unknown'}
-                {renderPlayerRedirectButton(item.players?.white?.user?.name)}
+                White: {item.players?.white?.name || 'Unknown'}
+                {renderPlayerRedirectButton(item.players?.white?.name)}
                 (Accuracy: {item.players?.white?.accuracy?.toFixed(2) || 'N/A'}%)
               </p>
               <p>
-                Black: {item.players?.black?.user?.name || 'Unknown'}
-                {renderPlayerRedirectButton(item.players?.black?.user?.name)}
+                Black: {item.players?.black?.name || 'Unknown'}
+                {renderPlayerRedirectButton(item.players?.black?.name)}
                 (Accuracy: {item.players?.black?.accuracy?.toFixed(2) || 'N/A'}%)
               </p>
               {item.gameId && renderGameRedirectButton(item.gameId)}
@@ -147,7 +148,7 @@ const InsightContent = ({
 
     return (
       <div key={index} className="mb-2 flex items-start">
-        {!isPngPreview && (
+        {!isPngPreview && !showOnlySelected && (
           <Checkbox
             checked={isSelected}
             onCheckedChange={toggleSelection}
@@ -160,11 +161,12 @@ const InsightContent = ({
   };
 
   const values = Array.isArray(value) ? value : [value];
+  const valuesToShow = showOnlySelected ? values.filter((_, index) => selectedItems.includes(index)) : values;
 
   return (
     <div className="space-y-2">
-      {formatSingleInsight(values[0], 0)}
-      {values.length > 1 && (
+      {formatSingleInsight(valuesToShow[0], 0)}
+      {!isPngPreview && valuesToShow.length > 1 && (
         <div>
           <Button
             variant="ghost"
@@ -180,13 +182,13 @@ const InsightContent = ({
             ) : (
               <>
                 <ChevronDownIcon className="mr-2 h-4 w-4" />
-                Show {values.length - 1} more values
+                Show {valuesToShow.length - 1} more values
               </>
             )}
           </Button>
           {isExpanded && (
             <div className="mt-2 space-y-2">
-              {values.slice(1).map((item, index) => formatSingleInsight(item, index + 1))}
+              {valuesToShow.slice(1).map((item, index) => formatSingleInsight(item, index + 1))}
             </div>
           )}
         </div>

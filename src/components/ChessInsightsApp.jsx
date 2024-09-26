@@ -24,6 +24,7 @@ const ChessInsightsApp = () => {
   const [calculatedInsights, setCalculatedInsights] = useState(null);
   const [fetchError, setFetchError] = useState(null);
   const [evaluationProgress, setEvaluationProgress] = useState(0);
+  const [dataProcessingProgress, setDataProcessingProgress] = useState(0);
 
   const fetchGames = async () => {
     let fetchData = [];
@@ -95,9 +96,15 @@ const ChessInsightsApp = () => {
 
   useEffect(() => {
     if (tournamentGames.length > 0) {
-      const insightsResult = calculateAllInsights(tournamentGames, Object.values(INSIGHTS));
-      setCalculatedInsights(insightsResult);
-      setSelectedInsights({});
+      setDataProcessingProgress(0);
+      const processInsights = async () => {
+        const insightsResult = await calculateAllInsights(tournamentGames, Object.values(INSIGHTS), (progress) => {
+          setDataProcessingProgress(progress);
+        });
+        setCalculatedInsights(insightsResult);
+        setSelectedInsights({});
+      };
+      processInsights();
     }
   }, [tournamentGames]);
 
@@ -123,7 +130,7 @@ const ChessInsightsApp = () => {
       ...prev,
       [insightKey]: prev[insightKey]?.includes(itemIndex)
         ? prev[insightKey].filter(i => i !== itemIndex)
-        : [itemIndex]
+        : [...(prev[insightKey] || []), itemIndex]
     }));
   };
 
@@ -187,6 +194,12 @@ const ChessInsightsApp = () => {
       )}
       {isDataFetched && calculatedInsights && (
         <div>
+          {dataProcessingProgress < 100 && (
+            <div className="space-y-2">
+              <p>Processing data...</p>
+              <Progress value={dataProcessingProgress} className="w-full" />
+            </div>
+          )}
           <TournamentInsights 
             tournamentData={{ name: `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, type: tournamentType, players: calculatedInsights.totalGames }}
             insights={calculatedInsights.insights}

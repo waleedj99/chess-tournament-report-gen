@@ -55,6 +55,7 @@ const TournamentInsights = ({
                 isPngPreview={isPngPreview}
                 selectedItems={selectedInsights[key] || []}
                 onItemSelection={onInsightSelection}
+                showOnlySelected={showOnlySelected}
               />
             </CardContent>
           </Card>
