@@ -17,7 +17,7 @@ const ChessInsightsApp = () => {
   const [tournamentType, setTournamentType] = useState('swiss');
   const [tournamentId, setTournamentId] = useState('');
   const [isDataFetched, setIsDataFetched] = useState(false);
-  const [selectedInsights, setSelectedInsights] = useState([]);
+  const [selectedInsights, setSelectedInsights] = useState({});
   const [pngPreview, setPngPreview] = useState(null);
   const [tournamentGames, setTournamentGames] = useState([]);
   const [calculatedInsights, setCalculatedInsights] = useState(null);
@@ -105,12 +105,24 @@ const ChessInsightsApp = () => {
     }
   };
 
-  const handleInsightSelection = (insight) => {
-    setSelectedInsights(prev => 
-      prev.includes(insight) 
-        ? prev.filter(i => i !== insight)
-        : [...prev, insight]
-    );
+  const handleInsightSelection = (insightKey, index, checked) => {
+    setSelectedInsights(prev => {
+      const updatedInsight = prev[insightKey] ? [...prev[insightKey]] : [];
+      if (checked) {
+        if (!updatedInsight.includes(index)) {
+          updatedInsight.push(index);
+        }
+      } else {
+        const indexToRemove = updatedInsight.indexOf(index);
+        if (indexToRemove !== -1) {
+          updatedInsight.splice(indexToRemove, 1);
+        }
+      }
+      return {
+        ...prev,
+        [insightKey]: updatedInsight
+      };
+    });
   };
 
   const generatePng = async () => {
@@ -195,7 +207,7 @@ const ChessInsightsApp = () => {
       {isDataFetched && calculatedInsights && (
         <Card>
           <CardContent className="pt-6">
-            <Button onClick={generatePng} disabled={selectedInsights.length === 0}>
+            <Button onClick={generatePng} disabled={Object.values(selectedInsights).every(arr => arr.length === 0)}>
               Generate PNG
             </Button>
             {pngPreview && <PngPreview imageUrl={pngPreview} />}
