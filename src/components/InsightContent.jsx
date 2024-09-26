@@ -9,7 +9,6 @@ const InsightContent = ({
   isPngPreview,
   selectedItems,
   onItemSelection,
-  expanded,
 }) => {
   const renderGameRedirectButton = (gameId) => {
     return (
@@ -160,14 +159,7 @@ const InsightContent = ({
 
   return (
     <div className="space-y-2">
-      {Array.isArray(value) ? (
-        <>
-          {formatSingleInsight(value[0], 0)}
-          {expanded && value.slice(1).map((item, index) => formatSingleInsight(item, index + 1))}
-        </>
-      ) : (
-        formatSingleInsight(value, 0)
-      )}
+      {Array.isArray(value) ? value.map((item, index) => formatSingleInsight(item, index)) : formatSingleInsight(value, 0)}
     </div>
   );
 };
