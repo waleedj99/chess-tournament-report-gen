@@ -165,32 +165,30 @@ const InsightContent = ({
 
   return (
     <div className="space-y-2">
-      {formatSingleInsight(valuesToShow[0], 0)}
-      {!isPngPreview && valuesToShow.length > 1 && (
-        <div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-2"
-          >
-            {isExpanded ? (
-              <>
-                <ChevronUpIcon className="mr-2 h-4 w-4" />
-                Hide additional values
-              </>
-            ) : (
-              <>
-                <ChevronDownIcon className="mr-2 h-4 w-4" />
-                Show {valuesToShow.length - 1} more values
-              </>
-            )}
-          </Button>
-          {isExpanded && (
-            <div className="mt-2 space-y-2">
-              {valuesToShow.slice(1).map((item, index) => formatSingleInsight(item, index + 1))}
-            </div>
+      {valuesToShow.map((item, index) => formatSingleInsight(item, index))}
+      {!isPngPreview && !showOnlySelected && values.length > 1 && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="mt-2"
+        >
+          {isExpanded ? (
+            <>
+              <ChevronUpIcon className="mr-2 h-4 w-4" />
+              Hide additional values
+            </>
+          ) : (
+            <>
+              <ChevronDownIcon className="mr-2 h-4 w-4" />
+              Show {values.length - 1} more values
+            </>
           )}
+        </Button>
+      )}
+      {!isPngPreview && !showOnlySelected && isExpanded && (
+        <div className="mt-2 space-y-2">
+          {values.slice(1).map((item, index) => formatSingleInsight(item, index + 1))}
         </div>
       )}
     </div>
