@@ -60,14 +60,25 @@ const InsightContent = ({
           <div key={index} className="mb-2 flex items-start">
             {renderCheckbox()}
             <div>
-              <p>#{index + 1} - Moves: {item.value}</p>
-              <p>
-                Players: {item.players?.white?.user?.name || 'Unknown'}
+              <p className="font-semibold">#{index + 1} - Moves: {item.value}</p>
+              <p className="text-sm">
+                White: {item.players?.white?.user?.name || 'Unknown'}
                 {renderPlayerRedirectButton(item.players?.white?.user?.name)}
-                vs {item.players?.black?.user?.name || 'Unknown'}
+              </p>
+              <p className="text-sm">
+                Black: {item.players?.black?.user?.name || 'Unknown'}
                 {renderPlayerRedirectButton(item.players?.black?.user?.name)}
               </p>
-              {item.gameId && renderGameRedirectButton(item.gameId)}
+              {item.gameId && (
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="p-0 h-auto text-sm text-blue-500 hover:text-blue-700"
+                  onClick={() => window.open(`https://lichess.org/${item.gameId}`, '_blank')}
+                >
+                  View Game
+                </Button>
+              )}
             </div>
           </div>
         );
@@ -180,7 +191,7 @@ const InsightContent = ({
 
   return (
     <div className="space-y-2">
-      {formatInsight(insightKey, value, false)}
+      {formatInsight(insightKey, value, true)}
       {!isPngPreview && value && value.length > 1 && (
         <Toggle
           aria-label="Toggle insight expansion"

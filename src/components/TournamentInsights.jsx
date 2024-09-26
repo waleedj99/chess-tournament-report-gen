@@ -44,7 +44,7 @@ const TournamentInsights = ({
               {!showOnlySelected && !isPngPreview && (
                 <Checkbox
                   checked={selectedInsights[key] && selectedInsights[key].length > 0}
-                  onCheckedChange={(checked) => onInsightSelection(key, checked ? [0] : [])}
+                  onCheckedChange={(checked) => onInsightSelection(key, 0, checked)}
                 />
               )}
             </CardHeader>
