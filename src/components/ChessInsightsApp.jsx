@@ -21,6 +21,7 @@ const ChessInsightsApp = () => {
   const [pngPreview, setPngPreview] = useState(null);
   const [tournamentGames, setTournamentGames] = useState([]);
   const [calculatedInsights, setCalculatedInsights] = useState(null);
+  const [fetchError, setFetchError] = useState(null);
 
   const fetchGames = async () => {
     let fetchData = [];
@@ -44,6 +45,11 @@ const ChessInsightsApp = () => {
       }
 
       const response = await fetch(`${apiUrl}?evals=true&accuracy=true&clocks=true&opening=true`, requestOptions);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch tournament data. Please check the tournament ID and try again.');
+      }
+
       const reader = response.body.getReader();
       let chunk = '';
 
@@ -70,9 +76,11 @@ const ChessInsightsApp = () => {
 
       await read();
       setTournamentGames(fetchData);
+      setFetchError(null);
       return fetchData;
     } catch (error) {
       console.error('Error fetching games:', error);
+      setFetchError(error.message);
       throw error;
     }
   };
@@ -149,7 +157,7 @@ const ChessInsightsApp = () => {
       </Card>
 
       {isLoading && <p>Loading tournament data...</p>}
-      {error && <p className="text-red-500">Error: {error.message}</p>}
+      {fetchError && <Alert variant="destructive"><AlertDescription>{fetchError}</AlertDescription></Alert>}
       {isDataFetched && calculatedInsights && (
         <Alert>
           <InfoIcon className="h-4 w-4" />
