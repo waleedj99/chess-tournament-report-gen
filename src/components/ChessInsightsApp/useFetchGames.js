@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 export const useFetchGames = () => {
   const [tournamentGames, setTournamentGames] = useState([]);
   const [evaluationProgress, setEvaluationProgress] = useState(0);
+  const [tournamentDetails, setTournamentDetails] = useState(null);
 
   const fetchGames = async (tournamentType, tournamentId) => {
     let fetchData = [];
@@ -17,6 +18,15 @@ export const useFetchGames = () => {
     };
 
     try {
+      // Fetch tournament details
+      const detailsResponse = await fetch(`https://lichess.org/api/${tournamentType}/${tournamentId}`, requestOptions);
+      if (!detailsResponse.ok) {
+        throw new Error('Failed to fetch tournament details');
+      }
+      const details = await detailsResponse.json();
+      setTournamentDetails(details);
+
+      // Fetch games
       let apiUrl;
       if (tournamentType === 'swiss') {
         apiUrl = `https://lichess.org/api/swiss/${tournamentId}/games`;
@@ -72,5 +82,12 @@ export const useFetchGames = () => {
     enabled: false,
   });
 
-  return { fetchGames: refetch, data: tournamentGames, isLoading, error, evaluationProgress };
+  return { 
+    fetchGames: refetch, 
+    data: tournamentGames, 
+    isLoading, 
+    error, 
+    evaluationProgress,
+    tournamentDetails
+  };
 };

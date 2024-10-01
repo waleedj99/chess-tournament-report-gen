@@ -12,6 +12,7 @@ import InsightsOverview from '../InsightsOverview';
 import { Container, Header, ProgressContainer, InsightsContainer } from './styles';
 import { useFetchGames } from './useFetchGames';
 import { useInsightsCalculation } from './useInsightsCalculation';
+import TournamentWinners from '../TournamentWinners';
 
 const ChessInsightsApp = () => {
   const [tournamentType, setTournamentType] = useState('swiss');
@@ -23,7 +24,8 @@ const ChessInsightsApp = () => {
     data: tournamentGames, 
     isLoading, 
     error: fetchError, 
-    evaluationProgress 
+    evaluationProgress,
+    tournamentDetails
   } = useFetchGames();
 
   const {
@@ -79,6 +81,15 @@ const ChessInsightsApp = () => {
 
       {fetchError && <Alert variant="destructive"><AlertDescription>{fetchError}</AlertDescription></Alert>}
 
+      {tournamentDetails && (
+        <div className="mt-6">
+          <h2 className="text-2xl font-bold mb-4">{tournamentDetails.name}</h2>
+          <p>Type: {tournamentType}</p>
+          <p>Number of players: {tournamentDetails.nbPlayers}</p>
+          <TournamentWinners winners={tournamentDetails.podium} />
+        </div>
+      )}
+
       {tournamentGames.length > 0 && calculatedInsights && (
         <InsightsContainer>
           <Alert>
@@ -95,7 +106,7 @@ const ChessInsightsApp = () => {
           )}
           <TournamentInsights 
             tournamentData={{ 
-              name: `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, 
+              name: tournamentDetails?.name || `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, 
               type: tournamentType, 
               players: calculatedInsights.totalGames 
             }}
@@ -107,7 +118,7 @@ const ChessInsightsApp = () => {
           />
           <PngPreview
             tournamentData={{ 
-              name: `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, 
+              name: tournamentDetails?.name || `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, 
               type: tournamentType, 
               players: calculatedInsights.totalGames 
             }}
