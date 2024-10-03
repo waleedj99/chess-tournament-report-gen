@@ -53,93 +53,57 @@ const InsightContent = ({
         case 'SHORTEST_GAME_LENGTH_BY_MOVES':
         case 'LONGEST_GAME_LENGTH_BY_MOVES':
           return (
-            <>
-              <p>#{index + 1} - Moves: {item.value}</p>
+            <div>
+              <p>Moves: {item.value}</p>
               <p>
-                Players: {item.players?.white?.user?.name || 'Unknown'}
-                {renderPlayerRedirectButton(item.players?.white?.user?.name)}
-                vs {item.players?.black?.user?.name || 'Unknown'}
-                {renderPlayerRedirectButton(item.players?.black?.user?.name)}
+                Players: {item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'}
               </p>
-              {item.gameId && renderGameRedirectButton(item.gameId)}
-            </>
+            </div>
           );
         case 'LONGEST_MOVE_BY_TIME':
           return (
-            <>
-              <p>#{index + 1} - Time taken: {item.timeTaken?.toFixed(2) || 'N/A'} seconds</p>
+            <div>
+              <p>Time taken: {item.timeTaken?.toFixed(2) || 'N/A'} seconds</p>
               <p>Move number: {item.moveNo || 'N/A'}</p>
               <p>Side: {item.side || 'N/A'}</p>
-              <p>
-                Players: {item.players?.white?.user?.name || 'Unknown'}
-                {renderPlayerRedirectButton(item.players?.white?.user?.name)}
-                vs {item.players?.black?.user?.name || 'Unknown'}
-                {renderPlayerRedirectButton(item.players?.black?.user?.name)}
-              </p>
-              {item.gameId && renderGameRedirectButton(item.gameId)}
-            </>
+            </div>
           );
         case 'MOST_ACCURATE_GAME':
           return (
-            <>
-              <p>#{index + 1} - Average Accuracy: {item.value?.toFixed(2) || 'N/A'}%</p>
-              <p>
-                White: {item.players?.white?.name || 'Unknown'}
-                {renderPlayerRedirectButton(item.players?.white?.name)}
-                (Accuracy: {item.players?.white?.accuracy?.toFixed(2) || 'N/A'}%)
-              </p>
-              <p>
-                Black: {item.players?.black?.name || 'Unknown'}
-                {renderPlayerRedirectButton(item.players?.black?.name)}
-                (Accuracy: {item.players?.black?.accuracy?.toFixed(2) || 'N/A'}%)
-              </p>
-              {item.gameId && renderGameRedirectButton(item.gameId)}
-            </>
+            <div>
+              <p>Average Accuracy: {item.value?.toFixed(2) || 'N/A'}%</p>
+              <p>White: {item.players?.white?.name || 'Unknown'} (Accuracy: {item.players?.white?.accuracy?.toFixed(2) || 'N/A'}%)</p>
+              <p>Black: {item.players?.black?.name || 'Unknown'} (Accuracy: {item.players?.black?.accuracy?.toFixed(2) || 'N/A'}%)</p>
+            </div>
           );
         case 'MOST_DYNAMIC_GAME':
           return (
-            <>
-              <p>#{index + 1} - Turn arounds: {item.value || 'N/A'}</p>
-              <p>
-                Players: {item.players?.white?.user?.name || 'Unknown'}
-                {renderPlayerRedirectButton(item.players?.white?.user?.name)}
-                vs {item.players?.black?.user?.name || 'Unknown'}
-                {renderPlayerRedirectButton(item.players?.black?.user?.name)}
-              </p>
-              {item.gameId && renderGameRedirectButton(item.gameId)}
-            </>
+            <div>
+              <p>Turn arounds: {item.value || 'N/A'}</p>
+              <p>Players: {item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'}</p>
+            </div>
           );
         case 'MOST_USED_OPENING':
           return (
-            <>
-              <p>#{index + 1} - Opening: {item.openingName || 'Unknown'}</p>
+            <div>
+              <p>Opening: {item.openingName || 'Unknown'}</p>
               <p>Used {item.noOfTimes || 'N/A'} times</p>
-            </>
+            </div>
           );
         case 'MOST_ACCURATE_PLAYER':
           return (
-            <>
-              <p>
-                #{index + 1} - Player: {item.playerName || 'Unknown'}
-                {renderPlayerRedirectButton(item.playerName)}
-              </p>
+            <div>
+              <p>Player: {item.playerName || 'Unknown'}</p>
               <p>Average accuracy: {item.averageAccuracy?.toFixed(2) || 'N/A'}%</p>
               <p>Matches played: {item.noOfMatches || 'N/A'}</p>
-            </>
+            </div>
           );
         case 'HIGHEST_WINNING_STREAK':
           return (
-            <>
-              <p>
-                #{index + 1} - Player(s): {item.playerNames?.map(name => (
-                  <span key={name}>
-                    {name}
-                    {renderPlayerRedirectButton(name)}
-                  </span>
-                )) || 'Unknown'}
-              </p>
+            <div>
+              <p>Player(s): {item.playerNames?.join(', ') || 'Unknown'}</p>
               <p>Streak: {item.streakCount || 'N/A'} games</p>
-            </>
+            </div>
           );
         default:
           return <p>{JSON.stringify(item)}</p>;
@@ -147,15 +111,15 @@ const InsightContent = ({
     };
 
     return (
-      <div key={index} className="mb-2 flex items-start">
+      <div key={index} className="mb-2 flex items-start justify-between">
+        <div className="flex-grow">{renderContent()}</div>
         {!isPngPreview && !showOnlySelected && (
           <Checkbox
             checked={isSelected}
             onCheckedChange={toggleSelection}
-            className="mr-2 mt-1"
+            className="ml-2 mt-1"
           />
         )}
-        <div>{renderContent()}</div>
       </div>
     );
   };
@@ -165,33 +129,26 @@ const InsightContent = ({
 
   return (
     <div className="space-y-2">
-      {formatSingleInsight(valuesToShow[0], 0)}
+      {valuesToShow.slice(0, isExpanded ? valuesToShow.length : 1).map((item, index) => formatSingleInsight(item, index))}
       {!isPngPreview && valuesToShow.length > 1 && (
-        <div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-2"
-          >
-            {isExpanded ? (
-              <>
-                <ChevronUpIcon className="mr-2 h-4 w-4" />
-                Hide additional values
-              </>
-            ) : (
-              <>
-                <ChevronDownIcon className="mr-2 h-4 w-4" />
-                Show {valuesToShow.length - 1} more values
-              </>
-            )}
-          </Button>
-          {isExpanded && (
-            <div className="mt-2 space-y-2">
-              {valuesToShow.slice(1).map((item, index) => formatSingleInsight(item, index + 1))}
-            </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="mt-2 w-full"
+        >
+          {isExpanded ? (
+            <>
+              <ChevronUpIcon className="mr-2 h-4 w-4" />
+              Show less
+            </>
+          ) : (
+            <>
+              <ChevronDownIcon className="mr-2 h-4 w-4" />
+              Show {valuesToShow.length - 1} more
+            </>
           )}
-        </div>
+        </Button>
       )}
     </div>
   );

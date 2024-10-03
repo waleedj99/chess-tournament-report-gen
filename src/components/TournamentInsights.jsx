@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import InsightContent from './InsightContent';
 import AnalysisProgress from './AnalysisProgress';
@@ -35,15 +35,15 @@ const TournamentInsights = ({
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {insightsToShow.map(([key, value]) => (
-          <Card key={key} className={`transition-all ${selectedInsights[key] && selectedInsights[key].length > 0 ? 'ring-2 ring-blue-500 dark:ring-blue-400' : ''}`}>
+          <Card key={key} className="flex flex-col">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold">
                   A
                 </div>
-                <CardTitle className="text-sm font-medium">
+                <h3 className="text-sm font-medium">
                   {toTitleCase(key)}
-                </CardTitle>
+                </h3>
               </div>
               {!showOnlySelected && !isPngPreview && (
                 <Checkbox
@@ -52,7 +52,7 @@ const TournamentInsights = ({
                 />
               )}
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex-grow">
               <InsightContent
                 insightKey={key}
                 value={value}
