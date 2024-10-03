@@ -3,6 +3,13 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import InsightContent from './InsightContent';
 import AnalysisProgress from './AnalysisProgress';
+import { InfoIcon } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const TournamentInsights = ({ 
   tournamentData, 
@@ -37,6 +44,23 @@ const TournamentInsights = ({
     }
   };
 
+  const getInsightTooltip = (key) => {
+    switch(key) {
+      case 'MOST_ACCURATE_GAME':
+        return "Calculated based on the average accuracy of both players in a game.";
+      case 'SHORTEST_GAME_LENGTH_BY_MOVES':
+        return "Determined by the game with the least number of moves.";
+      case 'LONGEST_GAME_LENGTH_BY_MOVES':
+        return "Determined by the game with the most number of moves.";
+      case 'LONGEST_MOVE_BY_TIME':
+        return "Calculated by finding the move that took the most time across all games.";
+      case 'MOST_DYNAMIC_GAME':
+        return "Based on the number of times the advantage switched between players.";
+      default:
+        return "Insight calculation method.";
+    }
+  };
+
   const insightsToShow = showOnlySelected 
     ? Object.entries(insights).filter(([key]) => selectedInsights[key] && selectedInsights[key].length > 0)
     : Object.entries(insights);
@@ -58,8 +82,20 @@ const TournamentInsights = ({
                 <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold">
                   {key.charAt(0).toUpperCase()}
                 </div>
-                <div>
-                  <h3 className="text-sm font-medium">{toTitleCase(key)}</h3>
+                <div className="flex-grow">
+                  <div className="flex items-center">
+                    <h3 className="text-sm font-medium mr-2">{toTitleCase(key)}</h3>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <InfoIcon className="h-4 w-4 text-gray-500" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{getInsightTooltip(key)}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                   <p className="text-xs text-gray-500">{getInsightDescription(key, value)}</p>
                 </div>
               </div>
