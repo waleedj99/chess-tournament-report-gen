@@ -23,15 +23,15 @@ const TournamentInsights = ({
   const getInsightDescription = (key, value) => {
     switch(key) {
       case 'MOST_ACCURATE_GAME':
-        return `The most accurate game had an average accuracy of ${value[0]?.value?.toFixed(2)}%`;
+        return `${value[0]?.players?.white?.name || 'Unknown'} vs ${value[0]?.players?.black?.name || 'Unknown'} had ${value[0]?.value?.toFixed(2)}% accuracy`;
       case 'SHORTEST_GAME_LENGTH_BY_MOVES':
-        return `The shortest game was completed in ${value[0]?.value} moves`;
+        return `Shortest game completed in ${value[0]?.value} moves`;
       case 'LONGEST_GAME_LENGTH_BY_MOVES':
-        return `The longest game lasted for ${value[0]?.value} moves`;
+        return `Longest game lasted for ${value[0]?.value} moves`;
       case 'LONGEST_MOVE_BY_TIME':
-        return `The longest move took ${value[0]?.timeTaken?.toFixed(2)} seconds`;
+        return `Longest move took ${value[0]?.timeTaken?.toFixed(2)} seconds`;
       case 'MOST_DYNAMIC_GAME':
-        return `The most dynamic game had ${value[0]?.value} turn arounds`;
+        return `Most dynamic game had ${value[0]?.value} turn arounds`;
       default:
         return toTitleCase(key);
     }
@@ -50,7 +50,7 @@ const TournamentInsights = ({
           <AnalysisProgress analyzed={analysedGames} total={totalGames} />
         </>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {insightsToShow.map(([key, value]) => (
           <Card key={key} className="flex flex-col">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

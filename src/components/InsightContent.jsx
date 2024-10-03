@@ -18,10 +18,10 @@ const InsightContent = ({
       <Button
         variant="ghost"
         size="sm"
-        className="ml-2"
+        className="ml-auto"
         onClick={() => window.open(`https://lichess.org/${gameId}`, '_blank')}
       >
-        Open
+        Open <ExternalLinkIcon className="ml-1 h-4 w-4" />
       </Button>
     );
   };
@@ -40,75 +40,66 @@ const InsightContent = ({
         case 'SHORTEST_GAME_LENGTH_BY_MOVES':
         case 'LONGEST_GAME_LENGTH_BY_MOVES':
           return (
-            <div>
-              <p>Moves: {item.value}</p>
-              <p>
-                Players: {item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'}
-              </p>
+            <div className="flex items-center justify-between">
+              <span>{item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'} ({item.value} moves)</span>
               {renderGameRedirectButton(item.gameId)}
             </div>
           );
         case 'LONGEST_MOVE_BY_TIME':
           return (
-            <div>
-              <p>Time taken: {item.timeTaken?.toFixed(2) || 'N/A'} seconds</p>
-              <p>Move number: {item.moveNo || 'N/A'}</p>
-              <p>Side: {item.side || 'N/A'}</p>
+            <div className="flex items-center justify-between">
+              <span>Move {item.moveNo || 'N/A'} by {item.side || 'N/A'} ({item.timeTaken?.toFixed(2) || 'N/A'} seconds)</span>
               {renderGameRedirectButton(item.gameId)}
             </div>
           );
         case 'MOST_ACCURATE_GAME':
           return (
-            <div>
-              <p>Average Accuracy: {item.value?.toFixed(2) || 'N/A'}%</p>
-              <p>White: {item.players?.white?.name || 'Unknown'} (Accuracy: {item.players?.white?.accuracy?.toFixed(2) || 'N/A'}%)</p>
-              <p>Black: {item.players?.black?.name || 'Unknown'} (Accuracy: {item.players?.black?.accuracy?.toFixed(2) || 'N/A'}%)</p>
+            <div className="flex items-center justify-between">
+              <span>
+                White: {item.players?.white?.name || 'Unknown'} ({item.players?.white?.accuracy?.toFixed(2) || 'N/A'}%) 
+                Black: {item.players?.black?.name || 'Unknown'} ({item.players?.black?.accuracy?.toFixed(2) || 'N/A'}%)
+              </span>
               {renderGameRedirectButton(item.gameId)}
             </div>
           );
         case 'MOST_DYNAMIC_GAME':
           return (
-            <div>
-              <p>Turn arounds: {item.value || 'N/A'}</p>
-              <p>Players: {item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'}</p>
+            <div className="flex items-center justify-between">
+              <span>{item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'} ({item.value} turn arounds)</span>
               {renderGameRedirectButton(item.gameId)}
             </div>
           );
         case 'MOST_USED_OPENING':
           return (
-            <div>
-              <p>Opening: {item.openingName || 'Unknown'}</p>
-              <p>Used {item.noOfTimes || 'N/A'} times</p>
+            <div className="flex items-center justify-between">
+              <span>{item.openingName || 'Unknown'} (Used {item.noOfTimes || 'N/A'} times)</span>
             </div>
           );
         case 'MOST_ACCURATE_PLAYER':
           return (
-            <div>
-              <p>Player: {item.playerName || 'Unknown'}</p>
-              <p>Average accuracy: {item.averageAccuracy?.toFixed(2) || 'N/A'}%</p>
-              <p>Matches played: {item.noOfMatches || 'N/A'}</p>
+            <div className="flex items-center justify-between">
+              <span>{item.playerName || 'Unknown'} ({item.averageAccuracy?.toFixed(2) || 'N/A'}% in {item.noOfMatches || 'N/A'} matches)</span>
             </div>
           );
         case 'HIGHEST_WINNING_STREAK':
           return (
-            <div>
-              <p>Player(s): {item.playerNames?.join(', ') || 'Unknown'}</p>
-              <p>Streak: {item.streakCount || 'N/A'} games</p>
+            <div className="flex items-center justify-between">
+              <span>{item.playerNames?.join(', ') || 'Unknown'} ({item.streakCount || 'N/A'} games)</span>
             </div>
           );
         default:
-          return <p>{JSON.stringify(item)}</p>;
+          return <span>{JSON.stringify(item)}</span>;
       }
     };
 
     return (
-      <div key={index} className="mb-2 flex items-start justify-between">
+      <div key={index} className="mb-2 flex items-center justify-between">
         <div className="flex-grow">{renderContent()}</div>
         {!isPngPreview && !showOnlySelected && (
           <Checkbox
             checked={isSelected}
             onCheckedChange={toggleSelection}
-            className="ml-2 mt-1"
+            className="ml-2"
           />
         )}
       </div>
