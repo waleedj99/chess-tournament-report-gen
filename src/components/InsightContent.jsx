@@ -21,20 +21,7 @@ const InsightContent = ({
         className="ml-2"
         onClick={() => window.open(`https://lichess.org/${gameId}`, '_blank')}
       >
-        <ExternalLinkIcon className="h-4 w-4" />
-      </Button>
-    );
-  };
-
-  const renderPlayerRedirectButton = (playerName) => {
-    return (
-      <Button
-        variant="ghost"
-        size="sm"
-        className="ml-2"
-        onClick={() => window.open(`https://lichess.org/@/${playerName}`, '_blank')}
-      >
-        <ExternalLinkIcon className="h-4 w-4" />
+        Open
       </Button>
     );
   };
@@ -58,6 +45,7 @@ const InsightContent = ({
               <p>
                 Players: {item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'}
               </p>
+              {renderGameRedirectButton(item.gameId)}
             </div>
           );
         case 'LONGEST_MOVE_BY_TIME':
@@ -66,6 +54,7 @@ const InsightContent = ({
               <p>Time taken: {item.timeTaken?.toFixed(2) || 'N/A'} seconds</p>
               <p>Move number: {item.moveNo || 'N/A'}</p>
               <p>Side: {item.side || 'N/A'}</p>
+              {renderGameRedirectButton(item.gameId)}
             </div>
           );
         case 'MOST_ACCURATE_GAME':
@@ -74,6 +63,7 @@ const InsightContent = ({
               <p>Average Accuracy: {item.value?.toFixed(2) || 'N/A'}%</p>
               <p>White: {item.players?.white?.name || 'Unknown'} (Accuracy: {item.players?.white?.accuracy?.toFixed(2) || 'N/A'}%)</p>
               <p>Black: {item.players?.black?.name || 'Unknown'} (Accuracy: {item.players?.black?.accuracy?.toFixed(2) || 'N/A'}%)</p>
+              {renderGameRedirectButton(item.gameId)}
             </div>
           );
         case 'MOST_DYNAMIC_GAME':
@@ -81,6 +71,7 @@ const InsightContent = ({
             <div>
               <p>Turn arounds: {item.value || 'N/A'}</p>
               <p>Players: {item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'}</p>
+              {renderGameRedirectButton(item.gameId)}
             </div>
           );
         case 'MOST_USED_OPENING':

@@ -20,6 +20,23 @@ const TournamentInsights = ({
     ).join(" ");
   };
 
+  const getInsightDescription = (key, value) => {
+    switch(key) {
+      case 'MOST_ACCURATE_GAME':
+        return `The most accurate game had an average accuracy of ${value[0]?.value?.toFixed(2)}%`;
+      case 'SHORTEST_GAME_LENGTH_BY_MOVES':
+        return `The shortest game was completed in ${value[0]?.value} moves`;
+      case 'LONGEST_GAME_LENGTH_BY_MOVES':
+        return `The longest game lasted for ${value[0]?.value} moves`;
+      case 'LONGEST_MOVE_BY_TIME':
+        return `The longest move took ${value[0]?.timeTaken?.toFixed(2)} seconds`;
+      case 'MOST_DYNAMIC_GAME':
+        return `The most dynamic game had ${value[0]?.value} turn arounds`;
+      default:
+        return toTitleCase(key);
+    }
+  };
+
   const insightsToShow = showOnlySelected 
     ? Object.entries(insights).filter(([key]) => selectedInsights[key] && selectedInsights[key].length > 0)
     : Object.entries(insights);
@@ -39,11 +56,12 @@ const TournamentInsights = ({
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold">
-                  A
+                  {key.charAt(0).toUpperCase()}
                 </div>
-                <h3 className="text-sm font-medium">
-                  {toTitleCase(key)}
-                </h3>
+                <div>
+                  <h3 className="text-sm font-medium">{toTitleCase(key)}</h3>
+                  <p className="text-xs text-gray-500">{getInsightDescription(key, value)}</p>
+                </div>
               </div>
               {!showOnlySelected && !isPngPreview && (
                 <Checkbox
