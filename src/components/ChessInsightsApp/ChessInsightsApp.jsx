@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import TournamentInsights from '../TournamentInsights';
+import PngPreview from '../PngPreview';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
@@ -114,6 +115,17 @@ const ChessInsightsApp = () => {
             totalGames={calculatedInsights.totalGames}
             selectedInsights={selectedInsights}
             onInsightSelection={handleInsightSelection}
+          />
+          <PngPreview
+            tournamentData={{ 
+              name: tournamentDetails?.name || `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, 
+              type: tournamentType, 
+              players: calculatedInsights.totalGames 
+            }}
+            insights={calculatedInsights.insights}
+            analysedGames={calculatedInsights.analysedGames}
+            totalGames={calculatedInsights.totalGames}
+            selectedInsights={selectedInsights}
           />
         </InsightsContainer>
       )}
