@@ -30,15 +30,15 @@ const TournamentInsights = ({
   const getInsightDescription = (key, value) => {
     switch(key) {
       case 'MOST_ACCURATE_GAME':
-        return `${value[0]?.players?.white?.name || 'Unknown'} vs ${value[0]?.players?.black?.name || 'Unknown'} had ${value[0]?.value?.toFixed(2)}% accuracy`;
+        return `${value[0]?.players?.white?.name || 'Unknown'} vs ${value[0]?.players?.black?.name || 'Unknown'} (${value[0]?.value?.toFixed(2)}% accuracy)`;
       case 'SHORTEST_GAME_LENGTH_BY_MOVES':
-        return `Shortest game completed in ${value[0]?.value} moves`;
+        return `${value[0]?.players?.white?.name || 'Unknown'} vs ${value[0]?.players?.black?.name || 'Unknown'} (${value[0]?.value} moves)`;
       case 'LONGEST_GAME_LENGTH_BY_MOVES':
-        return `Longest game lasted for ${value[0]?.value} moves`;
+        return `${value[0]?.players?.white?.name || 'Unknown'} vs ${value[0]?.players?.black?.name || 'Unknown'} (${value[0]?.value} moves)`;
       case 'LONGEST_MOVE_BY_TIME':
-        return `Longest move took ${value[0]?.timeTaken?.toFixed(2)} seconds`;
+        return `Move ${value[0]?.moveNo || 'N/A'} by ${value[0]?.side || 'N/A'} (${value[0]?.timeTaken?.toFixed(2) || 'N/A'} seconds)`;
       case 'MOST_DYNAMIC_GAME':
-        return `Most dynamic game had ${value[0]?.value} turn arounds`;
+        return `${value[0]?.players?.white?.name || 'Unknown'} vs ${value[0]?.players?.black?.name || 'Unknown'} (${value[0]?.value} turn arounds)`;
       default:
         return toTitleCase(key);
     }
