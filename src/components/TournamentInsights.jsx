@@ -19,7 +19,9 @@ const TournamentInsights = ({
   selectedInsights = {}, 
   onInsightSelection,
   showOnlySelected = false, 
-  isPngPreview = false 
+  isPngPreview = false,
+  insightDescriptions,
+  onDescriptionChange
 }) => {
   const [expandedCards, setExpandedCards] = useState({});
 
@@ -27,23 +29,6 @@ const TournamentInsights = ({
     return str.split('_').map(word => 
       word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
     ).join(" ");
-  };
-
-  const getInsightDescription = (key, value) => {
-    switch(key) {
-      case 'MOST_ACCURATE_GAME':
-        return `${value[0]?.players?.white?.name || 'Unknown'} vs ${value[0]?.players?.black?.name || 'Unknown'} had ${value[0]?.value?.toFixed(2)}% accuracy`;
-      case 'SHORTEST_GAME_LENGTH_BY_MOVES':
-        return `Shortest game completed in ${value[0]?.value} moves`;
-      case 'LONGEST_GAME_LENGTH_BY_MOVES':
-        return `Longest game lasted for ${value[0]?.value} moves`;
-      case 'LONGEST_MOVE_BY_TIME':
-        return `Longest move took ${value[0]?.timeTaken?.toFixed(2)} seconds`;
-      case 'MOST_DYNAMIC_GAME':
-        return `Most dynamic game had ${value[0]?.value} turn arounds`;
-      default:
-        return toTitleCase(key);
-    }
   };
 
   const getInsightTooltip = (key) => {
@@ -106,7 +91,7 @@ const TournamentInsights = ({
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <p className="text-sm text-gray-500">{getInsightDescription(key, value)}</p>
+                  <p className="text-sm text-gray-500">{insightDescriptions[key] || toTitleCase(key)}</p>
                 </div>
               </div>
             </CardHeader>
@@ -119,6 +104,7 @@ const TournamentInsights = ({
                 onItemSelection={onInsightSelection}
                 showOnlySelected={showOnlySelected}
                 isExpanded={expandedCards[key]}
+                onDescriptionChange={onDescriptionChange}
               />
             </CardContent>
             <CardFooter className="flex justify-between items-center">

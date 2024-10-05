@@ -10,7 +10,8 @@ const InsightContent = ({
   selectedItems,
   onItemSelection,
   showOnlySelected,
-  isExpanded
+  isExpanded,
+  onDescriptionChange
 }) => {
   const renderGameRedirectButton = (gameId) => {
     return (
@@ -32,9 +33,10 @@ const InsightContent = ({
 
     const toggleSelection = () => {
       onItemSelection(insightKey, index);
+      onDescriptionChange(insightKey, renderContent(item));
     };
 
-    const renderContent = () => {
+    const renderContent = (item) => {
       switch (insightKey) {
         case 'MOST_ACCURATE_GAME':
           return `${item.players?.white?.name || 'Unknown'} vs ${item.players?.black?.name || 'Unknown'} had an average accuracy of ${item.value?.toFixed(2)}%.`;
@@ -59,7 +61,7 @@ const InsightContent = ({
     return (
       <div key={index} className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
         <div className="flex items-center justify-between">
-          <p className="flex-grow">{renderContent()}</p>
+          <p className="flex-grow">{renderContent(item)}</p>
           {!isPngPreview && !showOnlySelected && (
             <Checkbox
               checked={isSelected}
