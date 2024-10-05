@@ -1,15 +1,16 @@
 import React from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import InsightContent from './InsightContent';
 import AnalysisProgress from './AnalysisProgress';
-import { InfoIcon } from 'lucide-react';
+import { InfoIcon, Share2Icon } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Button } from '@/components/ui/button';
 
 const TournamentInsights = ({ 
   tournamentData, 
@@ -61,6 +62,10 @@ const TournamentInsights = ({
     }
   };
 
+  const getInsightIcon = (key) => {
+    return '🏆';
+  };
+
   const insightsToShow = showOnlySelected 
     ? Object.entries(insights).filter(([key]) => selectedInsights[key] && selectedInsights[key].length > 0)
     : Object.entries(insights);
@@ -76,15 +81,15 @@ const TournamentInsights = ({
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {insightsToShow.map(([key, value]) => (
-          <Card key={key} className="flex flex-col">
+          <Card key={key} className="flex flex-col hover:shadow-lg transition-shadow duration-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold">
-                  {key.charAt(0).toUpperCase()}
+                <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold text-xl">
+                  {getInsightIcon(key)}
                 </div>
                 <div className="flex-grow">
                   <div className="flex items-center">
-                    <h3 className="text-sm font-medium mr-2">{toTitleCase(key)}</h3>
+                    <h3 className="text-lg font-medium mr-2">{toTitleCase(key)}</h3>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
@@ -96,15 +101,9 @@ const TournamentInsights = ({
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <p className="text-xs text-gray-500">{getInsightDescription(key, value)}</p>
+                  <p className="text-sm text-gray-500">{getInsightDescription(key, value)}</p>
                 </div>
               </div>
-              {!showOnlySelected && !isPngPreview && (
-                <Checkbox
-                  checked={selectedInsights[key] && selectedInsights[key].length > 0}
-                  onCheckedChange={() => onInsightSelection(key, 0)}
-                />
-              )}
             </CardHeader>
             <CardContent className="flex-grow">
               <InsightContent
@@ -116,6 +115,19 @@ const TournamentInsights = ({
                 showOnlySelected={showOnlySelected}
               />
             </CardContent>
+            <CardFooter className="flex justify-between items-center">
+              {!showOnlySelected && !isPngPreview && (
+                <Checkbox
+                  checked={selectedInsights[key] && selectedInsights[key].length > 0}
+                  onCheckedChange={() => onInsightSelection(key, 0)}
+                  className="mr-2"
+                />
+              )}
+              <Button variant="ghost" size="sm" className="ml-auto">
+                <Share2Icon className="h-4 w-4 mr-2" />
+                Share
+              </Button>
+            </CardFooter>
           </Card>
         ))}
       </div>

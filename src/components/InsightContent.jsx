@@ -37,54 +37,71 @@ const InsightContent = ({
 
     const renderContent = () => {
       switch (insightKey) {
+        case 'MOST_ACCURATE_GAME':
+          return (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="font-medium">{item.players?.white?.name || 'Unknown'} vs {item.players?.black?.name || 'Unknown'}</span>
+                {renderGameRedirectButton(item.gameId)}
+              </div>
+              <div className="text-sm">
+                <p>Average Accuracy: {item.value?.toFixed(2)}%</p>
+                <p>White: {item.players?.white?.name || 'Unknown'} (Accuracy: {item.players?.white?.accuracy?.toFixed(2) || 'N/A'}%)</p>
+                <p>Black: {item.players?.black?.name || 'Unknown'} (Accuracy: {item.players?.black?.accuracy?.toFixed(2) || 'N/A'}%)</p>
+              </div>
+            </div>
+          );
         case 'SHORTEST_GAME_LENGTH_BY_MOVES':
         case 'LONGEST_GAME_LENGTH_BY_MOVES':
           return (
-            <div className="flex items-center justify-between">
-              <span>{item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'} ({item.value} moves)</span>
-              {renderGameRedirectButton(item.gameId)}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="font-medium">{item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'}</span>
+                {renderGameRedirectButton(item.gameId)}
+              </div>
+              <p className="text-sm">Game length: {item.value} moves</p>
             </div>
           );
         case 'LONGEST_MOVE_BY_TIME':
           return (
-            <div className="flex items-center justify-between">
-              <span>Move {item.moveNo || 'N/A'} by {item.side || 'N/A'} ({item.timeTaken?.toFixed(2) || 'N/A'} seconds)</span>
-              {renderGameRedirectButton(item.gameId)}
-            </div>
-          );
-        case 'MOST_ACCURATE_GAME':
-          return (
-            <div className="flex items-center justify-between">
-              <span>
-                White: {item.players?.white?.name || 'Unknown'} ({item.players?.white?.accuracy?.toFixed(2) || 'N/A'}%) 
-                Black: {item.players?.black?.name || 'Unknown'} ({item.players?.black?.accuracy?.toFixed(2) || 'N/A'}%)
-              </span>
-              {renderGameRedirectButton(item.gameId)}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="font-medium">Move {item.moveNo || 'N/A'} by {item.side || 'N/A'}</span>
+                {renderGameRedirectButton(item.gameId)}
+              </div>
+              <p className="text-sm">Time taken: {item.timeTaken?.toFixed(2) || 'N/A'} seconds</p>
             </div>
           );
         case 'MOST_DYNAMIC_GAME':
           return (
-            <div className="flex items-center justify-between">
-              <span>{item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'} ({item.value} turn arounds)</span>
-              {renderGameRedirectButton(item.gameId)}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="font-medium">{item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'}</span>
+                {renderGameRedirectButton(item.gameId)}
+              </div>
+              <p className="text-sm">Turn arounds: {item.value}</p>
             </div>
           );
         case 'MOST_USED_OPENING':
           return (
-            <div className="flex items-center justify-between">
-              <span>{item.openingName || 'Unknown'} (Used {item.noOfTimes || 'N/A'} times)</span>
+            <div className="space-y-2">
+              <p className="font-medium">{item.openingName || 'Unknown'}</p>
+              <p className="text-sm">Used {item.noOfTimes || 'N/A'} times</p>
             </div>
           );
         case 'MOST_ACCURATE_PLAYER':
           return (
-            <div className="flex items-center justify-between">
-              <span>{item.playerName || 'Unknown'} ({item.averageAccuracy?.toFixed(2) || 'N/A'}% in {item.noOfMatches || 'N/A'} matches)</span>
+            <div className="space-y-2">
+              <p className="font-medium">{item.playerName || 'Unknown'}</p>
+              <p className="text-sm">Average Accuracy: {item.averageAccuracy?.toFixed(2) || 'N/A'}%</p>
+              <p className="text-sm">Matches played: {item.noOfMatches || 'N/A'}</p>
             </div>
           );
         case 'HIGHEST_WINNING_STREAK':
           return (
-            <div className="flex items-center justify-between">
-              <span>{item.playerNames?.join(', ') || 'Unknown'} ({item.streakCount || 'N/A'} games)</span>
+            <div className="space-y-2">
+              <p className="font-medium">{item.playerNames?.join(', ') || 'Unknown'}</p>
+              <p className="text-sm">Winning streak: {item.streakCount || 'N/A'} games</p>
             </div>
           );
         default:
@@ -93,13 +110,13 @@ const InsightContent = ({
     };
 
     return (
-      <div key={index} className="mb-2 flex items-center justify-between">
+      <div key={index} className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
         <div className="flex-grow">{renderContent()}</div>
         {!isPngPreview && !showOnlySelected && (
           <Checkbox
             checked={isSelected}
             onCheckedChange={toggleSelection}
-            className="ml-2"
+            className="mt-2"
           />
         )}
       </div>
