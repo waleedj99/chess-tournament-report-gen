@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
 import InsightContent from './InsightContent';
 import AnalysisProgress from './AnalysisProgress';
 import { InfoIcon, Share2Icon } from 'lucide-react';
@@ -115,15 +114,8 @@ const TournamentInsights = ({
                 showOnlySelected={showOnlySelected}
               />
             </CardContent>
-            <CardFooter className="flex justify-between items-center">
-              {!showOnlySelected && !isPngPreview && (
-                <Checkbox
-                  checked={selectedInsights[key] && selectedInsights[key].length > 0}
-                  onCheckedChange={() => onInsightSelection(key, 0)}
-                  className="mr-2"
-                />
-              )}
-              <Button variant="ghost" size="sm" className="ml-auto">
+            <CardFooter className="flex justify-end items-center">
+              <Button variant="ghost" size="sm">
                 <Share2Icon className="h-4 w-4 mr-2" />
                 Share
               </Button>
