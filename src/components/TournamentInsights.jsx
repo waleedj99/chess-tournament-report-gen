@@ -10,7 +10,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from '@/components/ui/button';
-import { INSIGHTS } from '../utils/constants';
 
 const TournamentInsights = ({ 
   tournamentData, 
@@ -20,9 +19,7 @@ const TournamentInsights = ({
   selectedInsights = {}, 
   onInsightSelection,
   showOnlySelected = false, 
-  isPngPreview = false,
-  insightDescriptions,
-  onDescriptionChange
+  isPngPreview = false 
 }) => {
   const [expandedCards, setExpandedCards] = useState({});
 
@@ -32,24 +29,35 @@ const TournamentInsights = ({
     ).join(" ");
   };
 
+  const getInsightDescription = (key, value) => {
+    switch(key) {
+      case 'MOST_ACCURATE_GAME':
+        return `${value[0]?.players?.white?.name || 'Unknown'} vs ${value[0]?.players?.black?.name || 'Unknown'} had ${value[0]?.value?.toFixed(2)}% accuracy`;
+      case 'SHORTEST_GAME_LENGTH_BY_MOVES':
+        return `Shortest game completed in ${value[0]?.value} moves`;
+      case 'LONGEST_GAME_LENGTH_BY_MOVES':
+        return `Longest game lasted for ${value[0]?.value} moves`;
+      case 'LONGEST_MOVE_BY_TIME':
+        return `Longest move took ${value[0]?.timeTaken?.toFixed(2)} seconds`;
+      case 'MOST_DYNAMIC_GAME':
+        return `Most dynamic game had ${value[0]?.value} turn arounds`;
+      default:
+        return toTitleCase(key);
+    }
+  };
+
   const getInsightTooltip = (key) => {
     switch(key) {
-      case INSIGHTS.SHORTEST_GAME_BY_MOVES:
-        return "Determined by the game with the least number of moves.";
-      case INSIGHTS.LONGEST_GAME_BY_MOVES:
-        return "Determined by the game with the most number of moves.";
-      case INSIGHTS.LONGEST_MOVE_BY_TIME:
-        return "Calculated by finding the move that took the most time across all games.";
-      case INSIGHTS.MOST_ACCURATE_GAME:
+      case 'MOST_ACCURATE_GAME':
         return "Calculated based on the average accuracy of both players in a game.";
-      case INSIGHTS.MOST_DYNAMIC_GAME:
+      case 'SHORTEST_GAME_LENGTH_BY_MOVES':
+        return "Determined by the game with the least number of moves.";
+      case 'LONGEST_GAME_LENGTH_BY_MOVES':
+        return "Determined by the game with the most number of moves.";
+      case 'LONGEST_MOVE_BY_TIME':
+        return "Calculated by finding the move that took the most time across all games.";
+      case 'MOST_DYNAMIC_GAME':
         return "Based on the number of times the advantage switched between players.";
-      case INSIGHTS.MOST_USED_OPENING:
-        return "The opening that appeared most frequently in the tournament.";
-      case INSIGHTS.MOST_ACCURATE_PLAYER:
-        return "Player with the highest average accuracy across all their games.";
-      case INSIGHTS.HIGHEST_WINNING_STREAK:
-        return "The longest consecutive win streak achieved by a player.";
       default:
         return "Insight calculation method.";
     }
@@ -98,7 +106,7 @@ const TournamentInsights = ({
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <p className="text-sm text-gray-500">{insightDescriptions[key] || toTitleCase(key)}</p>
+                  <p className="text-sm text-gray-500">{getInsightDescription(key, value)}</p>
                 </div>
               </div>
             </CardHeader>
@@ -111,7 +119,6 @@ const TournamentInsights = ({
                 onItemSelection={onInsightSelection}
                 showOnlySelected={showOnlySelected}
                 isExpanded={expandedCards[key]}
-                onDescriptionChange={onDescriptionChange}
               />
             </CardContent>
             <CardFooter className="flex justify-between items-center">

@@ -12,7 +12,6 @@ const ChessInsightsApp = () => {
   const [tournamentType, setTournamentType] = useState('swiss');
   const [tournamentId, setTournamentId] = useState('');
   const [selectedInsights, setSelectedInsights] = useState({});
-  const [insightDescriptions, setInsightDescriptions] = useState({});
 
   const { 
     fetchGames, 
@@ -41,13 +40,6 @@ const ChessInsightsApp = () => {
       [insightKey]: prev[insightKey]?.includes(itemIndex)
         ? prev[insightKey].filter(i => i !== itemIndex)
         : [...(prev[insightKey] || []), itemIndex]
-    }));
-  };
-
-  const handleDescriptionChange = (insightKey, newDescription) => {
-    setInsightDescriptions(prev => ({
-      ...prev,
-      [insightKey]: newDescription
     }));
   };
 
@@ -96,8 +88,6 @@ const ChessInsightsApp = () => {
             totalGames={calculatedInsights.totalGames}
             selectedInsights={selectedInsights}
             onInsightSelection={handleInsightSelection}
-            insightDescriptions={insightDescriptions}
-            onDescriptionChange={handleDescriptionChange}
           />
         </div>
       )}
