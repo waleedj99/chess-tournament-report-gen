@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
 import InsightContent from './InsightContent';
 import AnalysisProgress from './AnalysisProgress';
-import { InfoIcon, Share2Icon } from 'lucide-react';
+import { InfoIcon, Share2Icon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -21,6 +21,8 @@ const TournamentInsights = ({
   showOnlySelected = false, 
   isPngPreview = false 
 }) => {
+  const [expandedCards, setExpandedCards] = useState({});
+
   const toTitleCase = (str) => {
     return str.split('_').map(word => 
       word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
@@ -63,6 +65,10 @@ const TournamentInsights = ({
 
   const getInsightIcon = (key) => {
     return '🏆';
+  };
+
+  const toggleCardExpansion = (key) => {
+    setExpandedCards(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
   const insightsToShow = showOnlySelected 
@@ -112,9 +118,23 @@ const TournamentInsights = ({
                 selectedItems={selectedInsights[key] || []}
                 onItemSelection={onInsightSelection}
                 showOnlySelected={showOnlySelected}
+                isExpanded={expandedCards[key]}
               />
             </CardContent>
-            <CardFooter className="flex justify-end items-center">
+            <CardFooter className="flex justify-between items-center">
+              <Button variant="ghost" size="sm" onClick={() => toggleCardExpansion(key)}>
+                {expandedCards[key] ? (
+                  <>
+                    <ChevronUpIcon className="h-4 w-4 mr-2" />
+                    Show Less
+                  </>
+                ) : (
+                  <>
+                    <ChevronDownIcon className="h-4 w-4 mr-2" />
+                    Show More
+                  </>
+                )}
+              </Button>
               <Button variant="ghost" size="sm">
                 <Share2Icon className="h-4 w-4 mr-2" />
                 Share

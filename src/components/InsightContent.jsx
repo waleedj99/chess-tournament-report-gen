@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ExternalLinkIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { ExternalLinkIcon } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 
 const InsightContent = ({
@@ -9,10 +9,9 @@ const InsightContent = ({
   isPngPreview,
   selectedItems,
   onItemSelection,
-  showOnlySelected
+  showOnlySelected,
+  isExpanded
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
   const renderGameRedirectButton = (gameId) => {
     return (
       <Button
@@ -38,87 +37,38 @@ const InsightContent = ({
     const renderContent = () => {
       switch (insightKey) {
         case 'MOST_ACCURATE_GAME':
-          return (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-medium">{item.players?.white?.name || 'Unknown'} vs {item.players?.black?.name || 'Unknown'}</span>
-                {renderGameRedirectButton(item.gameId)}
-              </div>
-              <div className="text-sm">
-                <p>Average Accuracy: {item.value?.toFixed(2)}%</p>
-                <p>White: {item.players?.white?.name || 'Unknown'} (Accuracy: {item.players?.white?.accuracy?.toFixed(2) || 'N/A'}%)</p>
-                <p>Black: {item.players?.black?.name || 'Unknown'} (Accuracy: {item.players?.black?.accuracy?.toFixed(2) || 'N/A'}%)</p>
-              </div>
-            </div>
-          );
+          return `${item.players?.white?.name || 'Unknown'} vs ${item.players?.black?.name || 'Unknown'} had an average accuracy of ${item.value?.toFixed(2)}%.`;
         case 'SHORTEST_GAME_LENGTH_BY_MOVES':
         case 'LONGEST_GAME_LENGTH_BY_MOVES':
-          return (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-medium">{item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'}</span>
-                {renderGameRedirectButton(item.gameId)}
-              </div>
-              <p className="text-sm">Game length: {item.value} moves</p>
-            </div>
-          );
+          return `${item.players?.white?.user?.name || 'Unknown'} vs ${item.players?.black?.user?.name || 'Unknown'} played a game lasting ${item.value} moves.`;
         case 'LONGEST_MOVE_BY_TIME':
-          return (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-medium">Move {item.moveNo || 'N/A'} by {item.side || 'N/A'}</span>
-                {renderGameRedirectButton(item.gameId)}
-              </div>
-              <p className="text-sm">Time taken: {item.timeTaken?.toFixed(2) || 'N/A'} seconds</p>
-            </div>
-          );
+          return `Move ${item.moveNo || 'N/A'} by ${item.side || 'N/A'} took ${item.timeTaken?.toFixed(2) || 'N/A'} seconds.`;
         case 'MOST_DYNAMIC_GAME':
-          return (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-medium">{item.players?.white?.user?.name || 'Unknown'} vs {item.players?.black?.user?.name || 'Unknown'}</span>
-                {renderGameRedirectButton(item.gameId)}
-              </div>
-              <p className="text-sm">Turn arounds: {item.value}</p>
-            </div>
-          );
+          return `${item.players?.white?.user?.name || 'Unknown'} vs ${item.players?.black?.user?.name || 'Unknown'} had ${item.value} turn arounds.`;
         case 'MOST_USED_OPENING':
-          return (
-            <div className="space-y-2">
-              <p className="font-medium">{item.openingName || 'Unknown'}</p>
-              <p className="text-sm">Used {item.noOfTimes || 'N/A'} times</p>
-            </div>
-          );
+          return `${item.openingName || 'Unknown'} was used ${item.noOfTimes || 'N/A'} times.`;
         case 'MOST_ACCURATE_PLAYER':
-          return (
-            <div className="space-y-2">
-              <p className="font-medium">{item.playerName || 'Unknown'}</p>
-              <p className="text-sm">Average Accuracy: {item.averageAccuracy?.toFixed(2) || 'N/A'}%</p>
-              <p className="text-sm">Matches played: {item.noOfMatches || 'N/A'}</p>
-            </div>
-          );
+          return `${item.playerName || 'Unknown'} had an average accuracy of ${item.averageAccuracy?.toFixed(2) || 'N/A'}% over ${item.noOfMatches || 'N/A'} matches.`;
         case 'HIGHEST_WINNING_STREAK':
-          return (
-            <div className="space-y-2">
-              <p className="font-medium">{item.playerNames?.join(', ') || 'Unknown'}</p>
-              <p className="text-sm">Winning streak: {item.streakCount || 'N/A'} games</p>
-            </div>
-          );
+          return `${item.playerNames?.join(', ') || 'Unknown'} had a winning streak of ${item.streakCount || 'N/A'} games.`;
         default:
-          return <span>{JSON.stringify(item)}</span>;
+          return JSON.stringify(item);
       }
     };
 
     return (
       <div key={index} className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
-        <div className="flex-grow">{renderContent()}</div>
-        {!isPngPreview && !showOnlySelected && (
-          <Checkbox
-            checked={isSelected}
-            onCheckedChange={toggleSelection}
-            className="mt-2"
-          />
-        )}
+        <div className="flex items-center justify-between">
+          <p className="flex-grow">{renderContent()}</p>
+          {!isPngPreview && !showOnlySelected && (
+            <Checkbox
+              checked={isSelected}
+              onCheckedChange={toggleSelection}
+              className="ml-2"
+            />
+          )}
+        </div>
+        {item.gameId && renderGameRedirectButton(item.gameId)}
       </div>
     );
   };
@@ -128,26 +78,10 @@ const InsightContent = ({
 
   return (
     <div className="space-y-2">
-      {valuesToShow.slice(0, isExpanded ? valuesToShow.length : 1).map((item, index) => formatSingleInsight(item, index))}
-      {!isPngPreview && valuesToShow.length > 1 && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="mt-2 w-full"
-        >
-          {isExpanded ? (
-            <>
-              <ChevronUpIcon className="mr-2 h-4 w-4" />
-              Show less
-            </>
-          ) : (
-            <>
-              <ChevronDownIcon className="mr-2 h-4 w-4" />
-              Show {valuesToShow.length - 1} more
-            </>
-          )}
-        </Button>
+      {isExpanded ? (
+        valuesToShow.map((item, index) => formatSingleInsight(item, index))
+      ) : (
+        formatSingleInsight(valuesToShow[0], 0)
       )}
     </div>
   );
