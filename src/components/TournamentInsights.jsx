@@ -34,16 +34,22 @@ const TournamentInsights = ({
 
   const getInsightTooltip = (key) => {
     switch(key) {
-      case INSIGHTS.MOST_ACCURATE_GAME:
-        return "Calculated based on the average accuracy of both players in a game.";
       case INSIGHTS.SHORTEST_GAME_BY_MOVES:
         return "Determined by the game with the least number of moves.";
       case INSIGHTS.LONGEST_GAME_BY_MOVES:
         return "Determined by the game with the most number of moves.";
       case INSIGHTS.LONGEST_MOVE_BY_TIME:
         return "Calculated by finding the move that took the most time across all games.";
+      case INSIGHTS.MOST_ACCURATE_GAME:
+        return "Calculated based on the average accuracy of both players in a game.";
       case INSIGHTS.MOST_DYNAMIC_GAME:
         return "Based on the number of times the advantage switched between players.";
+      case INSIGHTS.MOST_USED_OPENING:
+        return "The opening that appeared most frequently in the tournament.";
+      case INSIGHTS.MOST_ACCURATE_PLAYER:
+        return "Player with the highest average accuracy across all their games.";
+      case INSIGHTS.HIGHEST_WINNING_STREAK:
+        return "The longest consecutive win streak achieved by a player.";
       default:
         return "Insight calculation method.";
     }
