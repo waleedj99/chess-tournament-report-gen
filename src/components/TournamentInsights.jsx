@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
 import InsightContent from './InsightContent';
 import AnalysisProgress from './AnalysisProgress';
-import { InfoIcon, Share2Icon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { InfoIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -134,10 +134,6 @@ const TournamentInsights = ({
                     Show More
                   </>
                 )}
-              </Button>
-              <Button variant="ghost" size="sm">
-                <Share2Icon className="h-4 w-4 mr-2" />
-                Share
               </Button>
             </CardFooter>
           </Card>
