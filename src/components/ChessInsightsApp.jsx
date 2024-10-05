@@ -208,7 +208,7 @@ const ChessInsightsApp = () => {
             selectedInsights={selectedInsights}
             onInsightSelection={handleInsightSelection}
           />
-          <div id="selected-insights-container" className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+          {/* <div id="selected-insights-container" className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
             <h2 className="text-2xl font-bold mb-4">{tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament Insights</h2>
             <TournamentInsights 
               tournamentData={{ name: `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, type: tournamentType, players: calculatedInsights.totalGames }}
@@ -219,11 +219,11 @@ const ChessInsightsApp = () => {
               showOnlySelected={true}
               isPngPreview={true}
             />
-          </div>
+          </div> */}
         </div>
       )}
 
-      {isDataFetched && calculatedInsights && (
+      {/* {isDataFetched && calculatedInsights && (
         <Card>
           <CardContent className="pt-6">
             <Button onClick={generatePng} disabled={Object.values(selectedInsights).every(arr => arr.length === 0)}>
@@ -232,7 +232,7 @@ const ChessInsightsApp = () => {
             {pngPreview && <PngPreview imageUrl={pngPreview} />}
           </CardContent>
         </Card>
-      )}
+      )} */}
     </div>
   );
 };
