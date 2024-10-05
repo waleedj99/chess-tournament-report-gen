@@ -10,6 +10,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from '@/components/ui/button';
+import { INSIGHTS } from '../utils/constants';
 
 const TournamentInsights = ({ 
   tournamentData, 
@@ -33,15 +34,15 @@ const TournamentInsights = ({
 
   const getInsightTooltip = (key) => {
     switch(key) {
-      case 'MOST_ACCURATE_GAME':
+      case INSIGHTS.MOST_ACCURATE_GAME:
         return "Calculated based on the average accuracy of both players in a game.";
-      case 'SHORTEST_GAME_LENGTH_BY_MOVES':
+      case INSIGHTS.SHORTEST_GAME_BY_MOVES:
         return "Determined by the game with the least number of moves.";
-      case 'LONGEST_GAME_LENGTH_BY_MOVES':
+      case INSIGHTS.LONGEST_GAME_BY_MOVES:
         return "Determined by the game with the most number of moves.";
-      case 'LONGEST_MOVE_BY_TIME':
+      case INSIGHTS.LONGEST_MOVE_BY_TIME:
         return "Calculated by finding the move that took the most time across all games.";
-      case 'MOST_DYNAMIC_GAME':
+      case INSIGHTS.MOST_DYNAMIC_GAME:
         return "Based on the number of times the advantage switched between players.";
       default:
         return "Insight calculation method.";
