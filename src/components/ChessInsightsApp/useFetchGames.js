@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 export const useFetchGames = () => {
+  const [tournamentType, setTournamentType] = useState('swiss');
+  const [tournamentId, setTournamentId] = useState('');
   const [tournamentGames, setTournamentGames] = useState([]);
   const [evaluationProgress, setEvaluationProgress] = useState(0);
   const [tournamentDetails, setTournamentDetails] = useState(null);
 
-  const fetchGames = async (tournamentType, tournamentId) => {
+  const fetchGames = async (type, id) => {
     let fetchData = [];
     var requestOptions = {
       method: 'GET',
@@ -19,7 +21,7 @@ export const useFetchGames = () => {
 
     try {
       // Fetch tournament details
-      const detailsResponse = await fetch(`https://lichess.org/api/${tournamentType}/${tournamentId}`, requestOptions);
+      const detailsResponse = await fetch(`https://lichess.org/api/${type}/${id}`, requestOptions);
       if (!detailsResponse.ok) {
         throw new Error('Failed to fetch tournament details');
       }
@@ -27,15 +29,7 @@ export const useFetchGames = () => {
       setTournamentDetails(details);
 
       // Fetch games
-      let apiUrl;
-      if (tournamentType === 'swiss') {
-        apiUrl = `https://lichess.org/api/swiss/${tournamentId}/games`;
-      } else if (tournamentType === 'arena') {
-        apiUrl = `https://lichess.org/api/tournament/${tournamentId}/games`;
-      } else {
-        throw new Error('Invalid tournament type');
-      }
-
+      let apiUrl = `https://lichess.org/api/${type === 'swiss' ? 'swiss' : 'tournament'}/${id}/games`;
       const response = await fetch(`${apiUrl}?evals=true&accuracy=true&clocks=true&opening=true`, requestOptions);
       
       if (!response.ok) {
@@ -53,9 +47,8 @@ export const useFetchGames = () => {
         const lines = chunk.split('\n');
 
         for (let i = 0; i < lines.length - 1; i++) {
-          const jsonLine = lines[i];
           try {
-            const jsonObject = JSON.parse(jsonLine);
+            const jsonObject = JSON.parse(lines[i]);
             fetchData.push(jsonObject);
           } catch (error) {
             console.error('Error parsing JSON:', error);
@@ -77,16 +70,20 @@ export const useFetchGames = () => {
   };
 
   const { isLoading, error, refetch } = useQuery({
-    queryKey: ['tournamentGames'],
-    queryFn: () => fetchGames,
+    queryKey: ['tournamentGames', tournamentType, tournamentId],
+    queryFn: () => fetchGames(tournamentType, tournamentId),
     enabled: false,
   });
 
   return { 
+    tournamentType,
+    setTournamentType,
+    tournamentId,
+    setTournamentId,
     fetchGames: refetch, 
-    data: tournamentGames, 
+    tournamentGames, 
     isLoading, 
-    error, 
+    fetchError: error, 
     evaluationProgress,
     tournamentDetails
   };
