@@ -6,6 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 const InsightContent = ({
   insightKey,
   value,
+  isPngPreview,
   selectedItems,
   onItemSelection,
   showOnlySelected,
@@ -59,7 +60,7 @@ const InsightContent = ({
       <div key={index} className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
         <div className="flex items-center justify-between">
           <p className="flex-grow">{renderContent()}</p>
-          {!showOnlySelected && (
+          {!isPngPreview && !showOnlySelected && (
             <Checkbox
               checked={isSelected}
               onCheckedChange={toggleSelection}
@@ -79,7 +80,7 @@ const InsightContent = ({
     <div className="space-y-2">
       {isExpanded ? (
         valuesToShow.map((item, index) => formatSingleInsight(item, index))
-      ) : <></>}
+      ) :<></>}
     </div>
   );
 };

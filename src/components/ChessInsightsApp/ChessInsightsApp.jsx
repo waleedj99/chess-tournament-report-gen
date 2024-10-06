@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
@@ -7,16 +7,24 @@ import TournamentInsights from '../TournamentInsights';
 import TournamentForm from '../TournamentForm';
 import { useFetchGames } from './useFetchGames';
 import { useInsightsCalculation } from './useInsightsCalculation';
-import { useInsightSelection } from './useInsightSelection';
 
 const ChessInsightsApp = () => {
+  const [tournamentType, setTournamentType] = useState('swiss');
+  const [tournamentId, setTournamentId] = useState('');
+  const [selectedInsights, setSelectedInsights] = useState({"MOST_ACCURATE_GAME" : [0],
+    'SHORTEST_GAME_LENGTH_BY_MOVES':[0],
+    'LONGEST_GAME_LENGTH_BY_MOVES':[0],
+    'LONGEST_MOVE_BY_TIME':[0],
+    'MOST_DYNAMIC_GAME':[0],
+    'MOST_USED_OPENING':[0],
+    'MOST_ACCURATE_PLAYER':[0],
+    'HIGHEST_WINNING_STREAK':[0]});
+
   const { 
-    tournamentType, setTournamentType,
-    tournamentId, setTournamentId,
     fetchGames, 
-    tournamentGames, 
+    data: tournamentGames, 
     isLoading, 
-    fetchError, 
+    error: fetchError, 
     evaluationProgress,
     tournamentDetails
   } = useFetchGames();
@@ -27,12 +35,19 @@ const ChessInsightsApp = () => {
     isProcessing
   } = useInsightsCalculation(tournamentGames);
 
-  const { selectedInsights, handleInsightSelection } = useInsightSelection();
-
   const handleFetchData = () => {
     if (tournamentId) {
       fetchGames(tournamentType, tournamentId);
     }
+  };
+
+  const handleInsightSelection = (insightKey, itemIndex) => {
+    setSelectedInsights(prev => ({
+      ...prev,
+      [insightKey]: prev[insightKey]?.includes(itemIndex)
+        ? prev[insightKey].filter(i => i !== itemIndex)
+        : [...(prev[insightKey] || []), itemIndex]
+    }));
   };
 
   return (
