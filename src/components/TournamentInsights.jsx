@@ -16,33 +16,44 @@ const TournamentInsights = ({
   insights = {},
   analysedGames = 0,
   totalGames = 0,
-  selectedInsights = {}, 
+  selectedInsights = {"MOST_ACCURATE_GAME" : [0],
+    'SHORTEST_GAME_LENGTH_BY_MOVES':[0],
+    'LONGEST_GAME_LENGTH_BY_MOVES':[0],
+    'LONGEST_MOVE_BY_TIME':[0],
+    'MOST_DYNAMIC_GAME':[0],
+    'MOST_USED_OPENING':[0],
+    'MOST_ACCURATE_PLAYER':[0],
+    'HIGHEST_WINNING_STREAK':[0]}, 
   onInsightSelection,
   showOnlySelected = false, 
   isPngPreview = false 
 }) => {
   const [expandedCards, setExpandedCards] = useState({});
-
   const toTitleCase = (str) => {
     return str.split('_').map(word => 
       word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
     ).join(" ");
   };
 
-  const getInsightDescription = (key, value) => {
-    switch(key) {
+  const getInsightDescription = (insightKey, item) => {
+    switch (insightKey) {
       case 'MOST_ACCURATE_GAME':
-        return `${value[0]?.players?.white?.name || 'Unknown'} vs ${value[0]?.players?.black?.name || 'Unknown'} had ${value[0]?.value?.toFixed(2)}% accuracy`;
+        return `${item.players?.white?.name || 'Unknown'} vs ${item.players?.black?.name || 'Unknown'} had an average accuracy of ${item.value?.toFixed(2)}%.`;
       case 'SHORTEST_GAME_LENGTH_BY_MOVES':
-        return `Shortest game completed in ${value[0]?.value} moves`;
       case 'LONGEST_GAME_LENGTH_BY_MOVES':
-        return `Longest game lasted for ${value[0]?.value} moves`;
+        return `${item.players?.white?.user?.name || 'Unknown'} vs ${item.players?.black?.user?.name || 'Unknown'} played a game lasting ${item.value} moves.`;
       case 'LONGEST_MOVE_BY_TIME':
-        return `Longest move took ${value[0]?.timeTaken?.toFixed(2)} seconds`;
+        return `Move ${item.moveNo || 'N/A'} by ${item.side || 'N/A'} took ${item.timeTaken?.toFixed(2) || 'N/A'} seconds.`;
       case 'MOST_DYNAMIC_GAME':
-        return `Most dynamic game had ${value[0]?.value} turn arounds`;
+        return `${item.players?.white?.user?.name || 'Unknown'} vs ${item.players?.black?.user?.name || 'Unknown'} had ${item.value} turn arounds.`;
+      case 'MOST_USED_OPENING':
+        return `${item.openingName || 'Unknown'} was used ${item.noOfTimes || 'N/A'} times.`;
+      case 'MOST_ACCURATE_PLAYER':
+        return `${item.playerName || 'Unknown'} had an average accuracy of ${item.averageAccuracy?.toFixed(2) || 'N/A'}% over ${item.noOfMatches || 'N/A'} matches.`;
+      case 'HIGHEST_WINNING_STREAK':
+        return `${item.playerNames?.join(', ') || 'Unknown'} had a winning streak of ${item.streakCount || 'N/A'} games.`;
       default:
-        return toTitleCase(key);
+        return JSON.stringify(item);
     }
   };
 
@@ -67,6 +78,11 @@ const TournamentInsights = ({
     return '🏆';
   };
 
+  const getSelectedCardDesciptions = (key, valuesToShow) => {
+    return valuesToShow.map(va => {
+      return <p className="text-sm text-gray-500">{getInsightDescription(key, va)}</p>})
+  }
+
   const toggleCardExpansion = (key) => {
     setExpandedCards(prev => ({ ...prev, [key]: !prev[key] }));
   };
@@ -85,7 +101,11 @@ const TournamentInsights = ({
         </>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {insightsToShow.map(([key, value]) => (
+        {insightsToShow.map(([key, value]) => { 
+            let selectedItems= selectedInsights[key] || []
+            const values = Array.isArray(value) ? value : [value];
+            const valuesToShow = values.filter((_, index) => selectedItems.includes(index))
+          return (
           <Card key={key} className="flex flex-col hover:shadow-lg transition-shadow duration-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex items-center space-x-2">
@@ -106,7 +126,7 @@ const TournamentInsights = ({
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <p className="text-sm text-gray-500">{getInsightDescription(key, value)}</p>
+                  {getSelectedCardDesciptions(key, valuesToShow)}
                 </div>
               </div>
             </CardHeader>
@@ -137,7 +157,7 @@ const TournamentInsights = ({
               </Button>
             </CardFooter>
           </Card>
-        ))}
+        )})}
       </div>
     </div>
   );

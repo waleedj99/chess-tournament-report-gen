@@ -80,9 +80,7 @@ const InsightContent = ({
     <div className="space-y-2">
       {isExpanded ? (
         valuesToShow.map((item, index) => formatSingleInsight(item, index))
-      ) : (
-        formatSingleInsight(valuesToShow[0], 0)
-      )}
+      ) :<></>}
     </div>
   );
 };
