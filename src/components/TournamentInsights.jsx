@@ -80,7 +80,7 @@ const TournamentInsights = ({
 
   const getSelectedCardDesciptions = (key, valuesToShow) => {
     return valuesToShow.map(va => {
-      return <li className="text-sm text-gray-500">{getInsightDescription(key, va)}</li>})
+      return <p className="text-sm text-gray-500">{getInsightDescription(key, va)}</p>})
   }
 
   const toggleCardExpansion = (key) => {
@@ -126,10 +126,7 @@ const TournamentInsights = ({
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <ul>
-                    {getSelectedCardDesciptions(key, valuesToShow)}
-                  </ul>
-                  
+                  {getSelectedCardDesciptions(key, valuesToShow)}
                 </div>
               </div>
             </CardHeader>
