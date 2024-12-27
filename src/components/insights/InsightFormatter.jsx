@@ -22,6 +22,30 @@ const InsightFormatter = ({ insightKey, item }) => {
         return `${formatPlayerName(item.playerName || 'Unknown')} had an average accuracy of ${formatValue(item.averageAccuracy?.toFixed(2) || 'N/A')}% over ${formatValue(item.noOfMatches || 'N/A')} matches.`;
       case INSIGHTS.HIGHEST_WINNING_STREAK:
         return `${formatPlayerName(item.playerNames?.join(', ') || 'Unknown')} had a winning streak of ${formatValue(item.streakCount || 'N/A')} games.`;
+      
+      case INSIGHTS.MOST_USED_OPENING_MOVE_WHITE:
+      case INSIGHTS.MOST_USED_OPENING_MOVE_BLACK:
+        return `${formatValue(item.opening)} was used ${formatValue(item.moveNumber)} times`;
+      
+      case INSIGHTS.PLAYER_WITH_HIGHEST_MOVE_AVERAGE:
+      case INSIGHTS.PLAYER_WITH_LOWEST_MOVE_AVERAGE:
+        return `${formatPlayerName(item.player)} played with an average of ${formatValue(item.insightValue)} moves`;
+      
+      case INSIGHTS.AVERAGE_MOVE_COUNT:
+        return `Tournament average moves: ${formatValue(item.insightValue)}`;
+      
+      case INSIGHTS.PLAYER_WITH_MOST_CHECKMATES_WIN:
+        return `${formatPlayerName(item.player)} won ${formatValue(item.number)} matches with checkmate`;
+      
+      case INSIGHTS.PLAYER_WITH_MOST_TIMEOUT_WIN:
+        return `${formatPlayerName(item.player)} won ${formatValue(item.number)} matches by timeout`;
+      
+      case INSIGHTS.PLAYER_WITH_MOST_CHECKMATES_LOSS:
+        return `${formatPlayerName(item.player)} lost ${formatValue(item.number)} matches by checkmate`;
+      
+      case INSIGHTS.PLAYER_WITH_MOST_TIMEOUT_LOSS:
+        return `${formatPlayerName(item.player)} lost ${formatValue(item.number)} matches by timeout`;
+      
       default:
         return JSON.stringify(item);
     }

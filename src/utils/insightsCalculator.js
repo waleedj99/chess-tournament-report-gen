@@ -28,12 +28,72 @@ const highestConsecutiveCount = (arr, value) => {
   return maxCount;
 };
 
+const calculateMoveCount = (moves) => {
+  return moves ? Math.floor(moves.split(' ').length / 2) : 0;
+};
+
+const calculatePlayerAverageGames = (games) => {
+  const playerGames = new Map();
+  
+  games.forEach(game => {
+    ['white', 'black'].forEach(color => {
+      const player = game.players[color]?.user?.name;
+      if (player && game.moves) {
+        if (!playerGames.has(player)) {
+          playerGames.set(player, { totalMoves: 0, games: 0 });
+        }
+        const moveCount = calculateMoveCount(game.moves);
+        const playerData = playerGames.get(player);
+        playerData.totalMoves += moveCount;
+        playerData.games += 1;
+      }
+    });
+  });
+
+  return Array.from(playerGames.entries())
+    .map(([player, data]) => ({
+      player,
+      averageMoves: data.totalMoves / data.games
+    }));
+};
+
+const countTerminationMethods = (games) => {
+  const playerStats = new Map();
+
+  games.forEach(game => {
+    const winner = game.winner;
+    const loser = winner === 'white' ? 'black' : 'white';
+    const winnerName = game.players[winner]?.user?.name;
+    const loserName = game.players[loser]?.user?.name;
+    const status = game.status;
+
+    if (winnerName) {
+      if (!playerStats.has(winnerName)) {
+        playerStats.set(winnerName, { checkmateWins: 0, timeoutWins: 0, checkmateLosses: 0, timeoutLosses: 0 });
+      }
+      if (status === 'mate') playerStats.get(winnerName).checkmateWins++;
+      if (status === 'outoftime') playerStats.get(winnerName).timeoutWins++;
+    }
+
+    if (loserName) {
+      if (!playerStats.has(loserName)) {
+        playerStats.set(loserName, { checkmateWins: 0, timeoutWins: 0, checkmateLosses: 0, timeoutLosses: 0 });
+      }
+      if (status === 'mate') playerStats.get(loserName).checkmateLosses++;
+      if (status === 'outoftime') playerStats.get(loserName).timeoutLosses++;
+    }
+  });
+
+  return playerStats;
+};
+
 const calculateInsight = (insightName, games, calculationFunction) => {
   const result = calculationFunction(games);
   return result ? { [insightName]: result } : {};
 };
 
-const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
+const calculateAllInsights = (tournamentGames, insightsToCalculate, onProgress) => {
+  console.log("Calculating insights for", tournamentGames.length, "games");
   const insights = {};
   let analysedGames = 0;
   let totalGames = tournamentGames.length;
@@ -114,56 +174,84 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate) => {
         .sort((a, b) => b.value - a.value)
         .slice(0, 5);
     },
-    [INSIGHTS.MOST_USED_OPENING]: (games) => {
-      const openings = games.reduce((acc, game) => {
+    [INSIGHTS.MOST_USED_OPENING_MOVE_WHITE]: (games) => {
+      const openings = new Map();
+      games.forEach(game => {
         if (game.opening) {
-          acc[game.opening.name] = (acc[game.opening.name] || 0) + 1;
+          const key = `${game.opening.name}`;
+          openings.set(key, (openings.get(key) || 0) + 1);
         }
-        return acc;
-      }, {});
-      return Object.entries(openings)
-        .map(([openingName, noOfTimes]) => ({ openingName, noOfTimes }))
-        .sort((a, b) => b.noOfTimes - a.noOfTimes)
+      });
+      return Array.from(openings.entries())
+        .map(([opening, count]) => ({ opening, moveNumber: count }))
+        .sort((a, b) => b.moveNumber - a.moveNumber)
         .slice(0, 5);
     },
-    [INSIGHTS.MOST_ACCURATE_PLAYER]: (games) => {
-      const playerAccuracies = games.reduce((acc, game) => {
-        ['white', 'black'].forEach(color => {
-          if (game.players[color] && typeof game.players[color]?.analysis?.accuracy === 'number') {
-            const playerName = game.players[color].user.name;
-            if (!acc[playerName]) acc[playerName] = { totalAcc: 0, games: 0 };
-            acc[playerName].totalAcc += game.players[color]?.analysis?.accuracy;
-            acc[playerName].games++;
-          }
-        });
-        return acc;
-      }, {});
-      return Object.entries(playerAccuracies)
-        .map(([playerName, data]) => ({
-          playerName,
-          averageAccuracy: data.totalAcc / data.games,
-          noOfMatches: data.games
-        }))
-        .sort((a, b) => b.averageAccuracy - a.averageAccuracy)
+    [INSIGHTS.MOST_USED_OPENING_MOVE_BLACK]: (games) => {
+      const openings = new Map();
+      games.forEach(game => {
+        if (game.opening) {
+          const key = `${game.opening.name}`;
+          openings.set(key, (openings.get(key) || 0) + 1);
+        }
+      });
+      return Array.from(openings.entries())
+        .map(([opening, count]) => ({ opening, moveNumber: count }))
+        .sort((a, b) => b.moveNumber - a.moveNumber)
         .slice(0, 5);
     },
-    [INSIGHTS.HIGHEST_WINNING_STREAK]: (games) => {
-      const playerStreaks = games.reduce((acc, game) => {
-        ['white', 'black'].forEach(color => {
-          const playerName = game.players[color].user.name;
-          if (!acc[playerName]) acc[playerName] = [];
-          acc[playerName].push(game.winner === color);
-        });
-        return acc;
-      }, {});
-      return Object.entries(playerStreaks)
-        .map(([player, results]) => ({
-          playerNames: [player],
-          streakCount: highestConsecutiveCount(results, true)
-        }))
-        .sort((a, b) => b.streakCount - a.streakCount)
+    [INSIGHTS.PLAYER_WITH_HIGHEST_MOVE_AVERAGE]: (games) => {
+      return calculatePlayerAverageGames(games)
+        .sort((a, b) => b.averageMoves - a.averageMoves)
+        .slice(0, 5)
+        .map(({ player, averageMoves }) => ({
+          player,
+          insightValue: Math.round(averageMoves * 100) / 100
+        }));
+    },
+    [INSIGHTS.PLAYER_WITH_LOWEST_MOVE_AVERAGE]: (games) => {
+      return calculatePlayerAverageGames(games)
+        .sort((a, b) => a.averageMoves - b.averageMoves)
+        .slice(0, 5)
+        .map(({ player, averageMoves }) => ({
+          player,
+          insightValue: Math.round(averageMoves * 100) / 100
+        }));
+    },
+    [INSIGHTS.AVERAGE_MOVE_COUNT]: (games) => {
+      const totalMoves = games.reduce((acc, game) => acc + calculateMoveCount(game.moves), 0);
+      return [{
+        insightValue: Math.round((totalMoves / games.length) * 100) / 100
+      }];
+    },
+    [INSIGHTS.PLAYER_WITH_MOST_CHECKMATES_WIN]: (games) => {
+      const stats = countTerminationMethods(games);
+      return Array.from(stats.entries())
+        .map(([player, data]) => ({ player, number: data.checkmateWins }))
+        .sort((a, b) => b.number - a.number)
         .slice(0, 5);
-    }
+    },
+    [INSIGHTS.PLAYER_WITH_MOST_TIMEOUT_WIN]: (games) => {
+      const stats = countTerminationMethods(games);
+      return Array.from(stats.entries())
+        .map(([player, data]) => ({ player, number: data.timeoutWins }))
+        .sort((a, b) => b.number - a.number)
+        .slice(0, 5);
+    },
+    [INSIGHTS.PLAYER_WITH_MOST_CHECKMATES_LOSS]: (games) => {
+      const stats = countTerminationMethods(games);
+      return Array.from(stats.entries())
+        .map(([player, data]) => ({ player, number: data.checkmateLosses }))
+        .sort((a, b) => b.number - a.number)
+        .slice(0, 5);
+    },
+    [INSIGHTS.PLAYER_WITH_MOST_TIMEOUT_LOSS]: (games) => {
+      const stats = countTerminationMethods(games);
+      return Array.from(stats.entries())
+        .map(([player, data]) => ({ player, number: data.timeoutLosses }))
+        .sort((a, b) => b.number - a.number)
+        .slice(0, 5);
+    },
   };
 
   insightsToCalculate.forEach(insight => {
