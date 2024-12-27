@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
 import InsightContent from './InsightContent';
+import InsightFormatter from './insights/InsightFormatter';
 import AnalysisProgress from './AnalysisProgress';
 import { InfoIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { INSIGHTS, INSIGHT_SENTENCE } from '@/utils/constants';
@@ -81,7 +82,9 @@ const TournamentInsights = ({
 
   const getSelectedCardDesciptions = (key, valuesToShow) => {
     return valuesToShow.map(va => {
-      return <li className="text-lg text-gray-500">{getInsightDescription(key, va)}</li>})
+      return <InsightFormatter insightKey={key} item={va} />
+      // return <li className="text-lg text-gray-500">{getInsightDescription(key, va)}</li>
+    })
   }
 
   const toggleCardExpansion = (key) => {
