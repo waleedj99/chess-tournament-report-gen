@@ -106,7 +106,6 @@ const TournamentInsights = ({
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {insightsToShow.map(([key, value]) => { 
-          console.log(insightsToShow)
             let selectedItems= selectedInsights[key] || []
             const values = Array.isArray(value) ? value : [value];
             const valuesToShow = values.filter((_, index) => selectedItems.includes(index))

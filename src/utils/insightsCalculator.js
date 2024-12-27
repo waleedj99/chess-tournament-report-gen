@@ -45,7 +45,10 @@ const calculatePlayerAverageGames = (games) => {
         const moveCount = calculateMoveCount(game.moves);
         const playerData = playerGames.get(player);
         playerData.totalMoves += moveCount;
-        playerData.games += 1;
+        if(moveCount > 2) {
+          playerData.games += 1;
+        }
+        console.log(player + " -- " + playerData.games)
       }
     });
   });

@@ -102,14 +102,11 @@ const ChessInsightsApp = () => {
           setDataProcessingProgress(progress);
         });
         setCalculatedInsights(insightsResult);
-        setSelectedInsights({"MOST_ACCURATE_GAME" : [0],
-          'SHORTEST_GAME_BY_MOVES':[0],
-          'LONGEST_GAME_BY_MOVES':[0],
-          'LONGEST_MOVE_BY_TIME':[0],
-          'MOST_DYNAMIC_GAME':[0],
-          'MOST_USED_OPENING':[0],
-          'MOST_ACCURATE_PLAYER':[0],
-          'HIGHEST_WINNING_STREAK':[0]});
+        let map = {}
+        Object.keys(INSIGHTS).forEach(key => {
+          map[key] = [0]
+        })
+        setSelectedInsights(map);
       };
       processInsights();
     }
