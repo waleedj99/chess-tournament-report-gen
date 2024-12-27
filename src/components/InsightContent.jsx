@@ -35,8 +35,8 @@ const InsightContent = ({
       onItemSelection(insightKey, index);
     };
 
-    const formatPlayerName = (name) => `<strong>${name || 'Unknown'}</strong>`;
-    const formatValue = (value) => `<strong>${value}</strong>`;
+    const formatPlayerName = (name) => `<strong class="text-lg">${name || 'Unknown'}</strong>`;
+    const formatValue = (value) => `<strong class="text-lg">${value}</strong>`;
 
     const renderContent = () => {
       switch (insightKey) {
@@ -91,7 +91,7 @@ const InsightContent = ({
     return (
       <div key={index} className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
         <div className="flex items-center justify-between">
-          <p className="flex-grow">{renderContent()}</p>
+          <p className="flex-grow text-lg">{renderContent()}</p>
           {!isPngPreview && !showOnlySelected && (
             <Checkbox
               checked={isSelected}
