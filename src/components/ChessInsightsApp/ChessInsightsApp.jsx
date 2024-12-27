@@ -12,8 +12,8 @@ const ChessInsightsApp = () => {
   const [tournamentType, setTournamentType] = useState('swiss');
   const [tournamentId, setTournamentId] = useState('');
   const [selectedInsights, setSelectedInsights] = useState({"MOST_ACCURATE_GAME" : [0],
-    'SHORTEST_GAME_LENGTH_BY_MOVES':[0],
-    'LONGEST_GAME_LENGTH_BY_MOVES':[0],
+    'SHORTEST_GAME_BY_MOVES':[0],
+    'LONGEST_GAME_BY_MOVES':[0],
     'LONGEST_MOVE_BY_TIME':[0],
     'MOST_DYNAMIC_GAME':[0],
     'MOST_USED_OPENING':[0],

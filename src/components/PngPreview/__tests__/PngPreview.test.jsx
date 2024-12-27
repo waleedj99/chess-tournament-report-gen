@@ -13,11 +13,11 @@ const mockTournamentData = {
 };
 
 const mockInsights = {
-  SHORTEST_GAME_LENGTH_BY_MOVES: [{ value: 10 }],
+  SHORTEST_GAME_BY_MOVES: [{ value: 10 }],
 };
 
 const mockSelectedInsights = {
-  SHORTEST_GAME_LENGTH_BY_MOVES: [0],
+  SHORTEST_GAME_BY_MOVES: [0],
 };
 
 describe('PngPreview', () => {

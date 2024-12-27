@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card'
 import InsightContent from './InsightContent';
 import AnalysisProgress from './AnalysisProgress';
 import { InfoIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { INSIGHTS, INSIGHT_SENTENCE } from '@/utils/constants';
 import {
   Tooltip,
   TooltipContent,
@@ -17,8 +18,8 @@ const TournamentInsights = ({
   analysedGames = 0,
   totalGames = 0,
   selectedInsights = {"MOST_ACCURATE_GAME" : [0],
-    'SHORTEST_GAME_LENGTH_BY_MOVES':[0],
-    'LONGEST_GAME_LENGTH_BY_MOVES':[0],
+    'SHORTEST_GAME_BY_MOVES':[0],
+    'LONGEST_GAME_BY_MOVES':[0],
     'LONGEST_MOVE_BY_TIME':[0],
     'MOST_DYNAMIC_GAME':[0],
     'MOST_USED_OPENING':[0],
@@ -37,20 +38,20 @@ const TournamentInsights = ({
 
   const getInsightDescription = (insightKey, item) => {
     switch (insightKey) {
-      case 'MOST_ACCURATE_GAME':
+      case INSIGHTS.MOST_ACCURATE_GAME:
         return `${item.players?.white?.name || 'Unknown'} vs ${item.players?.black?.name || 'Unknown'} had an average accuracy of ${item.value?.toFixed(2)}%.`;
-      case 'SHORTEST_GAME_LENGTH_BY_MOVES':
-      case 'LONGEST_GAME_LENGTH_BY_MOVES':
+      case INSIGHTS.SHORTEST_GAME_BY_MOVES:
+      case INSIGHTS.LONGEST_GAME_BY_MOVES:
         return `${item.players?.white?.user?.name || 'Unknown'} vs ${item.players?.black?.user?.name || 'Unknown'} played a game lasting ${item.value} moves.`;
-      case 'LONGEST_MOVE_BY_TIME':
+      case INSIGHTS.LONGEST_MOVE_BY_TIME:
         return `Move ${item.moveNo || 'N/A'} by ${item.side || 'N/A'} took ${item.timeTaken?.toFixed(2) || 'N/A'} seconds.`;
-      case 'MOST_DYNAMIC_GAME':
+      case INSIGHTS.MOST_DYNAMIC_GAME:
         return `${item.players?.white?.user?.name || 'Unknown'} vs ${item.players?.black?.user?.name || 'Unknown'} had ${item.value} turn arounds.`;
-      case 'MOST_USED_OPENING':
+      case INSIGHTS.MOST_USED_OPENING:
         return `${item.openingName || 'Unknown'} was used ${item.noOfTimes || 'N/A'} times.`;
-      case 'MOST_ACCURATE_PLAYER':
+      case INSIGHTS.MOST_ACCURATE_PLAYER:
         return `${item.playerName || 'Unknown'} had an average accuracy of ${item.averageAccuracy?.toFixed(2) || 'N/A'}% over ${item.noOfMatches || 'N/A'} matches.`;
-      case 'HIGHEST_WINNING_STREAK':
+      case INSIGHTS.HIGHEST_WINNING_STREAK:
         return `${item.playerNames?.join(', ') || 'Unknown'} had a winning streak of ${item.streakCount || 'N/A'} games.`;
       default:
         return JSON.stringify(item);
@@ -59,15 +60,15 @@ const TournamentInsights = ({
 
   const getInsightTooltip = (key) => {
     switch(key) {
-      case 'MOST_ACCURATE_GAME':
+      case INSIGHTS.MOST_ACCURATE_GAME:
         return "Calculated based on the average accuracy of both players in a game.";
-      case 'SHORTEST_GAME_LENGTH_BY_MOVES':
+      case INSIGHTS.SHORTEST_GAME_BY_MOVES:
         return "Determined by the game with the least number of moves.";
-      case 'LONGEST_GAME_LENGTH_BY_MOVES':
+      case INSIGHTS.LONGEST_GAME_BY_MOVES:
         return "Determined by the game with the most number of moves.";
-      case 'LONGEST_MOVE_BY_TIME':
+      case INSIGHTS.LONGEST_MOVE_BY_TIME:
         return "Calculated by finding the move that took the most time across all games.";
-      case 'MOST_DYNAMIC_GAME':
+      case INSIGHTS.MOST_DYNAMIC_GAME:
         return "Based on the number of times the advantage switched between players.";
       default:
         return "Insight calculation method.";
@@ -80,7 +81,7 @@ const TournamentInsights = ({
 
   const getSelectedCardDesciptions = (key, valuesToShow) => {
     return valuesToShow.map(va => {
-      return <li className="text-sm text-gray-500">{getInsightDescription(key, va)}</li>})
+      return <li className="text-lg text-gray-500">{getInsightDescription(key, va)}</li>})
   }
 
   const toggleCardExpansion = (key) => {
@@ -102,6 +103,7 @@ const TournamentInsights = ({
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {insightsToShow.map(([key, value]) => { 
+          console.log(insightsToShow)
             let selectedItems= selectedInsights[key] || []
             const values = Array.isArray(value) ? value : [value];
             const valuesToShow = values.filter((_, index) => selectedItems.includes(index))
@@ -126,7 +128,7 @@ const TournamentInsights = ({
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <ul>
+                  <ul >
                     {getSelectedCardDesciptions(key, valuesToShow)}
                   </ul>
                   

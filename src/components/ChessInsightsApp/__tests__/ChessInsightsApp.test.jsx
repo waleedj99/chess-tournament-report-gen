@@ -94,7 +94,7 @@ describe('ChessInsightsApp', () => {
     });
     useInsightsCalculation.mockReturnValue({
       calculatedInsights: {
-        insights: { SHORTEST_GAME_LENGTH_BY_MOVES: [{ value: 10 }] },
+        insights: { SHORTEST_GAME_BY_MOVES: [{ value: 10 }] },
         analysedGames: 1,
         totalGames: 1,
       },

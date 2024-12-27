@@ -9,10 +9,10 @@ const mockTournamentData = {
 };
 
 const mockInsights = {
-  SHORTEST_GAME_LENGTH_BY_MOVES: [
+  SHORTEST_GAME_BY_MOVES: [
     { gameId: '123', players: { white: { user: { name: 'Player1' } }, black: { user: { name: 'Player2' } } }, value: 10 },
   ],
-  LONGEST_GAME_LENGTH_BY_MOVES: [
+  LONGEST_GAME_BY_MOVES: [
     { gameId: '456', players: { white: { user: { name: 'Player3' } }, black: { user: { name: 'Player4' } } }, value: 100 },
   ],
 };
