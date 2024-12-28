@@ -90,6 +90,34 @@ const countTerminationMethods = (games) => {
   return playerStats;
 };
 
+const calculateGameTerminations = (games) => {
+  const terminationStats = {
+    mate: 0,
+    resign: 0,
+    outoftime: 0,
+    draw: 0,
+    stalemate: 0,
+    other: 0
+  };
+
+  games.forEach(game => {
+    const status = game.status;
+    if (status in terminationStats) {
+      terminationStats[status]++;
+    } else {
+      terminationStats.other++;
+    }
+  });
+
+  return Object.entries(terminationStats)
+    .map(([type, count]) => ({
+      terminationType: type,
+      count: count,
+      percentage: (count / games.length * 100).toFixed(1)
+    }))
+    .sort((a, b) => b.count - a.count);
+};
+
 const calculateInsight = (insightName, games, calculationFunction) => {
   const result = calculationFunction(games);
   return result ? { [insightName]: result } : {};
@@ -254,6 +282,9 @@ const calculateAllInsights = (tournamentGames, insightsToCalculate, onProgress) 
         .map(([player, data]) => ({ player, number: data.timeoutLosses }))
         .sort((a, b) => b.number - a.number)
         .slice(0, 5);
+    },
+    [INSIGHTS.GAME_TERMINATIONS]: (games) => {
+      return calculateGameTerminations(games);
     },
   };
 

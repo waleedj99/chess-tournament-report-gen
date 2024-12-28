@@ -17,6 +17,7 @@ export const INSIGHTS = {
   PLAYER_WITH_MOST_CHECKMATES_LOSS: "PLAYER_WITH_MOST_CHECKMATES_LOSS",
   PLAYER_WITH_MOST_TIMEOUT_WIN: "PLAYER_WITH_MOST_TIMEOUT_WIN",
   PLAYER_WITH_MOST_TIMEOUT_LOSS: "PLAYER_WITH_MOST_TIMEOUT_LOSS",
+  GAME_TERMINATIONS: "GAME_TERMINATIONS",
 };
 
 export const INSIGHT_SENTENCE = {
@@ -29,4 +30,5 @@ export const INSIGHT_SENTENCE = {
   PLAYER_WITH_MOST_TIMEOUT_WIN: "player won number matches with a timeout",
   PLAYER_WITH_MOST_CHECKMATES_LOSS: "player lost number matches with a checkmate",
   PLAYER_WITH_MOST_TIMEOUT_LOSS: "player lost number matches with a checkmate",
+  GAME_TERMINATIONS: "games ended by termination_type",
 };

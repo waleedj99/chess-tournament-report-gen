@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { INSIGHTS, INSIGHT_SENTENCE } from '@/utils/constants';
+
 const insightsData = {
   specificGame: [
     INSIGHTS.LONGEST_GAME_BY_MOVES,
@@ -9,6 +10,7 @@ const insightsData = {
   overallTournament: [
     INSIGHTS.AVERAGE_MOVE_COUNT,
     INSIGHTS.MOST_USED_OPENING,
+    INSIGHTS.GAME_TERMINATIONS,
   ],
   specificPlayers: [
     INSIGHTS.PLAYER_WITH_HIGHEST_MOVE_AVERAGE,

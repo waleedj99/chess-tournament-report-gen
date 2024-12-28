@@ -5,6 +5,18 @@ const formatPlayerName = (name) => `<span class="text-orange-300 font-bold items
 const formatValue = (value) => `<span class="text-orange-300 font-bold items-center">${value}</span>`;
 const formatBigValue = (value) => `<span class="text-orange-300 font-bold text-5xl items-center">${value}</span>`;
 
+const formatTerminationType = (type) => {
+  const typeMap = {
+    mate: 'Checkmate',
+    resign: 'Resignation',
+    outoftime: 'Timeout',
+    draw: 'Draw',
+    stalemate: 'Stalemate',
+    other: 'Other'
+  };
+  return typeMap[type] || type;
+};
+
 const InsightFormatter = ({ insightKey, item }) => {
   const renderContent = () => {
     switch (insightKey) {
@@ -46,7 +58,8 @@ const InsightFormatter = ({ insightKey, item }) => {
       
       case INSIGHTS.PLAYER_WITH_MOST_TIMEOUT_LOSS:
         return `${formatPlayerName(item.player)} lost ${formatValue(item.number)} matches by timeout`;
-      
+      case INSIGHTS.GAME_TERMINATIONS:
+        return `${formatValue(item.count)} games (${item.percentage}%) ended by ${formatValue(formatTerminationType(item.terminationType))}`;
       default:
         return JSON.stringify(item);
     }
