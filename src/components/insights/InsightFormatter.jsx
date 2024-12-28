@@ -19,7 +19,9 @@ const formatTerminationType = (type) => {
 };
 
 const InsightFormatter = ({ insightKey, item }) => {
-  if (insightKey === INSIGHTS.GAME_TERMINATIONS) {
+  console.log('InsightFormatter - insightKey:', insightKey, 'item:', item); // Debug log
+
+  if (insightKey === INSIGHTS.GAME_TERMINATIONS && Array.isArray(item)) {
     return <GameTerminationsPieChart data={item} />;
   }
 
