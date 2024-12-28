@@ -1,5 +1,6 @@
 import React from 'react';
 import { INSIGHTS } from '@/utils/constants';
+import GameTerminationsPieChart from './GameTerminationsPieChart';
 
 const formatPlayerName = (name) => `<span class="text-orange-300 font-bold items-center">${name || 'Unknown'}</span>`;
 const formatValue = (value) => `<span class="text-orange-300 font-bold items-center">${value}</span>`;
@@ -51,7 +52,7 @@ const InsightFormatter = ({ insightKey, item }) => {
         return `${formatPlayerName(item.player)} won ${formatValue(item.number)} matches with checkmate`;
       
       case INSIGHTS.PLAYER_WITH_MOST_TIMEOUT_WIN:
-        return `${formatPlayerName(item.player)} won ${formatValue(item.number)} matches by timeout`;
+        return `${formatPlayerName(item.player)} won ${formatValue(item.number)} matches with timeout`;
       
       case INSIGHTS.PLAYER_WITH_MOST_CHECKMATES_LOSS:
         return `${formatPlayerName(item.player)} lost ${formatValue(item.number)} matches by checkmate`;
@@ -59,14 +60,23 @@ const InsightFormatter = ({ insightKey, item }) => {
       case INSIGHTS.PLAYER_WITH_MOST_TIMEOUT_LOSS:
         return `${formatPlayerName(item.player)} lost ${formatValue(item.number)} matches by timeout`;
       case INSIGHTS.GAME_TERMINATIONS:
-        return `${formatValue(item.count)} games (${item.percentage}%) ended by ${formatValue(formatTerminationType(item.terminationType))}`;
+        return (
+          <div>
+            <div dangerouslySetInnerHTML={{ 
+              __html: `${formatValue(item.count)} games (${item.percentage}%) ended by ${formatValue(formatTerminationType(item.terminationType))}` 
+            }} />
+            {Array.isArray(item) && <GameTerminationsPieChart data={item} />}
+          </div>
+        );
       default:
         return JSON.stringify(item);
     }
   };
 
   return (
-    <span dangerouslySetInnerHTML={{ __html: renderContent() }} />
+    <div>
+      {renderContent()}
+    </div>
   );
 };
 
