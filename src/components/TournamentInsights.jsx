@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card'
 import InsightContent from './InsightContent';
 import InsightFormatter from './insights/InsightFormatter';
 import AnalysisProgress from './AnalysisProgress';
-import { InfoIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { InfoIcon, ChevronDownIcon, ChevronUpIcon, AlignCenter } from 'lucide-react';
 import GameTerminationsPieChart from './insights/GameTerminationsPieChart';
 import { INSIGHTS, INSIGHT_SENTENCE } from '@/utils/constants';
 import {
@@ -25,21 +25,64 @@ const TournamentInsights = ({
   isPngPreview = false 
 }) => {
   const [expandedCards, setExpandedCards] = useState({});
-
   const toTitleCase = (str) => {
     return str.split('_').map(word => 
       word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
     ).join(" ");
   };
 
+  const getInsightDescription = (insightKey, item) => {
+    switch (insightKey) {
+      case INSIGHTS.MOST_ACCURATE_GAME:
+        return `${item.players?.white?.name || 'Unknown'} vs ${item.players?.black?.name || 'Unknown'} had an average accuracy of ${item.value?.toFixed(2)}%.`;
+      case INSIGHTS.SHORTEST_GAME_BY_MOVES:
+      case INSIGHTS.LONGEST_GAME_BY_MOVES:
+        return `${item.players?.white?.user?.name || 'Unknown'} vs ${item.players?.black?.user?.name || 'Unknown'} played a game lasting ${item.value} moves.`;
+      case INSIGHTS.LONGEST_MOVE_BY_TIME:
+        return `Move ${item.moveNo || 'N/A'} by ${item.side || 'N/A'} took ${item.timeTaken?.toFixed(2) || 'N/A'} seconds.`;
+      case INSIGHTS.MOST_DYNAMIC_GAME:
+        return `${item.players?.white?.user?.name || 'Unknown'} vs ${item.players?.black?.user?.name || 'Unknown'} had ${item.value} turn arounds.`;
+      case INSIGHTS.MOST_USED_OPENING:
+        return `${item.openingName || 'Unknown'} was used ${item.noOfTimes || 'N/A'} times.`;
+      case INSIGHTS.MOST_ACCURATE_PLAYER:
+        return `${item.playerName || 'Unknown'} had an average accuracy of ${item.averageAccuracy?.toFixed(2) || 'N/A'}% over ${item.noOfMatches || 'N/A'} matches.`;
+      case INSIGHTS.HIGHEST_WINNING_STREAK:
+        return `${item.playerNames?.join(', ') || 'Unknown'} had a winning streak of ${item.streakCount || 'N/A'} games.`;
+      default:
+        return JSON.stringify(item);
+    }
+  };
+
+  const getInsightTooltip = (key) => {
+    switch(key) {
+      case INSIGHTS.MOST_ACCURATE_GAME:
+        return "Calculated based on the average accuracy of both players in a game.";
+      case INSIGHTS.SHORTEST_GAME_BY_MOVES:
+        return "Determined by the game with the least number of moves.";
+      case INSIGHTS.LONGEST_GAME_BY_MOVES:
+        return "Determined by the game with the most number of moves.";
+      case INSIGHTS.LONGEST_MOVE_BY_TIME:
+        return "Calculated by finding the move that took the most time across all games.";
+      case INSIGHTS.MOST_DYNAMIC_GAME:
+        return "Based on the number of times the advantage switched between players.";
+      default:
+        return "Insight calculation method.";
+    }
+  };
+
+  const getInsightIcon = (key) => {
+    return '🏆';
+  };
+
   const getSelectedCardDesciptions = (key, valuesToShow) => {
     if (key === INSIGHTS.GAME_TERMINATIONS) {
-      return <GameTerminationsPieChart data={valuesToShow} />;
+      return <GameTerminationsPieChart data={insightsToShow.filter(v => v[0] === INSIGHTS.GAME_TERMINATIONS)[0][1]} />;
     }
     return valuesToShow.map(va => {
-      return <li key={va.id || Math.random()} className='text-xl text-center'><InsightFormatter insightKey={key} item={va} /></li>
-    });
-  };
+      return <li className='text-xl text-center '><InsightFormatter insightKey={key} item={va} /></li>
+      // return <li className="text-lg text-gray-500">{getInsightDescription(key, va)}</li>
+    })
+  }
 
   const toggleCardExpansion = (key) => {
     setExpandedCards(prev => ({ ...prev, [key]: !prev[key] }));
@@ -60,58 +103,63 @@ const TournamentInsights = ({
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {insightsToShow.map(([key, value]) => { 
-          let selectedItems = selectedInsights[key] || [];
-          const values = Array.isArray(value) ? value : [value];
-          const valuesToShow = values.filter((_, index) => selectedItems.includes(index));
-          
+            let selectedItems= selectedInsights[key] || []
+            const values = Array.isArray(value) ? value : [value];
+            const valuesToShow = values.filter((_, index) => selectedItems.includes(index))
           return (
-            <Card 
-              key={key} 
-              className={`flex flex-col hover:shadow-lg transition-shadow duration-300 ${
-                expandedCards[key] ? 'h-auto' : 'h-[300px]'
-              }`}
-            >
-              <CardHeader className="flex flex-row items-center justify-between">
+          <Card key={key} className="flex flex-col hover:shadow-lg transition-shadow duration-300">
+            <CardHeader className="flex flex-row items-center justify-between">
+                {/* <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold text-xl">
+                  {getInsightIcon(key)}
+                </div> */}
                 <div className="flex-grow">
                   <div className="flex items-center justify-center">
-                    <h3 className="text-lg font-medium mr-2">{toTitleCase(key)}</h3>
+                    <h3 className="text-lg font-medium mr-2 ">{toTitleCase(key)}</h3>
+                    {/* <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <InfoIcon className="h-4 w-4 text-gray-500" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{getInsightTooltip(key)}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider> */}
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent className={`flex-grow content-center justify-center pb-0 ${
-                expandedCards[key] ? 'overflow-y-auto' : 'overflow-hidden'
-              }`}>
-                <ul className='pb-3'>
-                  {getSelectedCardDesciptions(key, valuesToShow)}
-                </ul>
-                <InsightContent
-                  insightKey={key}
-                  value={value}
-                  isPngPreview={isPngPreview}
-                  selectedItems={selectedInsights[key] || []}
-                  onItemSelection={onInsightSelection}
-                  showOnlySelected={showOnlySelected}
-                  isExpanded={expandedCards[key]}
-                />
-              </CardContent>
-              <CardFooter className="flex justify-between items-center mt-auto">
-                <Button variant="ghost" size="sm" onClick={() => toggleCardExpansion(key)}>
-                  {expandedCards[key] ? (
-                    <>
-                      <ChevronUpIcon className="h-4 w-4 mr-2" />
-                      Show Less
-                    </>
-                  ) : (
-                    <>
-                      <ChevronDownIcon className="h-4 w-4 mr-2" />
-                      Show More
-                    </>
-                  )}
-                </Button>
-              </CardFooter>
-            </Card>
-          );
-        })}
+              
+            </CardHeader>
+            <CardContent className="flex-grow content-center justify-center pb-0">
+              <ul className='pb-3'>
+                {getSelectedCardDesciptions(key, valuesToShow)}
+              </ul>
+              <InsightContent
+                insightKey={key}
+                value={value}
+                isPngPreview={isPngPreview}
+                selectedItems={selectedInsights[key] || []}
+                onItemSelection={onInsightSelection}
+                showOnlySelected={showOnlySelected}
+                isExpanded={expandedCards[key]}
+              />
+            </CardContent>
+            <CardFooter className="flex justify-between items-center">
+              <Button variant="ghost" size="sm" onClick={() => toggleCardExpansion(key)}>
+                {expandedCards[key] ? (
+                  <>
+                    <ChevronUpIcon className="h-4 w-4 mr-2" />
+                    Show Less
+                  </>
+                ) : (
+                  <>
+                    <ChevronDownIcon className="h-4 w-4 mr-2" />
+                    Show More
+                  </>
+                )}
+              </Button>
+            </CardFooter>
+          </Card>
+        )})}
       </div>
     </div>
   );
