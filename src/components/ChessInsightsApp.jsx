@@ -25,6 +25,7 @@ const ChessInsightsApp = () => {
   const [fetchError, setFetchError] = useState(null);
   const [evaluationProgress, setEvaluationProgress] = useState(0);
   const [dataProcessingProgress, setDataProcessingProgress] = useState(0);
+  const [tournamentInfo, setTournamentInfo] = useState()
 
   const fetchGames = async () => {
     let fetchData = [];
@@ -88,6 +89,44 @@ const ChessInsightsApp = () => {
     }
   };
 
+  const fetchTournamentDetails = async () => {
+    let fetchData = [];
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+    };
+
+    try {
+      let apiUrl;
+      if (tournamentType === 'swiss') {
+        apiUrl = `https://lichess.org/api/swiss/${tournamentId}`;
+      } else if (tournamentType === 'arena') {
+        apiUrl = `https://lichess.org/api/tournament/${tournamentId}`;
+      } else {
+        throw new Error('Invalid tournament type');
+      }
+
+      const response = await fetch(`${apiUrl}`, requestOptions);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch tournament data. Please check the tournament ID and try again.');
+      }
+      console.log(data)
+      setTournamentInfo(data)
+      setFetchError(null);
+      return fetchData;
+    } catch (error) {
+      console.error('Error fetching games:', error);
+      setFetchError(error.message);
+      throw error;
+    }
+  };
+
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['tournamentGames', tournamentType, tournamentId],
     queryFn: fetchGames,
@@ -114,6 +153,7 @@ const ChessInsightsApp = () => {
 
   const handleFetchData = () => {
     if (tournamentId) {
+      fetchTournamentDetails()
       refetch();
       setIsDataFetched(true);
       setEvaluationProgress(0);
@@ -199,7 +239,7 @@ const ChessInsightsApp = () => {
       {isDataFetched && calculatedInsights && (
         <div>
           <TournamentInsights 
-            tournamentData={{ name: `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, type: tournamentType, players: calculatedInsights.totalGames }}
+            tournamentData={{ name: tournamentInfo?.fullName , type: tournamentType, players: tournamentInfo?.nbPlayers }}
             insights={calculatedInsights.insights}
             analysedGames={calculatedInsights.analysedGames}
             totalGames={calculatedInsights.totalGames}

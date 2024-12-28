@@ -1,6 +1,6 @@
 import React from 'react';
 import { INSIGHTS } from '@/utils/constants';
-import GameTerminationsPieChart from './GameTerminationsPieChart';
+
 
 const formatPlayerName = (name) => `<span class="text-orange-300 font-bold items-center">${name || 'Unknown'}</span>`;
 const formatValue = (value) => `<span class="text-orange-300 font-bold items-center">${value}</span>`;
@@ -20,10 +20,6 @@ const formatTerminationType = (type) => {
 
 const InsightFormatter = ({ insightKey, item }) => {
   console.log('InsightFormatter - insightKey:', insightKey, 'item:', item); // Debug log
-
-  if (insightKey === INSIGHTS.GAME_TERMINATIONS && Array.isArray(item)) {
-    return <GameTerminationsPieChart data={item} />;
-  }
 
   const renderContent = () => {
     switch (insightKey) {

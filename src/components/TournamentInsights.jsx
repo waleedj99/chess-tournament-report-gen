@@ -4,6 +4,7 @@ import InsightContent from './InsightContent';
 import InsightFormatter from './insights/InsightFormatter';
 import AnalysisProgress from './AnalysisProgress';
 import { InfoIcon, ChevronDownIcon, ChevronUpIcon, AlignCenter } from 'lucide-react';
+import GameTerminationsPieChart from './insights/GameTerminationsPieChart';
 import { INSIGHTS, INSIGHT_SENTENCE } from '@/utils/constants';
 import {
   Tooltip,
@@ -18,14 +19,7 @@ const TournamentInsights = ({
   insights = {},
   analysedGames = 0,
   totalGames = 0,
-  selectedInsights = {"MOST_ACCURATE_GAME" : [0],
-    'SHORTEST_GAME_BY_MOVES':[0],
-    'LONGEST_GAME_BY_MOVES':[0],
-    'LONGEST_MOVE_BY_TIME':[0],
-    'MOST_DYNAMIC_GAME':[0],
-    'MOST_USED_OPENING':[0],
-    'MOST_ACCURATE_PLAYER':[0],
-    'HIGHEST_WINNING_STREAK':[0]}, 
+  selectedInsights, 
   onInsightSelection,
   showOnlySelected = false, 
   isPngPreview = false 
@@ -81,6 +75,9 @@ const TournamentInsights = ({
   };
 
   const getSelectedCardDesciptions = (key, valuesToShow) => {
+    if (key === INSIGHTS.GAME_TERMINATIONS) {
+      return <GameTerminationsPieChart data={insightsToShow.filter(v => v[0] === INSIGHTS.GAME_TERMINATIONS)[0][1]} />;
+    }
     return valuesToShow.map(va => {
       return <li className='text-xl text-center '><InsightFormatter insightKey={key} item={va} /></li>
       // return <li className="text-lg text-gray-500">{getInsightDescription(key, va)}</li>
@@ -99,7 +96,7 @@ const TournamentInsights = ({
     <div className="space-y-6">
       {!showOnlySelected && !isPngPreview && tournamentData && (
         <>
-          <h2 className="text-2xl font-bold">Insights for {tournamentData.name}</h2>
+          <h2 className="text-2xl font-bold">Insights from {tournamentData.name}</h2>
           <p>Tournament Type: {tournamentData.type}, Players: {tournamentData.players}, Total Games: {totalGames}</p>
           <AnalysisProgress analyzed={analysedGames} total={totalGames} />
         </>
