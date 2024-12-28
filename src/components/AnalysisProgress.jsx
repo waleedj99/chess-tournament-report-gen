@@ -7,10 +7,10 @@ const AnalysisProgress = ({ analyzed, total }) => {
   return (
     <div className="space-y-2">
       <div className="flex justify-between text-sm">
-        <span>Analysis Progress</span>
-        <span>{analyzed} / {total} games analyzed</span>
+        {/* <span>Analysis Progress</span> */}
+        {/* <span>{analyzed} / {total} Have Been Analysed</span> */}
       </div>
-      <Progress value={percentage} className="w-full" />
+      {/* <Progress value={percentage} className="w-full" /> */}
     </div>
   );
 };

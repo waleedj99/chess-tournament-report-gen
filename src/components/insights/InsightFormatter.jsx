@@ -1,8 +1,9 @@
 import React from 'react';
 import { INSIGHTS } from '@/utils/constants';
 
-const formatPlayerName = (name) => `<span class="text-orange-300 text-xl font-bold">${name || 'Unknown'}</span>`;
-const formatValue = (value) => `<span class="text-orange-300 text-xl font-bold">${value}</span>`;
+const formatPlayerName = (name) => `<span class="text-orange-300 font-bold items-center">${name || 'Unknown'}</span>`;
+const formatValue = (value) => `<span class="text-orange-300 font-bold items-center">${value}</span>`;
+const formatBigValue = (value) => `<span class="text-orange-300 font-bold text-5xl items-center">${value}</span>`;
 
 const InsightFormatter = ({ insightKey, item }) => {
   const renderContent = () => {
@@ -32,7 +33,7 @@ const InsightFormatter = ({ insightKey, item }) => {
         return `${formatPlayerName(item.player)} played with an average of ${formatValue(item.insightValue)} moves`;
       
       case INSIGHTS.AVERAGE_MOVE_COUNT:
-        return `Tournament average moves: ${formatValue(item.insightValue)}`;
+        return `${formatBigValue(item.insightValue)}`;
       
       case INSIGHTS.PLAYER_WITH_MOST_CHECKMATES_WIN:
         return `${formatPlayerName(item.player)} won ${formatValue(item.number)} matches with checkmate`;

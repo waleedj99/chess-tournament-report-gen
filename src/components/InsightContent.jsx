@@ -14,7 +14,7 @@ const InsightContent = ({
   const valuesToShow = showOnlySelected ? values.filter((_, index) => selectedItems.includes(index)) : values;
 
   return (
-    <div className="space-y-2">
+    <div className='border-t-2 pt-2'>
       {isExpanded ? (
         valuesToShow.map((item, index) => (
           item && (

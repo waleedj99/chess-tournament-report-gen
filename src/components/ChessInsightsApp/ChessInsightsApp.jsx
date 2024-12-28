@@ -68,22 +68,16 @@ const ChessInsightsApp = () => {
         </div>
       )}
       {fetchError && <Alert variant="destructive"><AlertDescription>{fetchError}</AlertDescription></Alert>}
-      {tournamentGames.length > 0 && calculatedInsights && (
+      {/* {tournamentGames.length > 0 && calculatedInsights && (
         <Alert>
           <InfoIcon className="h-4 w-4" />
           <AlertDescription>
             Some insights require game analysis. This process may take some time depending on the number of games.
           </AlertDescription>
         </Alert>
-      )}
+      )} */}
       {tournamentGames.length > 0 && calculatedInsights && (
         <div>
-          {isProcessing && (
-            <div className="space-y-2">
-              <p>Processing data...</p>
-              <Progress value={dataProcessingProgress} className="w-full" />
-            </div>
-          )}
           <TournamentInsights 
             tournamentData={{ 
               name: tournamentDetails?.name || `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, 

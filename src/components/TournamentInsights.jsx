@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card'
 import InsightContent from './InsightContent';
 import InsightFormatter from './insights/InsightFormatter';
 import AnalysisProgress from './AnalysisProgress';
-import { InfoIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { InfoIcon, ChevronDownIcon, ChevronUpIcon, AlignCenter } from 'lucide-react';
 import { INSIGHTS, INSIGHT_SENTENCE } from '@/utils/constants';
 import {
   Tooltip,
@@ -82,7 +82,7 @@ const TournamentInsights = ({
 
   const getSelectedCardDesciptions = (key, valuesToShow) => {
     return valuesToShow.map(va => {
-      return <InsightFormatter insightKey={key} item={va} />
+      return <li className='text-xl text-center '><InsightFormatter insightKey={key} item={va} /></li>
       // return <li className="text-lg text-gray-500">{getInsightDescription(key, va)}</li>
     })
   }
@@ -111,15 +111,14 @@ const TournamentInsights = ({
             const valuesToShow = values.filter((_, index) => selectedItems.includes(index))
           return (
           <Card key={key} className="flex flex-col hover:shadow-lg transition-shadow duration-300">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold text-xl">
+            <CardHeader className="flex flex-row items-center justify-between">
+                {/* <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold text-xl">
                   {getInsightIcon(key)}
-                </div>
+                </div> */}
                 <div className="flex-grow">
-                  <div className="flex items-center">
-                    <h3 className="text-lg font-medium mr-2">{toTitleCase(key)}</h3>
-                    <TooltipProvider>
+                  <div className="flex items-center justify-center">
+                    <h3 className="text-lg font-medium mr-2 ">{toTitleCase(key)}</h3>
+                    {/* <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
                           <InfoIcon className="h-4 w-4 text-gray-500" />
@@ -128,16 +127,15 @@ const TournamentInsights = ({
                           <p>{getInsightTooltip(key)}</p>
                         </TooltipContent>
                       </Tooltip>
-                    </TooltipProvider>
+                    </TooltipProvider> */}
                   </div>
-                  <ul >
-                    {getSelectedCardDesciptions(key, valuesToShow)}
-                  </ul>
-                  
                 </div>
-              </div>
+              
             </CardHeader>
-            <CardContent className="flex-grow">
+            <CardContent className="flex-grow content-center justify-center pb-0">
+              <ul className='pb-3'>
+                {getSelectedCardDesciptions(key, valuesToShow)}
+              </ul>
               <InsightContent
                 insightKey={key}
                 value={value}

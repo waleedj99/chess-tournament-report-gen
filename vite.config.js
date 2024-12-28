@@ -8,9 +8,14 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: "8080",
+    watch: {
+      usePolling: true
+    }
   },
   plugins: [
-    react(),
+    react({
+      include: "**/*.jsx"
+    }),
     mode === 'development' && componentTagger(),
   ].filter(Boolean),
   resolve: {

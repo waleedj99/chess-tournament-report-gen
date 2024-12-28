@@ -13,11 +13,9 @@ const InsightCard = ({
   onToggleSelection 
 }) => {
   return (
-    <div key={index} className="mb-4 p-6 bg-gray-900 dark:bg-gray-800 rounded-lg">
+    <div key={index} className="text-xs mb-4 rounded-lg">
       <div className="flex items-center justify-between">
-        <p className="flex-grow text-xl text-white">
           <InsightFormatter insightKey={insightKey} item={item} />
-        </p>
         {!isPngPreview && !showOnlySelected && (
           <Checkbox
             checked={isSelected}
