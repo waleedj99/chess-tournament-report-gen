@@ -1,70 +1,98 @@
 import { INSIGHTS } from './constants';
 
-const calculatePGNInsights = (pgnGame) => {
-  console.log("Calculating insights for PGN game:", pgnGame);
+const calculatePGNInsights = (pgnGames) => {
+  console.log("Calculating insights for PGN games:", pgnGames);
   
   const insights = {};
   let analysedGames = 0;
-  let totalGames = 1; // Since we're processing a single game
+  let totalGames = pgnGames.length;
 
   // Helper function to get move count
   const getMoveCount = (moves) => moves.length;
 
   // Helper function to get player names
-  const getPlayerNames = () => ({
-    white: pgnGame.tags.White,
-    black: pgnGame.tags.Black
+  const getPlayerNames = (game) => ({
+    white: game.tags.White,
+    black: game.tags.Black
   });
 
-  // Calculate move-based insights
-  insights[INSIGHTS.SHORTEST_GAME_BY_MOVES] = [{
-    gameId: "pgn-1",
-    players: {
-      white: { user: { name: pgnGame.tags.White } },
-      black: { user: { name: pgnGame.tags.Black } }
-    },
-    value: getMoveCount(pgnGame.moves)
-  }];
+  // Process all games and aggregate data
+  const gamesData = pgnGames.map(game => {
+    const moveCount = getMoveCount(game.moves);
+    const players = getPlayerNames(game);
+    const longestMove = game.moves.reduce((longest, move) => {
+      const timeSpent = move.commentDiag?.clk ? 
+        parseFloat(move.commentDiag.clk.split(':').reduce((acc, time) => acc * 60 + parseFloat(time), 0)) : 0;
+      return timeSpent > longest.timeTaken ? 
+        { moveNo: move.moveNumber, timeTaken: timeSpent, side: move.turn === 'w' ? 'white' : 'black' } : 
+        longest;
+    }, { moveNo: 0, timeTaken: 0, side: 'white' });
 
-  insights[INSIGHTS.LONGEST_GAME_BY_MOVES] = [{
-    gameId: "pgn-1",
-    players: {
-      white: { user: { name: pgnGame.tags.White } },
-      black: { user: { name: pgnGame.tags.Black } }
-    },
-    value: getMoveCount(pgnGame.moves)
-  }];
+    return {
+      gameId: `pgn-${analysedGames++}`,
+      players,
+      moveCount,
+      longestMove,
+      opening: game.tags.Opening || "Unknown Opening"
+    };
+  });
 
-  // Calculate time-based insights
-  const longestMove = pgnGame.moves.reduce((longest, move) => {
-    const timeSpent = move.commentDiag?.clk ? 
-      parseFloat(move.commentDiag.clk.split(':').reduce((acc, time) => acc * 60 + parseFloat(time), 0)) : 0;
-    return timeSpent > longest.timeTaken ? 
-      { moveNo: move.moveNumber, timeTaken: timeSpent, side: move.turn === 'w' ? 'white' : 'black' } : 
-      longest;
-  }, { moveNo: 0, timeTaken: 0, side: 'white' });
+  // Calculate aggregated insights
+  insights[INSIGHTS.SHORTEST_GAME_BY_MOVES] = gamesData
+    .sort((a, b) => a.moveCount - b.moveCount)
+    .slice(0, 5)
+    .map(game => ({
+      gameId: game.gameId,
+      players: {
+        white: { user: { name: game.players.white } },
+        black: { user: { name: game.players.black } }
+      },
+      value: game.moveCount
+    }));
 
-  insights[INSIGHTS.LONGEST_MOVE_BY_TIME] = [{
-    gameId: "pgn-1",
-    players: {
-      white: { user: { name: pgnGame.tags.White } },
-      black: { user: { name: pgnGame.tags.Black } }
-    },
-    ...longestMove
-  }];
+  insights[INSIGHTS.LONGEST_GAME_BY_MOVES] = gamesData
+    .sort((a, b) => b.moveCount - a.moveCount)
+    .slice(0, 5)
+    .map(game => ({
+      gameId: game.gameId,
+      players: {
+        white: { user: { name: game.players.white } },
+        black: { user: { name: game.players.black } }
+      },
+      value: game.moveCount
+    }));
 
-  // Opening information
-  insights[INSIGHTS.MOST_USED_OPENING] = [{
-    openingName: pgnGame.tags.Opening || "Unknown Opening",
-    noOfTimes: 1
-  }];
+  insights[INSIGHTS.LONGEST_MOVE_BY_TIME] = gamesData
+    .sort((a, b) => b.longestMove.timeTaken - a.longestMove.timeTaken)
+    .slice(0, 5)
+    .map(game => ({
+      gameId: game.gameId,
+      players: {
+        white: { user: { name: game.players.white } },
+        black: { user: { name: game.players.black } }
+      },
+      ...game.longestMove
+    }));
 
-  // Calculate average moves
+  // Opening statistics
+  const openingStats = gamesData.reduce((stats, game) => {
+    stats[game.opening] = (stats[game.opening] || 0) + 1;
+    return stats;
+  }, {});
+
+  insights[INSIGHTS.MOST_USED_OPENING] = Object.entries(openingStats)
+    .map(([opening, count]) => ({
+      openingName: opening,
+      noOfTimes: count
+    }))
+    .sort((a, b) => b.noOfTimes - a.noOfTimes)
+    .slice(0, 5);
+
+  // Average moves calculation
+  const totalMoves = gamesData.reduce((sum, game) => sum + game.moveCount, 0);
   insights[INSIGHTS.AVERAGE_MOVE_COUNT] = [{
-    insightValue: getMoveCount(pgnGame.moves)
+    insightValue: Math.round((totalMoves / totalGames) * 100) / 100
   }];
-
-  analysedGames = 1;
 
   return { insights, analysedGames, totalGames };
 };
