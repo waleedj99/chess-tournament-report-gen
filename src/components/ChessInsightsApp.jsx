@@ -4,16 +4,15 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import TournamentInsights from './TournamentInsights';
-import PngPreview from './PngPreview';
-import { toPng } from 'html-to-image';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import InsightsOverview from './InsightsOverview';
 import calculateAllInsights from '../utils/insightsCalculator';
+import calculatePGNInsights from '../utils/pgnInsightsCalculator';
 import { INSIGHTS } from '../utils/constants';
 import { Progress } from '@/components/ui/progress';
-import { parse } from '@mliebelt/pgn-parser'
+import { parse } from '@mliebelt/pgn-parser';
 
 const ChessInsightsApp = () => {
   const [tournamentType, setTournamentType] = useState('swiss');
@@ -26,7 +25,7 @@ const ChessInsightsApp = () => {
   const [fetchError, setFetchError] = useState(null);
   const [evaluationProgress, setEvaluationProgress] = useState(0);
   const [dataProcessingProgress, setDataProcessingProgress] = useState(0);
-  const [tournamentInfo, setTournamentInfo] = useState()
+  const [tournamentInfo, setTournamentInfo] = useState();
 
   const fetchGames = async () => {
     let fetchData = [];
@@ -128,33 +127,40 @@ const ChessInsightsApp = () => {
   };
 
   const fetchPGNGames = async () => {
-    let fetchData = [];
     var requestOptions = {
       method: 'GET',
       redirect: 'follow',
     };
 
     try {
-      let apiUrl;
+      const apiUrl = `https://lichess.org/broadcast/fide-world-rapid--blitz-championships-2024--rapid-open-1-30/round-9/dTW0DV3y.pgn`;
+      const response = await fetch(apiUrl, requestOptions);
       
-      apiUrl = `https://lichess.org/broadcast/fide-world-rapid--blitz-championships-2024--rapid-open-1-30/round-9/dTW0DV3y.pgn`;
-
-      const response = await fetch(`${apiUrl}`, requestOptions);
-      const data = await response.text();
-
       if (!response.ok) {
-        throw new Error('Failed to fetch tournament data. Please check the tournament ID and try again.');
+        throw new Error('Failed to fetch PGN data');
       }
-      console.log(parse(data))
-      // setTournamentInfo(data)
-      setFetchError(null);
-      return fetchData;
+      
+      const data = await response.text();
+      const parsedGame = parse(data);
+      console.log("Parsed PGN game:", parsedGame);
+      
+      const pgnInsights = calculatePGNInsights(parsedGame);
+      setCalculatedInsights(pgnInsights);
+      setIsDataFetched(true);
+      
+      let map = {};
+      Object.keys(INSIGHTS).forEach(key => {
+        map[key] = [0];
+      });
+      setSelectedInsights(map);
+      
+      return parsedGame;
     } catch (error) {
-      console.error('Error fetching games:', error);
+      console.error('Error fetching PGN games:', error);
       setFetchError(error.message);
       throw error;
     }
-  }
+  };
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['tournamentGames', tournamentType, tournamentId],
@@ -182,9 +188,12 @@ const ChessInsightsApp = () => {
 
   const handleFetchData = () => {
     if (tournamentId) {
-      fetchPGNGames()
-      fetchTournamentDetails()
-      refetch();
+      if (tournamentType === 'pgn') {
+        fetchPGNGames();
+      } else {
+        fetchTournamentDetails();
+        refetch();
+      }
       setIsDataFetched(true);
       setEvaluationProgress(0);
       const interval = setInterval(() => {
@@ -238,6 +247,7 @@ const ChessInsightsApp = () => {
               <SelectContent>
                 <SelectItem value="swiss">Swiss</SelectItem>
                 <SelectItem value="arena">Arena</SelectItem>
+                <SelectItem value="pgn">PGN Game</SelectItem>
               </SelectContent>
             </Select>
             <Input
@@ -258,14 +268,6 @@ const ChessInsightsApp = () => {
         </div>
       )}
       {fetchError && <Alert variant="destructive"><AlertDescription>{fetchError}</AlertDescription></Alert>}
-      {/* {isDataFetched && calculatedInsights && (
-        <Alert>
-          <InfoIcon className="h-4 w-4" />
-          <AlertDescription>
-            Some insights require game analysis. This process may take some time depending on the number of games.
-          </AlertDescription>
-        </Alert>
-      )} */}
       {isDataFetched && calculatedInsights && (
         <div>
           <TournamentInsights 
@@ -276,31 +278,8 @@ const ChessInsightsApp = () => {
             selectedInsights={selectedInsights}
             onInsightSelection={handleInsightSelection}
           />
-          {/* <div id="selected-insights-container" className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-            <h2 className="text-2xl font-bold mb-4">{tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament Insights</h2>
-            <TournamentInsights 
-              tournamentData={{ name: `${tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1)} Tournament`, type: tournamentType, players: calculatedInsights.totalGames }}
-              insights={calculatedInsights.insights}
-              analysedGames={calculatedInsights.analysedGames}
-              totalGames={calculatedInsights.totalGames}
-              selectedInsights={selectedInsights}
-              showOnlySelected={true}
-              isPngPreview={true}
-            />
-          </div> */}
         </div>
       )}
-
-      {/* {isDataFetched && calculatedInsights && (
-        <Card>
-          <CardContent className="pt-6">
-            <Button onClick={generatePng} disabled={Object.values(selectedInsights).every(arr => arr.length === 0)}>
-              Generate PNG
-            </Button>
-            {pngPreview && <PngPreview imageUrl={pngPreview} />}
-          </CardContent>
-        </Card>
-      )} */}
     </div>
   );
 };
