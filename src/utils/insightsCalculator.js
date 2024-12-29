@@ -48,7 +48,7 @@ const calculatePlayerAverageGames = (games) => {
         if(moveCount > 2) {
           playerData.games += 1;
         }
-        console.log(player + " -- " + playerData.games)
+       
       }
     });
   });
@@ -124,7 +124,7 @@ const calculateInsight = (insightName, games, calculationFunction) => {
 };
 
 const calculateAllInsights = (tournamentGames, insightsToCalculate, onProgress) => {
-  console.log("Calculating insights for", tournamentGames.length, "games");
+ 
   const insights = {};
   let analysedGames = 0;
   let totalGames = tournamentGames.length;

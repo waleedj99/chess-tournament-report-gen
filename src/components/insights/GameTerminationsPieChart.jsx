@@ -4,8 +4,6 @@ import { PieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
 const GameTerminationsPieChart = ({ data }) => {
-  console.log('GameTerminationsPieChart data:', data); // Debug log
-
   // Ensure data is an array and has items
   if (!Array.isArray(data) || data.length === 0) {
     console.warn('Invalid or empty data provided to GameTerminationsPieChart');

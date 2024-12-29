@@ -19,7 +19,6 @@ const formatTerminationType = (type) => {
 };
 
 const InsightFormatter = ({ insightKey, item }) => {
-  console.log('InsightFormatter - insightKey:', insightKey, 'item:', item); // Debug log
 
   const renderContent = () => {
     switch (insightKey) {

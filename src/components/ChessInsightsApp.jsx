@@ -13,6 +13,7 @@ import InsightsOverview from './InsightsOverview';
 import calculateAllInsights from '../utils/insightsCalculator';
 import { INSIGHTS } from '../utils/constants';
 import { Progress } from '@/components/ui/progress';
+import { parse } from '@mliebelt/pgn-parser'
 
 const ChessInsightsApp = () => {
   const [tournamentType, setTournamentType] = useState('swiss');
@@ -116,7 +117,6 @@ const ChessInsightsApp = () => {
       if (!response.ok) {
         throw new Error('Failed to fetch tournament data. Please check the tournament ID and try again.');
       }
-      console.log(data)
       setTournamentInfo(data)
       setFetchError(null);
       return fetchData;
@@ -126,6 +126,35 @@ const ChessInsightsApp = () => {
       throw error;
     }
   };
+
+  const fetchPGNGames = async () => {
+    let fetchData = [];
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+    };
+
+    try {
+      let apiUrl;
+      
+      apiUrl = `https://lichess.org/broadcast/fide-world-rapid--blitz-championships-2024--rapid-open-1-30/round-9/dTW0DV3y.pgn`;
+
+      const response = await fetch(`${apiUrl}`, requestOptions);
+      const data = await response.text();
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch tournament data. Please check the tournament ID and try again.');
+      }
+      console.log(parse(data))
+      // setTournamentInfo(data)
+      setFetchError(null);
+      return fetchData;
+    } catch (error) {
+      console.error('Error fetching games:', error);
+      setFetchError(error.message);
+      throw error;
+    }
+  }
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['tournamentGames', tournamentType, tournamentId],
@@ -153,6 +182,7 @@ const ChessInsightsApp = () => {
 
   const handleFetchData = () => {
     if (tournamentId) {
+      fetchPGNGames()
       fetchTournamentDetails()
       refetch();
       setIsDataFetched(true);

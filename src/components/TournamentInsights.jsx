@@ -93,10 +93,10 @@ const TournamentInsights = ({
     : Object.entries(insights);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-center">
       {!showOnlySelected && !isPngPreview && tournamentData && (
         <>
-          <h2 className="text-2xl font-bold">Insights from {tournamentData.name}</h2>
+          <h2 className="text-2xl font-bold ">Insights from {tournamentData.name}</h2>
           <p>Tournament Type: {tournamentData.type}, Players: {tournamentData.players}, Total Games: {totalGames}</p>
           <AnalysisProgress analyzed={analysedGames} total={totalGames} />
         </>

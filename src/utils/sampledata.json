@@ -1,0 +1,2546 @@
+{
+    "tags": {
+        "Event": "FIDE World Rapid Chess Championship 2024",
+        "Site": "New York, United States",
+        "Date": {
+            "value": "2024.12.27",
+            "year": 2024,
+            "month": 12,
+            "day": 27
+        },
+        "Round": "9.1",
+        "White": "Erigaisi Arjun",
+        "Black": "Duda, Jan-Krzysztof",
+        "Result": "1/2-1/2",
+        "WhiteElo": 2694,
+        "WhiteTitle": "GM",
+        "WhiteFideId": "35009192",
+        "BlackElo": 2740,
+        "BlackTitle": "GM",
+        "BlackFideId": "1170546",
+        "TimeControl": "15 min + 10 s",
+        "Variant": "Standard",
+        "ECO": "E25",
+        "Opening": "Nimzo-Indian Defense: Sämisch Variation, Keres Variation",
+        "Annotator": "https://lichess.org/broadcast/-/-/dTW0DV3y",
+        "StudyName": "Round 9",
+        "ChapterName": "Erigaisi Arjun - Duda, Jan-Krzysztof",
+        "messages": [
+            {
+                "key": "TimeControl",
+                "value": "15 min + 10 s",
+                "message": "Format of tag: \"TimeControl\" not correct: \"15 min + 10 s\"",
+                "start": {
+                    "offset": 314,
+                    "line": 14,
+                    "column": 2
+                },
+                "end": {
+                    "offset": 341,
+                    "line": 14,
+                    "column": 29
+                }
+            },
+            {
+                "key": "StudyName",
+                "value": "Round 9",
+                "message": "Tag: \"StudyName\" not known: \"Round 9\"",
+                "start": {
+                    "offset": 503,
+                    "line": 19,
+                    "column": 2
+                },
+                "end": {
+                    "offset": 522,
+                    "line": 19,
+                    "column": 21
+                }
+            },
+            {
+                "key": "ChapterName",
+                "value": "Erigaisi Arjun - Duda, Jan-Krzysztof",
+                "message": "Tag: \"ChapterName\" not known: \"Erigaisi Arjun - Duda, Jan-Krzysztof\"",
+                "start": {
+                    "offset": 525,
+                    "line": 20,
+                    "column": 2
+                },
+                "end": {
+                    "offset": 575,
+                    "line": 20,
+                    "column": 52
+                }
+            }
+        ]
+    },
+    "gameComment": null,
+    "moves": [
+        {
+            "moveNumber": 1,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "d",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "d4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:19"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 1,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "f",
+                "row": "6",
+                "check": null,
+                "promotion": null,
+                "notation": "Nf6"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:18"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 2,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "c",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "c4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:27"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 2,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "e",
+                "row": "6",
+                "check": null,
+                "promotion": null,
+                "notation": "e6"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:26"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 3,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "c",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Nc3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:35"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 3,
+            "notation": {
+                "fig": "B",
+                "strike": null,
+                "col": "b",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Bb4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:30"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 4,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "f",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "f3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:43"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 4,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "d",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "d5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:21"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 5,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "a",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "a3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:50"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 5,
+            "notation": {
+                "fig": "B",
+                "strike": "x",
+                "col": "c",
+                "row": "3",
+                "check": "+",
+                "promotion": null,
+                "notation": "Bxc3+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:26"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 6,
+            "notation": {
+                "fig": null,
+                "disc": "b",
+                "strike": "x",
+                "col": "c",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "bxc3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:58"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 6,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "c",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "c5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:32"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 7,
+            "notation": {
+                "fig": null,
+                "disc": "c",
+                "strike": "x",
+                "col": "d",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "cxd5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:16:01"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 7,
+            "notation": {
+                "fig": "N",
+                "strike": "x",
+                "col": "d",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "Nxd5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:40"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 8,
+            "notation": {
+                "fig": null,
+                "disc": "d",
+                "strike": "x",
+                "col": "c",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "dxc5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:16:05"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 8,
+            "notation": {
+                "fig": "Q",
+                "strike": null,
+                "col": "a",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "Qa5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:44"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 9,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "e",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "e4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:16:11"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 9,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "e",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Ne7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:47"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 10,
+            "notation": {
+                "fig": "B",
+                "strike": null,
+                "col": "e",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Be3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:23"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 10,
+            "notation": {
+                "notation": "O-O",
+                "check": null
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:36"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 11,
+            "notation": {
+                "fig": "Q",
+                "strike": null,
+                "col": "b",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Qb3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:28"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 11,
+            "notation": {
+                "fig": "Q",
+                "strike": null,
+                "col": "c",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Qc7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:09"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 12,
+            "notation": {
+                "fig": "B",
+                "strike": null,
+                "col": "b",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "Bb5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:32"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 12,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "e",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "e5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:14:50"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 13,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "e",
+                "row": "2",
+                "check": null,
+                "promotion": null,
+                "notation": "Ne2"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:15:09"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 13,
+            "notation": {
+                "fig": "B",
+                "strike": null,
+                "col": "e",
+                "row": "6",
+                "check": null,
+                "promotion": null,
+                "notation": "Be6"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:14:56"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 14,
+            "notation": {
+                "fig": "Q",
+                "strike": null,
+                "col": "b",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Qb4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:12:36"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 14,
+            "notation": {
+                "fig": "N",
+                "disc": "e",
+                "strike": null,
+                "col": "c",
+                "row": "6",
+                "check": null,
+                "promotion": null,
+                "notation": "Nec6"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:14:13"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 15,
+            "notation": {
+                "fig": "Q",
+                "strike": null,
+                "col": "a",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Qa4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:10:01"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 15,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "a",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "Na5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:13:34"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 16,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "b",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Rb1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:09:51"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 16,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "a",
+                "row": "6",
+                "check": null,
+                "promotion": null,
+                "notation": "a6"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:12:02"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 17,
+            "notation": {
+                "fig": "B",
+                "strike": null,
+                "col": "d",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Bd3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:09:59"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 17,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "d",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Nd7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:12:09"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 18,
+            "notation": {
+                "fig": "Q",
+                "strike": null,
+                "col": "b",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Qb4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:09:11"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 18,
+            "notation": {
+                "fig": "R",
+                "disc": "f",
+                "strike": null,
+                "col": "c",
+                "row": "8",
+                "check": null,
+                "promotion": null,
+                "notation": "Rfc8"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:12:08"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 19,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "f",
+                "row": "2",
+                "check": null,
+                "promotion": null,
+                "notation": "Kf2"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:08:44"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 19,
+            "notation": {
+                "fig": "N",
+                "strike": "x",
+                "col": "c",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "Nxc5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:12:01"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 20,
+            "notation": {
+                "fig": "B",
+                "strike": null,
+                "col": "c",
+                "row": "2",
+                "check": null,
+                "promotion": null,
+                "notation": "Bc2"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:08:38"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 20,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "b",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "b5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:10:40"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 21,
+            "notation": {
+                "fig": "B",
+                "strike": "x",
+                "col": "c",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "Bxc5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:08:43"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 21,
+            "notation": {
+                "fig": "Q",
+                "strike": "x",
+                "col": "c",
+                "row": "5",
+                "check": "+",
+                "promotion": null,
+                "notation": "Qxc5+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:10:47"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 22,
+            "notation": {
+                "fig": "Q",
+                "strike": "x",
+                "col": "c",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "Qxc5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:08:51"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 22,
+            "notation": {
+                "fig": "R",
+                "strike": "x",
+                "col": "c",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "Rxc5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:10:55"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 23,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "a",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "a4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:09:00"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 23,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "c",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Nc4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:10:39"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 24,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "a",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Ra1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:07:46"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 24,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "f",
+                "row": "8",
+                "check": null,
+                "promotion": null,
+                "notation": "Kf8"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:09:52"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 25,
+            "notation": {
+                "fig": "R",
+                "disc": "h",
+                "strike": null,
+                "col": "b",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Rhb1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:07:38"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 25,
+            "notation": {
+                "fig": null,
+                "disc": "b",
+                "strike": "x",
+                "col": "a",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "bxa4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:09:39"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 26,
+            "notation": {
+                "fig": "B",
+                "strike": "x",
+                "col": "a",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Bxa4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:07:38"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 26,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "a",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "a5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:08:47"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 27,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "b",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Rb7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:07:09"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 27,
+            "notation": {
+                "fig": "B",
+                "strike": null,
+                "col": "c",
+                "row": "8",
+                "check": null,
+                "promotion": null,
+                "notation": "Bc8"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:07:49"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 28,
+            "notation": {
+                "fig": "R",
+                "disc": "b",
+                "strike": null,
+                "col": "b",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Rbb1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:06:27"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 28,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "e",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Ke7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:07:44"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 29,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "c",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Nc1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:06:13"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 29,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "c",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Rc7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:07:41"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 30,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "d",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Nd3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:05:00"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 30,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "f",
+                "row": "6",
+                "check": null,
+                "promotion": null,
+                "notation": "f6"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:06:55"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 31,
+            "notation": {
+                "fig": "B",
+                "strike": null,
+                "col": "d",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Bd1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:04:27"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 31,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "d",
+                "row": "6",
+                "check": null,
+                "promotion": null,
+                "notation": "Nd6"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:06:20"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 32,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "a",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Ra3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:03:57"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 32,
+            "notation": {
+                "fig": "B",
+                "strike": null,
+                "col": "e",
+                "row": "6",
+                "check": null,
+                "promotion": null,
+                "notation": "Be6"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:04:06"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 33,
+            "notation": {
+                "fig": "B",
+                "strike": null,
+                "col": "e",
+                "row": "2",
+                "check": null,
+                "promotion": null,
+                "notation": "Be2"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:03:47"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 33,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "c",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Nc4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:03:23"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 34,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "a",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Ra4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:03:40"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 34,
+            "notation": {
+                "fig": "R",
+                "disc": "a",
+                "strike": null,
+                "col": "a",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Raa7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:02:57"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 35,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "e",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Ke1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:03:09"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 35,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "d",
+                "row": "6",
+                "check": null,
+                "promotion": null,
+                "notation": "Kd6"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:02:21"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 36,
+            "notation": {
+                "fig": "R",
+                "disc": "b",
+                "strike": null,
+                "col": "a",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Rba1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:02:22"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 36,
+            "notation": {
+                "fig": "R",
+                "disc": "a",
+                "strike": null,
+                "col": "b",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Rab7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:02:22"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 37,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "g",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "g3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:01:03"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 37,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "b",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Rb3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:02:03"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 38,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "c",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Rc1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:01:05"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 38,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "a",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Ra3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:01:39"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 39,
+            "notation": {
+                "fig": "R",
+                "strike": "x",
+                "col": "a",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Rxa3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:56"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 39,
+            "notation": {
+                "fig": "N",
+                "strike": "x",
+                "col": "a",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Nxa3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:01:47"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 40,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "d",
+                "row": "2",
+                "check": null,
+                "promotion": null,
+                "notation": "Kd2"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:01:04"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 40,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "c",
+                "row": "4",
+                "check": "+",
+                "promotion": null,
+                "notation": "Nc4+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:28"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 41,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "c",
+                "row": "2",
+                "check": null,
+                "promotion": null,
+                "notation": "Kc2"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:01:13"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 41,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "b",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Rb7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:21"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 42,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "a",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Ra1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:01:20"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 42,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "g",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "g5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:21"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 43,
+            "notation": {
+                "fig": null,
+                "strike": null,
+                "col": "f",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "f4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:31"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 43,
+            "notation": {
+                "fig": "B",
+                "strike": null,
+                "col": "f",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Bf7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:17"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 44,
+            "notation": {
+                "fig": null,
+                "disc": "f",
+                "strike": "x",
+                "col": "e",
+                "row": "5",
+                "check": "+",
+                "promotion": null,
+                "notation": "fxe5+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:15"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 44,
+            "notation": {
+                "fig": null,
+                "disc": "f",
+                "strike": "x",
+                "col": "e",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "fxe5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:25"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 45,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "a",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Ra4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:21"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 45,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "a",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Ra7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:19"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 46,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "a",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Ra1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:21"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 46,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "b",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Rb7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:15"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 47,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "a",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Ra4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:29"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 47,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "b",
+                "row": "8",
+                "check": null,
+                "promotion": null,
+                "notation": "Rb8"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:23"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 48,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "c",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Nc1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:15"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 48,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "b",
+                "row": "2",
+                "check": "+",
+                "promotion": null,
+                "notation": "Rb2+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:17"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 49,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "d",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Kd1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:24"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 49,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "e",
+                "row": "3",
+                "check": "+",
+                "promotion": null,
+                "notation": "Ne3+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:15"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 50,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "e",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Ke1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:33"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 50,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "c",
+                "row": "2",
+                "check": null,
+                "promotion": null,
+                "notation": "Rc2"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:14"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 51,
+            "notation": {
+                "fig": "B",
+                "strike": null,
+                "col": "d",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Bd3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:12"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 51,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "g",
+                "row": "2",
+                "check": "+",
+                "promotion": null,
+                "notation": "Ng2+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:14"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 52,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "d",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Kd1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:21"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 52,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "e",
+                "row": "3",
+                "check": "+",
+                "promotion": null,
+                "notation": "Ne3+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:13"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 53,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "e",
+                "row": "1",
+                "check": null,
+                "promotion": null,
+                "notation": "Ke1"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:30"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 53,
+            "notation": {
+                "fig": "R",
+                "strike": "x",
+                "col": "h",
+                "row": "2",
+                "check": null,
+                "promotion": null,
+                "notation": "Rxh2"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:12"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 54,
+            "notation": {
+                "fig": "R",
+                "strike": "x",
+                "col": "a",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "Rxa5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:37"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 54,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "h",
+                "row": "1",
+                "check": "+",
+                "promotion": null,
+                "notation": "Rh1+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:13"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 55,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "d",
+                "row": "2",
+                "check": null,
+                "promotion": null,
+                "notation": "Kd2"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:28"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 55,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "c",
+                "row": "4",
+                "check": "+",
+                "promotion": null,
+                "notation": "Nc4+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:19"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 56,
+            "notation": {
+                "fig": "B",
+                "strike": "x",
+                "col": "c",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Bxc4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:36"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 56,
+            "notation": {
+                "fig": "B",
+                "strike": "x",
+                "col": "c",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Bxc4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:27"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 57,
+            "notation": {
+                "fig": "N",
+                "strike": null,
+                "col": "d",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Nd3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:40"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 57,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "h",
+                "row": "2",
+                "check": "+",
+                "promotion": null,
+                "notation": "Rh2+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:16"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 58,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "e",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Ke3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:48"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 58,
+            "notation": {
+                "fig": "B",
+                "strike": "x",
+                "col": "d",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Bxd3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:17"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 59,
+            "notation": {
+                "fig": "K",
+                "strike": "x",
+                "col": "d",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Kxd3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:51"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 59,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "h",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Rh3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:17"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 60,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "c",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Kc4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:44"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 60,
+            "notation": {
+                "fig": "R",
+                "strike": "x",
+                "col": "g",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Rxg3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:16"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 61,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "a",
+                "row": "6",
+                "check": "+",
+                "promotion": null,
+                "notation": "Ra6+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:53"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 61,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "e",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Ke7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:25"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 62,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "d",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "Kd5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:41"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 62,
+            "notation": {
+                "fig": "R",
+                "strike": "x",
+                "col": "c",
+                "row": "3",
+                "check": null,
+                "promotion": null,
+                "notation": "Rxc3"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:15"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 63,
+            "notation": {
+                "fig": "K",
+                "strike": "x",
+                "col": "e",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "Kxe5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:48"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 63,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "c",
+                "row": "5",
+                "check": "+",
+                "promotion": null,
+                "notation": "Rc5+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:13"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 64,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "d",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Kd4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:57"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 64,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "c",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Rc7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:20"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 65,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "e",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "Ke5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:01:05"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 65,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "c",
+                "row": "5",
+                "check": "+",
+                "promotion": null,
+                "notation": "Rc5+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:13"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 66,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "d",
+                "row": "4",
+                "check": null,
+                "promotion": null,
+                "notation": "Kd4"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:01:14"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 66,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "c",
+                "row": "7",
+                "check": null,
+                "promotion": null,
+                "notation": "Rc7"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:22"
+            },
+            "turn": "b"
+        },
+        {
+            "moveNumber": 67,
+            "notation": {
+                "fig": "K",
+                "strike": null,
+                "col": "e",
+                "row": "5",
+                "check": null,
+                "promotion": null,
+                "notation": "Ke5"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:01:23"
+            },
+            "turn": "w"
+        },
+        {
+            "moveNumber": 67,
+            "notation": {
+                "fig": "R",
+                "strike": null,
+                "col": "c",
+                "row": "5",
+                "check": "+",
+                "promotion": null,
+                "notation": "Rc5+"
+            },
+            "variations": [],
+            "nag": null,
+            "commentDiag": {
+                "clk": "0:00:14"
+            },
+            "turn": "b"
+        }
+    ],
+    "messages": [
+        {
+            "key": "TimeControl",
+            "value": "15 min + 10 s",
+            "message": "Format of tag: \"TimeControl\" not correct: \"15 min + 10 s\"",
+            "start": {
+                "offset": 314,
+                "line": 14,
+                "column": 2
+            },
+            "end": {
+                "offset": 341,
+                "line": 14,
+                "column": 29
+            }
+        },
+        {
+            "key": "StudyName",
+            "value": "Round 9",
+            "message": "Tag: \"StudyName\" not known: \"Round 9\"",
+            "start": {
+                "offset": 503,
+                "line": 19,
+                "column": 2
+            },
+            "end": {
+                "offset": 522,
+                "line": 19,
+                "column": 21
+            }
+        },
+        {
+            "key": "ChapterName",
+            "value": "Erigaisi Arjun - Duda, Jan-Krzysztof",
+            "message": "Tag: \"ChapterName\" not known: \"Erigaisi Arjun - Duda, Jan-Krzysztof\"",
+            "start": {
+                "offset": 525,
+                "line": 20,
+                "column": 2
+            },
+            "end": {
+                "offset": 575,
+                "line": 20,
+                "column": 52
+            }
+        }
+    ]
+}
