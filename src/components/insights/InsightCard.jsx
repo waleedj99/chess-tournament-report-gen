@@ -15,7 +15,7 @@ const InsightCard = ({
   return (
     <div key={index} className="text-xs mb-4 rounded-lg">
       <div className="flex items-center justify-between">
-          <InsightFormatter insightKey={insightKey} item={item} />
+        <InsightFormatter insightKey={insightKey} item={item} />
         {!isPngPreview && !showOnlySelected && (
           <Checkbox
             checked={isSelected}
@@ -24,7 +24,12 @@ const InsightCard = ({
           />
         )}
       </div>
-      {item.gameId && <GameRedirectButton gameId={item.gameId} />}
+      {(item.gameId || item.tags?.Annotator) && (
+        <GameRedirectButton 
+          gameId={item.gameId} 
+          annotator={item.tags?.Annotator}
+        />
+      )}
     </div>
   );
 };
