@@ -1,5 +1,6 @@
 export const calculateMoveCount = (moves) => {
-  return moves ? Math.floor(moves.length / 2) : 0;
+  if (!moves || moves.length === 0) return 0;
+  return moves[moves.length - 1].moveNumber;
 };
 
 export const parseGameId = (annotator) => {

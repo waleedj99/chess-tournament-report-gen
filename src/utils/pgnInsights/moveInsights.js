@@ -11,7 +11,7 @@ export const calculateMoveInsights = (games) => {
         white: { user: { name: game.tags.White } },
         black: { user: { name: game.tags.Black } }
       },
-      value: game.moves.length
+      value: game.moves[game.moves.length - 1]?.moveNumber || 0
     }))
     .sort((a, b) => a.value - b.value);
 
@@ -19,7 +19,11 @@ export const calculateMoveInsights = (games) => {
   moveInsights.LONGEST_GAME_BY_MOVES = sortedByMoves.reverse().slice(0, 5);
 
   // Average move count
-  const totalMoves = games.reduce((sum, game) => sum + game.moves.length, 0);
+  const totalMoves = games.reduce((sum, game) => {
+    const lastMove = game.moves[game.moves.length - 1];
+    return sum + (lastMove?.moveNumber || 0);
+  }, 0);
+  
   moveInsights.AVERAGE_MOVE_COUNT = [{
     insightValue: Math.round((totalMoves / games.length) * 100) / 100
   }];
