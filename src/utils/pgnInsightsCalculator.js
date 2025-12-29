@@ -10,7 +10,7 @@ const calculatePGNInsights = (pgnGames) => {
     ...calculateMoveInsights(pgnGames),
     ...calculatePlayerInsights(pgnGames),
     ...calculateOpeningInsights(pgnGames),
-    ...calculateGameTerminationInsights(pgnGames)
+    // ...calculateGameTerminationInsights(pgnGames)
   };
 
   return {

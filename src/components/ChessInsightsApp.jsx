@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+
 import TournamentInsights from './TournamentInsights';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon } from 'lucide-react';
@@ -26,7 +25,8 @@ const ChessInsightsApp = () => {
   const [evaluationProgress, setEvaluationProgress] = useState(0);
   const [dataProcessingProgress, setDataProcessingProgress] = useState(0);
   const [tournamentInfo, setTournamentInfo] = useState();
-
+  const [roundsUrl, setRoundsUrl] = useState([])
+  const [totalGames, setTotalGames] = useState([])
   const fetchGames = async () => {
     let fetchData = [];
     var requestOptions = {
@@ -49,7 +49,7 @@ const ChessInsightsApp = () => {
       }
 
       const response = await fetch(`${apiUrl}?evals=true&accuracy=true&clocks=true&opening=true`, requestOptions);
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch tournament data. Please check the tournament ID and try again.');
       }
@@ -133,28 +133,61 @@ const ChessInsightsApp = () => {
     };
 
     try {
-      const apiUrl = `https://lichess.org/broadcast/fide-world-rapid--blitz-championships-2024--rapid-open-1-30/round-9/dTW0DV3y.pgn`;
-      const response = await fetch(apiUrl, requestOptions);
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch PGN data');
-      }
-      
-      const data = await response.text();
-      const parsedGame = parse(data);
-      console.log("Parsed PGN game:", parsedGame);
-      
-      const pgnInsights = calculatePGNInsights(parsedGame);
+      let tdetails = await fetch("https://lichess.org/api/broadcast/zsiKgSQq", requestOptions)
+        .then(res => res.json());
+
+      setRoundsUrl(tdetails.rounds.map(r => r.url));
+      setTotalGames([]);
+
+      const roundsUrl = tdetails.rounds.map(r => r.url); // Get rounds URLs after setting state
+
+      // Create an array of promises to handle all round fetches
+      const gamePromises = roundsUrl.map(async (round) => {
+        try {
+          console.log(round);
+          const response = await fetch(round + ".pgn", requestOptions);
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch PGN data');
+          }
+
+          const data = await response.text();
+          console.log("Setting Round " + round);
+
+          // Collect the parsed games
+          return parse(data); // We will accumulate parsed games here
+        } catch (error) {
+          console.error("Error fetching PGN data for round " + round, error);
+          return [];
+        }
+      });
+
+      // Wait for all fetches and parsing to complete
+      const parsedGames = await Promise.all(gamePromises);
+
+      // Update the state with all the parsed games
+      const allGames = parsedGames.flat(); // Flatten the array of games
+
+      // Update totalGames state once all data is fetched
+      setTotalGames(allGames);
+
+      console.log("Parsed PGN game:", allGames);
+
+      // Calculate insights
+      const pgnInsights = calculatePGNInsights(allGames);
       setCalculatedInsights(pgnInsights);
+
+      // Indicate data fetch is complete
       setIsDataFetched(true);
-      
+
+      // Prepare the insights map
       let map = {};
       Object.keys(INSIGHTS).forEach(key => {
         map[key] = [0];
       });
       setSelectedInsights(map);
-      
-      return parsedGame;
+
+      return allGames;
     } catch (error) {
       console.error('Error fetching PGN games:', error);
       setFetchError(error.message);
@@ -235,31 +268,13 @@ const ChessInsightsApp = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <InsightsOverview />
-      <Card>
-        <CardContent className="pt-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Select value={tournamentType} onValueChange={setTournamentType}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select tournament type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="swiss">Swiss</SelectItem>
-                <SelectItem value="arena">Arena</SelectItem>
-                <SelectItem value="pgn">PGN Game</SelectItem>
-              </SelectContent>
-            </Select>
-            <Input
-              type="text"
-              placeholder="Enter tournament ID"
-              value={tournamentId}
-              onChange={(e) => setTournamentId(e.target.value)}
-            />
-            <Button onClick={handleFetchData}>Fetch Data</Button>
-          </div>
-        </CardContent>
-      </Card>
+    <div className="space-y-4">
+      <InsightsOverview
+        tournamentId={tournamentId}
+        setTournamentId={setTournamentId}
+        setTournamentType={setTournamentType}
+        handleFetchData={handleFetchData}
+      />
 
       {isLoading && (
         <div className="space-y-2">
@@ -270,8 +285,8 @@ const ChessInsightsApp = () => {
       {fetchError && <Alert variant="destructive"><AlertDescription>{fetchError}</AlertDescription></Alert>}
       {isDataFetched && calculatedInsights && (
         <div>
-          <TournamentInsights 
-            tournamentData={{ name: tournamentInfo?.fullName , type: tournamentType, players: tournamentInfo?.nbPlayers }}
+          <TournamentInsights
+            tournamentData={{ name: tournamentInfo?.fullName, type: tournamentType, players: tournamentInfo?.nbPlayers }}
             insights={calculatedInsights.insights}
             analysedGames={calculatedInsights.analysedGames}
             totalGames={calculatedInsights.totalGames}

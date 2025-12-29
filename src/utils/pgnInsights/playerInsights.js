@@ -7,7 +7,7 @@ export const calculatePlayerInsights = (games) => {
     const whitePlayer = game.tags.White;
     const blackPlayer = game.tags.Black;
     const gameResult = game.tags.Result;
-    const moveCount = game.moves.length;
+    const moveCount = game.moves[game.moves.length-1].moveNumber;
     
     // Track moves per player
     [whitePlayer, blackPlayer].forEach(player => {
